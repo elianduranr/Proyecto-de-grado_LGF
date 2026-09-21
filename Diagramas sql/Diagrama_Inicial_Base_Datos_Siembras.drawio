@@ -1,0 +1,115 @@
+<mxfile host="app.diagrams.net" agent="ChatGPT">
+  <diagram id="siembra-diagrama-inicial" name="Diagrama inicial siembras">
+    <mxGraphModel dx="1334" dy="849" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;" value="Basico.Finca" vertex="1">
+          <mxGeometry height="50" width="170" x="80" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Mapa.Invernadero" vertex="1">
+          <mxGeometry height="50" width="170" x="80" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Mapa.CamaFisica" vertex="1">
+          <mxGeometry height="50" width="170" x="80" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="5" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;" value="Siembra.SiembraCama" vertex="1">
+          <mxGeometry height="55" width="190" x="80" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="6" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="TablasBasicas.Variedad" vertex="1">
+          <mxGeometry height="50" width="210" x="380" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="7" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="TablasBasicas.Producto" vertex="1">
+          <mxGeometry height="50" width="210" x="380" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="8" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="TablasBasicas.CicloVariedad" vertex="1">
+          <mxGeometry height="50" width="210" x="380" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="9" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="TablasBasicas.Ciclo" vertex="1">
+          <mxGeometry height="50" width="210" x="380" y="520" as="geometry" />
+        </mxCell>
+        <mxCell id="10" parent="1" style="shape=note;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1;" value="Reglas / curvas" vertex="1">
+          <mxGeometry height="60" width="150" x="600" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="11" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="Siembra.CurvaCoeficiente" vertex="1">
+          <mxGeometry height="50" width="220" x="660" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="12" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="Siembra.CicloVariCoefInverna" vertex="1">
+          <mxGeometry height="50" width="220" x="660" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="13" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="Siembra.CicloVariCoefFinca" vertex="1">
+          <mxGeometry height="50" width="220" x="660" y="440" as="geometry" />
+        </mxCell>
+        <mxCell id="14" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=1;" value="Siembra.ProyeccionDia" vertex="1">
+          <mxGeometry height="50" width="190" x="960" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="15" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=1;" value="Siembra.ProyeccionSemana" vertex="1">
+          <mxGeometry height="55" width="210" x="960" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="16" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="Siembra.ProyInvernaVariedad" vertex="1">
+          <mxGeometry height="50" width="220" x="900" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="17" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="Siembra.ProyFincaVariedad" vertex="1">
+          <mxGeometry height="50" width="210" x="1170" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="18" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=1;" value="Siembra.ProyeccionGrado" vertex="1">
+          <mxGeometry height="55" width="210" x="1170" y="660" as="geometry" />
+        </mxCell>
+        <mxCell id="20" edge="1" parent="1" source="2" style="endArrow=block;html=1;rounded=0;strokeWidth=2;" target="3" value="1:N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="21" edge="1" parent="1" source="3" style="endArrow=block;html=1;rounded=0;strokeWidth=2;" target="4" value="1:N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="22" edge="1" parent="1" source="4" style="endArrow=block;html=1;rounded=0;strokeWidth=2;" target="5" value="1:N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="23" edge="1" parent="1" source="5" style="endArrow=block;html=1;rounded=0;strokeWidth=2;" target="6" value="IdVariedad">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="24" edge="1" parent="1" source="6" style="endArrow=block;html=1;rounded=0;strokeWidth=2;dashed=1;" target="7" value="producto">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="25" edge="1" parent="1" source="5" style="endArrow=block;html=1;rounded=0;strokeWidth=2;" target="8" value="IdCicloVariedad">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="26" edge="1" parent="1" source="8" style="endArrow=block;html=1;rounded=0;strokeWidth=2;dashed=1;" target="9" value="IdCiclo">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="30" edge="1" parent="1" source="5" style="endArrow=block;html=1;rounded=0;strokeWidth=2;" target="10" value="curvas / coef.">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="27" edge="1" parent="1" source="10" style="endArrow=block;html=1;rounded=0;strokeWidth=2;dashed=1;" target="11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="28" edge="1" parent="1" source="10" style="endArrow=block;html=1;rounded=0;strokeWidth=2;dashed=1;" target="12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="29" edge="1" parent="1" source="10" style="endArrow=block;html=1;rounded=0;strokeWidth=2;dashed=1;" target="13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="31" edge="1" parent="1" source="11" style="endArrow=block;html=1;rounded=0;strokeWidth=2;" target="14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="32" edge="1" parent="1" source="12" style="endArrow=block;html=1;rounded=0;strokeWidth=2;" target="14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="33" edge="1" parent="1" source="13" style="endArrow=block;html=1;rounded=0;strokeWidth=2;" target="14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="34" edge="1" parent="1" source="14" style="endArrow=block;html=1;rounded=0;strokeWidth=2;" target="15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="35" edge="1" parent="1" source="15" style="endArrow=block;html=1;rounded=0;strokeWidth=2;" target="16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="36" edge="1" parent="1" source="15" style="endArrow=block;html=1;rounded=0;strokeWidth=2;" target="17">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="37" edge="1" parent="1" source="17" style="endArrow=block;html=1;rounded=0;strokeWidth=2;" target="18">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -235,7 +235,7 @@ sns.barplot(data=volumen, x="anio_objetivo", y="tallos", hue="serie", ax=axes[0]
 axes[0].set(title="Volumen acumulado en las semanas comparables", xlabel="Año", ylabel="Tallos")
 axes[0].legend(title="")
 
-colores = np.where(resumen_anual["diferencia_total"] >= 0, "#d95f02", "#1b9e77")
+colores = np.where(resumen_anual["diferencia_total"] >= 0, "#1b9e77", "#d95f02")
 axes[1].bar(resumen_anual["anio_objetivo"].astype(str), resumen_anual["diferencia_total"], color=colores)
 axes[1].axhline(0, color="black", linewidth=1)
 axes[1].set(title="Sesgo acumulado: estimado − real", xlabel="Año", ylabel="Diferencia en tallos")
@@ -272,11 +272,11 @@ for anio, datos_anio in validas.groupby("anio_objetivo", sort=True):
                 ylabel="Tallos")
     axes[0].legend()
 
-    colores = np.where(datos_anio["error_tallos"] >= 0, "#d95f02", "#1b9e77")
+colores = np.where(datos_anio["error_tallos"] >= 0, "#1b9e77", "#d95f02")
     axes[1].bar(datos_anio["semana_objetivo"], datos_anio["error_tallos"], color=colores)
     axes[1].axhline(0, color="black", linewidth=1)
     axes[1].set(xlabel="Semana ISO objetivo", ylabel="Estimado − real",
-                title="Naranja: sobreestimó · Verde: subestimó")
+                title="Verde: sobreestimó · Naranja: subestimó")
     plt.tight_layout()
     plt.show()
 """),

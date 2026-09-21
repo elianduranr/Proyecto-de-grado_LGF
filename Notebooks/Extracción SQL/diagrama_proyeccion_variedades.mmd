@@ -1,0 +1,74 @@
+flowchart LR
+    F["Basico.Finca<br/>PK: IdFinca<br/>NomFinca, IdCompania"]:::master
+    I["Mapa.Invernadero<br/>PK: IdInvernadero<br/>FK: IdFinca<br/>1 fila = bloque/invernadero"]:::master
+    C["Mapa.CamaFisica<br/>PK: IdCamaFisica<br/>FK: IdInvernadero<br/>NumeroCama, Area, AreaUtilizada"]:::master
+    SC["Siembra.SiembraCama<br/>PK: IdSiembra<br/>FK: IdCamaFisica, IdVariedad,<br/>IdCicloVariedad, IdCurvaCiclo<br/>FechaSiembra, Planta, Area"]:::input
+    PR["TablasBasicas.Producto<br/>PK: IdProducto<br/>NomProducto"]:::master
+    VA["TablasBasicas.Variedad<br/>PK: IdVariedad<br/>FK: IdProducto<br/>NomVariedad, IdColor"]:::master
+    CI["TablasBasicas.Ciclo<br/>PK: IdCiclo<br/>FK: IdProducto<br/>PickPeriodo, PickForma,<br/>PickTipoProyeccion"]:::config
+    CV["TablasBasicas.CicloVariedad<br/>PK: IdCicloVariedad<br/>FK: IdFinca, IdVariedad, IdCiclo<br/>Semanas de corte, Densidad"]:::config
+    CC["Siembra.CurvaCiclo<br/>PK: IdCurvaCiclo<br/>FK: IdCicloVariedad<br/>NomCurva"]:::config
+    CO["Siembra.CurvaCoeficiente<br/>PK: IdCurvaCoeficiente<br/>FK: IdCurvaCiclo<br/>SemanaDia = edad<br/>Coeficiente"]:::config
+    XI["Siembra.CicloVariCoefInverna<br/>FK: IdCicloVariedad, IdInvernadero<br/>Semana, Anio, Coeficiente<br/>Método tipo 11"]:::config
+    XF["Siembra.CicloVariCoefFinca<br/>FK: IdCicloVariedad<br/>Semana, Anio, Coeficiente<br/>Método tipo 12"]:::config
+    PC["Siembra.ProyeccionCalcula<br/>PROCEDIMIENTO ANALIZADO<br/>Parámetros: año, rango de semanas,<br/>compañía, finca, invernadero, variedad<br/>No ejecutado"]:::process
+    PS["Siembra.ProyeccionSemana<br/>PK: IdProyeccionSemana<br/>FK: IdSiembra<br/>Anio/Semana objetivo,<br/>Coeficiente, Inicial, Final,<br/>IdUsuarioAuditoria, FechaAuditoria"]:::result
+    PV["Siembra.ProyeccionSemanaView<br/>VISTA, no tabla de cálculo<br/>ProyeccionSemana + SiembraCamaView<br/>+ InvernaderoView"]:::view
+    PI["Siembra.ProyInvernaVariedad<br/>PK: IdProyInvernaVariedad<br/>Invernadero + Variedad + Año/Semana<br/>Proyeccion1..8, Inicial, Final"]:::result
+    PF["Siembra.ProyFincaVariedad<br/>PK: IdProyFincaVariedad<br/>Finca + Variedad + Año/Semana<br/>Proyeccion1..8, Inicial, Final"]:::result
+    PG["Siembra.ProyeccionGrado<br/>PK: IdProyeccionGrado<br/>Finca + Variedad + Grado + Año/Semana<br/>Proyeccion por día, EsAjustado"]:::result
+    PGP["Siembra.PorcentajeGrado<br/>PK: IdPorcentajeGrado<br/>Finca + Variedad + Grado + Año/Semana<br/>Porcentaje por día<br/>Participación en cálculo: validar"]:::config
+    IW["Reporte.InformeProyeccionSemana<br/>@Anio, @SemanaInicial, @SemanaFinal<br/>SELECT desde ProyeccionSemanaView"]:::report
+    IVW["Reporte.InformeDeProyeccionesPorVariedadSemana<br/>@FechaInicial, @FechaFinal<br/>CalcularSemana + SUM Inicial/Final<br/>agrupa por finca, bloque, producto, variedad"]:::report
+    EX["Excel / capa WebFlor<br/>Exportación fuera de los objetos SQL confirmados"]:::external
+    ER["Siembra.SiembraErradicacion<br/>PROCEDIMIENTO NO EJECUTADO<br/>copia proyección de una siembra<br/>antes de eliminarla"]:::history
+    HS["Siembra.HistoricoProyeccionSemana<br/>PK: IdHistoricoProyeccionSemana<br/>FK lógica: IdProyeccionSemana, IdSiembra<br/>FechaAuditoria = momento de copia"]:::history
+    HD["Siembra.HistoricoProyeccionDia<br/>PK: IdHistoricoProyeccionDia<br/>FK lógica: IdProyeccionDia, IdSiembra<br/>FechaAuditoria = momento de copia"]:::history
+    IP["Mapa.ListInvIndicesProductividad<br/>PROCEDIMIENTO DE CONSULTA<br/>@IdFinca, @IdVariedad<br/>lista invernaderos con siembra activa"]:::aux
+    IX["Siembra.SiembrasIndicesProductividadToExcel<br/>PROCEDIMIENTO NO EJECUTADO<br/>arma índices para Excel según tipo 17/11/12"]:::aux
+
+    F -->|FK IdFinca| I
+    I -->|FK IdInvernadero| C
+    C -->|FK IdCamaFisica| SC
+    PR -->|FK IdProducto| VA
+    VA -->|FK IdVariedad| SC
+    PR -->|FK IdProducto| CI
+    CI -->|FK IdCiclo| CV
+    F -->|FK IdFinca| CV
+    VA -->|FK IdVariedad| CV
+    CV -->|FK IdCicloVariedad| CC
+    CC -->|FK IdCurvaCiclo| CO
+    CV -->|FK IdCicloVariedad| SC
+    CC -->|FK IdCurvaCiclo| SC
+    SC -->|Inputs de la unidad de cálculo| PC
+    CO -->|Método tipo 17: edad| PC
+    XI -->|Método tipo 11: invernadero| PC
+    XF -->|Método tipo 12: finca| PC
+    PC -->|Resultado por siembra y semana| PS
+    SC -->|FK IdSiembra| PS
+    PS -->|JOIN IdSiembra| PV
+    PV -->|Filtro año y semanas| IW
+    PV -->|GROUP BY y SUM| IVW
+    IW -.->|Exportación| EX
+    IVW -.->|Exportación| EX
+    PS -->|Agregado por invernadero| PI
+    PS -->|Agregado por finca| PF
+    PI -->|Agregado por grado| PG
+    PF -->|Agregado por grado| PG
+    PGP -.->|Relación candidata| PG
+    ER -->|Copia antes de eliminar| HS
+    ER -->|Copia antes de eliminar| HD
+    ER -->|Elimina siembra actual| SC
+    IP -.->|Consulta auxiliar| I
+    IX -.->|Expone índices| CO
+
+    classDef master fill:#e3f2fd,stroke:#1976d2,color:#0d47a1
+    classDef input fill:#e8f5e9,stroke:#388e3c,color:#1b5e20
+    classDef config fill:#fff8e1,stroke:#f9a825,color:#5d4037
+    classDef process fill:#fce4ec,stroke:#c2185b,color:#880e4f
+    classDef result fill:#ede7f6,stroke:#5e35b1,color:#311b92
+    classDef view fill:#e0f7fa,stroke:#00838f,color:#006064
+    classDef report fill:#f3e5f5,stroke:#8e24aa,color:#4a148c
+    classDef history fill:#ffebee,stroke:#d32f2f,color:#b71c1c
+    classDef aux fill:#f5f5f5,stroke:#757575,color:#424242
+    classDef external fill:#eeeeee,stroke:#616161,color:#212121

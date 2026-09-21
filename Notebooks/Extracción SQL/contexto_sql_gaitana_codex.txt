@@ -1,0 +1,816 @@
+CONTEXTO DEL PROYECTO – BASE SQL LA GAITANA / MODELO DE SIEMBRA Y PROYECCIÓN
+
+1. OBJETIVO
+
+Estoy estudiando y documentando una base de datos SQL Server utilizada en una empresa floricultora.
+
+El objetivo NO es solamente hacer consultas SQL.
+
+Quiero entender primero:
+- la arquitectura de la base de datos;
+- la lógica de negocio;
+- las relaciones entre tablas;
+- el modelo agronómico;
+- cómo una siembra física termina convirtiéndose en una proyección de producción;
+- y posteriormente construir análisis reproducibles en Python/Jupyter Notebook.
+
+Trabajo principalmente con:
+- SQL Server
+- Python
+- pandas
+- Jupyter Notebook / ipynb
+- eventualmente Power BI
+
+IMPORTANTE:
+No asumir significados de columnas sin evidencia.
+Distinguir siempre entre:
+1. confirmado por FK o código SQL;
+2. inferido por datos;
+3. pendiente por validar.
+
+No ejecutar procedimientos almacenados que modifiquen información productiva salvo autorización explícita.
+
+
+2. ARQUITECTURA GENERAL DESCUBIERTA
+
+Lógica física del cultivo:
+
+Basico.Finca
+    ↓
+Mapa.Invernadero
+    ↓
+Mapa.CamaFisica
+    ↓
+Siembra.SiembraCama
+
+Lógica del producto:
+
+TablasBasicas.Producto
+    ↓
+TablasBasicas.Variedad
+
+Configuración productiva:
+
+TablasBasicas.Ciclo
+    ↓
+TablasBasicas.CicloVariedad
+    ↓
+Siembra.CurvaCiclo
+    ↓
+Siembra.CurvaCoeficiente
+
+Siembra.SiembraCama conecta el mundo físico con el productivo.
+
+Modelo general:
+
+Finca
+  ↓
+Invernadero
+  ↓
+CamaFisica
+  ↓
+SiembraCama
+  │
+  ├────────────→ Variedad → Producto
+  │
+  ├────────────→ CicloVariedad
+  │                    ↓
+  │                CurvaCiclo
+  │                    ↓
+  │             CurvaCoeficiente
+  │
+  ↓
+ProyeccionSemana
+  ↓
+ProyInvernaVariedad
+  ↓
+ProyFincaVariedad
+  ↓
+ProyeccionGrado
+
+
+3. BASICO.FINCA
+
+Basico.Finca es un maestro general de fincas/orígenes.
+
+No representa únicamente producción propia.
+
+En el negocio:
+- IdFinca = 1 → Arabella
+- IdFinca = 3 → Gaitana
+
+Estas son las dos fincas propias principales.
+
+La tabla también contiene:
+- fincas de compra;
+- proveedores;
+- posibles registros de presupuesto;
+- puntos de acopio.
+
+Relación confirmada:
+Basico.Finca.IdCompania → Basico.Compania.IdCompania
+
+
+4. MAPA.INVERNADERO
+
+Representa un bloque/invernadero físico.
+
+FK confirmada:
+Mapa.Invernadero.IdFinca → Basico.Finca.IdFinca
+
+Granularidad:
+1 fila = 1 invernadero/bloque físico
+
+
+5. MAPA.CAMAFISICA
+
+Representa una cama física dentro de un invernadero.
+
+Relación conceptual:
+Finca → Invernadero → CamaFisica
+
+Campos importantes:
+- IdCamaFisica
+- NumeroCama
+- Ancho
+- Largo
+- Area
+- AreaUtilizada
+- EstaOcupada
+- EstadoCamaFisica
+- IdInvernadero
+
+Concepto:
+CamaFisica describe EL LUGAR.
+SiembraCama describe LO QUE OCURRIÓ EN ESE LUGAR.
+
+
+6. TABLASBASICAS.PRODUCTO
+
+Maestro de familias de producto.
+
+Ejemplos:
+- IdProducto 71 = Carnation
+- IdProducto 65 = Minicarnation
+- IdProducto 70 = Solomio
+- IdProducto 73 = Raffine
+- IdProducto 55 = Statice
+
+Concepto:
+Producto = familia
+Variedad = cultivar específico
+
+Campos importantes:
+- IdProducto
+- Codigo
+- NomProducto
+- PickTipoRamo
+- PickUnidad
+- SeProduce
+- PickFactorConversion
+- CodigoArancelario
+- EstadoProducto
+
+SeProduce y EstadoProducto NO significan lo mismo.
+
+
+7. TABLASBASICAS.VARIEDAD
+
+Maestro de variedades/cultivares.
+
+FK confirmadas:
+Variedad.IdProducto → Producto.IdProducto
+Variedad.IdColor → Color.IdColor
+Variedad.IdColorAlterno → Color.IdColor
+
+Campos importantes:
+- IdVariedad
+- IdProducto
+- IdColor
+- NomVariedad
+- CodigoBarras
+- PickObtentor
+- SeProduce
+- SeTintura
+- EsComposicion
+- DiasRotacion
+- ConversionCorte
+- Densidad
+- EstadoVariedad
+- TemperaturaBase
+
+Ejemplo:
+Brut / Carnation / Peach aparece con DOS IDs:
+- IdVariedad = 422
+- IdVariedad = 6494
+
+Ambos:
+NomVariedad = Brut
+Producto = Carnation
+Color = Peach
+SeProduce = 1
+EstadoVariedad = 1
+
+Posteriormente se comprobó que representan parametrizaciones diferentes según finca.
+
+
+8. TABLASBASICAS.CICLO
+
+Define la configuración general del ciclo productivo por producto.
+
+FK confirmada:
+Ciclo.IdProducto → Producto.IdProducto
+
+Campos:
+- IdCiclo
+- NomCiclo
+- IdProducto
+- EstadoCiclo
+- Orden
+- PickPeriodo
+- PickForma
+- PickTipoProyeccion
+- TieneCorteLuz
+- PickProcesoCiclo
+
+Para Carnation:
+IdCiclo = 5
+NomCiclo = SIEMBRA
+IdProducto = 71
+PickPeriodo = 8
+PickForma = 45
+PickTipoProyeccion = 17
+
+Del procedimiento Siembra.ProyeccionCalcula se confirmó:
+- PickPeriodo = 7 → proyección por día
+- PickPeriodo = 8 → proyección por semana
+- PickForma = 44 → cálculo basado en Área
+- PickForma != 44 → cálculo basado en Plantas
+- PickTipoProyeccion = 17 → proyección por edad de la planta
+- PickTipoProyeccion = 11 → coeficiente por invernadero
+- PickTipoProyeccion = 12 → coeficiente por finca
+
+Para Carnation:
+PickPeriodo = 8
+PickForma = 45
+PickTipoProyeccion = 17
+
+Por tanto:
+Carnation se proyecta semanalmente,
+por edad de la planta,
+y el cálculo usa número de plantas.
+
+
+9. TABLASBASICAS.CICLOVARIEDAD
+
+FK confirmadas:
+CicloVariedad.IdFinca → Basico.Finca.IdFinca
+CicloVariedad.IdVariedad → TablasBasicas.Variedad.IdVariedad
+CicloVariedad.IdCiclo → TablasBasicas.Ciclo.IdCiclo
+
+Campos importantes:
+- IdCicloVariedad
+- IdFinca
+- IdVariedad
+- IdCiclo
+- SemanaInicioCorte
+- SemanaPicoCorte
+- SemanaFinCorte
+- DiaInicioCorte
+- DiaPicoCorte
+- DiaFinCorte
+- DiaCorteLuz
+- DiaRespuesta
+- Densidad
+- EstadoCicloVariedad
+
+Granularidad conceptual:
+1 fila = Finca + Variedad + Ciclo + parametrización agronómica
+
+Representa cómo se espera que se comporte una variedad específica en una finca.
+
+IMPORTANTE:
+No interpretar automáticamente SemanaPicoCorte como el máximo matemático exacto de CurvaCoeficiente.
+Se encontraron casos donde no coincide exactamente.
+
+Lo mismo para SemanaFinCorte: puede ser un límite agronómico/administrativo mientras que los coeficientes reales ya son cero antes.
+
+
+10. SIEMBRA.CURVACICLO
+
+FK confirmada:
+CurvaCiclo.IdCicloVariedad → CicloVariedad.IdCicloVariedad
+
+Campos:
+- IdCurvaCiclo
+- NomCurva
+- IdCicloVariedad
+- auditoría
+
+Esta tabla NO contiene los puntos matemáticos de la curva.
+Es la CABECERA de una curva.
+
+Relación:
+CicloVariedad 1 → N CurvaCiclo
+
+Una configuración puede tener más de una curva.
+
+SiembraCama guarda directamente IdCurvaCiclo.
+
+
+11. SIEMBRA.CURVACOEFICIENTE
+
+FK confirmada:
+CurvaCoeficiente.IdCurvaCiclo → CurvaCiclo.IdCurvaCiclo
+
+Campos:
+- IdCurvaCoeficiente
+- SemanaDia
+- Coeficiente
+- IdCurvaCiclo
+- Estado
+
+Granularidad:
+1 fila = 1 curva + 1 edad + 1 coeficiente
+
+Para PickPeriodo = 8:
+SemanaDia = edad de la siembra expresada en semanas
+
+NO es semana calendario.
+
+Ejemplo:
+SemanaDia = 25
+significa aproximadamente 25 semanas después de la siembra.
+
+
+12. FÓRMULA REAL DE LA PROYECCIÓN
+
+Siembra.ProyeccionCalcula contiene la fórmula real.
+
+Para cada siembra:
+
+CASE
+    WHEN PickForma = 44
+        THEN Area * Coeficiente
+    ELSE
+        Planta * Coeficiente
+END
+
+y se redondea a cero decimales.
+
+Por tanto:
+
+PickForma 44:
+Proyección = Área × Coeficiente
+
+Otros PickForma:
+Proyección = Plantas × Coeficiente
+
+Carnation utiliza PickForma = 45.
+
+Entonces:
+Proyección semanal Carnation = Plantas × Coeficiente
+
+
+13. EJEMPLO REAL: BRUT PEACH
+
+GAITANA
+- IdVariedad = 422
+- NomVariedad = Brut
+- Producto = Carnation
+- Color = Peach
+- IdFinca = 3
+- NomFinca = GAITANA
+- IdCicloVariedad = 291
+- IdCiclo = 5
+- IdCurvaCiclo = 7293
+- NomCurva = CURVA 01
+- SemanaInicioCorte = 18
+- SemanaPicoCorte = 25
+- SemanaFinCorte = 104
+- DensidadCicloVariedad = 59.50
+
+Curva productiva efectiva:
+- Primera semana con coeficiente > 0 = 19
+- Última semana con coeficiente > 0 = 65
+- Coeficiente máximo = 0.8016
+- Coeficiente acumulado = 8.7088
+
+Desde semana 66 hasta 104 los coeficientes almacenados son 0.
+
+
+ARABELLA
+- IdVariedad = 6494
+- NomVariedad = Brut
+- Producto = Carnation
+- Color = Peach
+- IdFinca = 1
+- NomFinca = Arabella
+- IdCicloVariedad = 7319
+- IdCiclo = 5
+- IdCurvaCiclo = 7023
+- NomCurva = Curva 02
+- SemanaInicioCorte = 19
+- SemanaPicoCorte = 26
+- SemanaFinCorte = 65
+- DensidadCicloVariedad = 1.00
+
+Curva:
+- Primera semana productiva = 19
+- Última semana productiva = 65
+- Coeficiente máximo = 0.7729
+- Coeficiente acumulado = 8.1132
+
+
+14. COMPARACIÓN BRUT POR FINCA
+
+Arabella:
+- Inicio real = 19
+- Fin real = 65
+- Coef máximo = 0.7729
+- Coef acumulado = 8.1132
+
+Gaitana:
+- Inicio real = 19
+- Fin real = 65
+- Coef máximo = 0.8016
+- Coef acumulado = 8.7088
+
+Diferencia acumulada:
+8.7088 - 8.1132 = 0.5956
+
+Gaitana tiene aproximadamente +7.34 % más coeficiente productivo acumulado que Arabella para Brut.
+
+Como Carnation se calcula por planta:
+Producción total teórica ≈ Plantas × suma de coeficientes
+
+Ejemplo con 1.000 plantas:
+Arabella: 1000 × 8.1132 ≈ 8.113 tallos
+Gaitana: 1000 × 8.7088 ≈ 8.709 tallos
+
+Diferencia ≈ 596 tallos por cada 1.000 plantas.
+
+Esto confirma que la misma variedad comercial puede estar parametrizada productivamente de forma distinta según finca.
+
+
+15. SIEMBRA.SIEMBRACAMA
+
+Representa una siembra real.
+
+Campos relevantes:
+- IdSiembra
+- NumeroSiembra
+- FechaSiembra
+- IdCamaFisica
+- IdVariedad
+- IdCicloVariedad
+- IdCurvaCiclo
+- Area
+- Planta
+- Densidad
+- AnioSiembra
+- SemanaSiembra
+- FechaInicioProduccion
+- PlantasInicial
+- AreaInicial
+
+Conceptualmente:
+SiembraCama responde:
+- qué variedad
+- dónde
+- cuándo
+- cuántas plantas
+- qué ciclo
+- qué curva
+
+
+16. EJEMPLO REAL DE SIEMBRACAMA BRUT
+
+Ejemplo Arabella:
+- IdSiembra = 115386
+- FechaSiembra = 2026-09-03
+- SemanaSiembra = 36
+- IdVariedad = 6494
+- Planta = 906
+- Area = 15
+- IdCicloVariedad = 7319
+- IdCurvaCiclo = 7023
+- FechaInicioProduccion = 2027-01-14
+
+Ejemplo Gaitana:
+- IdVariedad = 422
+- IdCicloVariedad = 291
+- IdCurvaCiclo = 7293
+- Densidad = 59.50
+
+
+17. SIEMBRA.PROYECCIONSEMANA
+
+FK confirmada:
+ProyeccionSemana.IdSiembra → SiembraCama.IdSiembra
+
+Campos:
+- IdProyeccionSemana
+- IdSiembra
+- AnioProyeccion
+- SemanaProyeccion
+- ProyeccionFinal
+- ProyeccionInicial
+- Coeficiente
+- auditoría
+
+Granularidad funcional:
+1 fila = 1 siembra + 1 año calendario + 1 semana calendario
+
+IMPORTANTE:
+CurvaCoeficiente.SemanaDia = EDAD de la planta
+ProyeccionSemana.SemanaProyeccion = SEMANA CALENDARIO
+
+No son lo mismo.
+
+
+18. VALIDACIÓN MATEMÁTICA REAL
+
+Ejemplo:
+- IdSiembra = 107492
+- Finca = Gaitana
+- Variedad = Brut
+- Plantas = 1200
+- Coeficiente = 0.0732
+- SemanaProyeccion = 52
+
+Cálculo:
+1200 × 0.0732 = 87.84
+
+SQL aplica ROUND(...,0)
+
+Resultado = 88
+
+Tabla:
+ProyeccionInicial = 88
+ProyeccionFinal = 88
+
+Coincide exactamente.
+
+Otros ejemplos validados:
+
+Arabella:
+1074 × 0.0347 = 37.2678 → 37
+1266 × 0.1976 = 250.1616 → 250
+
+Gaitana:
+1200 × 0.1508 = 180.96 → 181
+
+Todos coinciden con ProyeccionSemana.
+
+
+19. FLUJO TEMPORAL DE LA PROYECCIÓN
+
+Para proyección semanal por edad:
+
+SemanaSiembra + SemanaDia = Semana calendario proyectada
+
+El procedimiento contiene lógica adicional para manejar el cambio de año y semana 52.
+
+Por tanto distintas siembras de Brut pueden tener coeficientes distintos durante la misma semana calendario porque cada una tiene una edad diferente.
+
+
+20. AGREGACIONES DE PROYECCIÓN
+
+Después de ProyeccionSemana:
+
+ProyeccionSemana
+    ↓
+ProyInvernaVariedad
+    ↓
+ProyFincaVariedad
+    ↓
+ProyeccionGrado
+
+ProyInvernaVariedad:
+Granularidad aproximada =
+Invernadero + Variedad + Año + Semana + CicloVariedad
+
+ProyFincaVariedad:
+Granularidad aproximada =
+Finca + Variedad + Año + Semana + CicloVariedad
+
+
+21. PROYECCIONINICIAL VS PROYECCIONFINAL
+
+ProyeccionCalcula inicialmente genera:
+
+ProyeccionInicial = cálculo matemático
+ProyeccionFinal = cálculo matemático
+
+Existe:
+Siembra.ProyeccionAjuste
+
+para preservar/aplicar ajustes sobre la proyección.
+
+Su lógica redistribuye un ajuste agregado proporcionalmente:
+
+ProyeccionFinalSiembra =
+(ProyeccionInicialSiembra / ProyeccionInicialTotal)
+× ProyeccionFinalTotal
+
+Ejemplo conceptual:
+Inicial total = 10.000
+Final ajustado = 8.000
+Siembra representa 20 % del inicial
+Final siembra = 1.600
+
+
+22. USO HISTÓRICO DE AJUSTES
+
+Se buscó:
+ProyeccionInicial <> ProyeccionFinal
+
+En Siembra.ProyeccionSemana:
+no se encontraron registros diferentes.
+
+En niveles agregados sí existen:
+
+ProyFincaVariedad:
+- 1 ajuste
+- solo en 2019
+
+ProyInvernaVariedad:
+- 5 ajustes
+- solo en 2019
+
+Resultado:
+FINCA: primer año 2019, último año 2019, 1 ajuste
+INVERNADERO: primer año 2019, último año 2019, 5 ajustes
+
+Ejemplos:
+Invernadero:
+865 → 900
+0 → 500
+106 → 300
+248 → 300
+1655 → 1654
+
+Finca:
+3312 → 3000
+
+Interpretación segura:
+El mecanismo de ajustes existe y fue utilizado históricamente, pero no se encontró evidencia almacenada de ajustes posteriores a 2019.
+
+NO afirmar todavía que el mecanismo haya sido eliminado.
+
+
+23. PROYECCIONAJUSTE – POSIBLE PROBLEMA DE CÓDIGO
+
+En Siembra.ProyeccionAjuste existe:
+
+INNER JOIN mapa.CamaFisica d
+    ON c.IdCamaFisica = c.IdCamaFisica
+
+Esto parece incorrecto porque compara la columna consigo misma.
+
+Probablemente se esperaba algo similar a:
+
+ON c.IdCamaFisica = d.IdCamaFisica
+
+NO modificar todavía.
+
+Registrar como:
+POSIBLE BUG / DEUDA TÉCNICA
+
+hasta comprobar impacto.
+
+
+24. PROYECCIONCALCULA – ADVERTENCIA
+
+NO ejecutar libremente:
+
+EXEC Siembra.ProyeccionCalcula ...
+
+Este procedimiento:
+- TRUNCATE tablas temporales permanentes;
+- DELETE proyecciones existentes;
+- INSERT nuevas proyecciones;
+- UPDATE información;
+- recalcula varios niveles.
+
+Puede alterar información productiva real.
+
+Para estudiarlo usar solamente:
+EXEC sp_helptext 'Siembra.ProyeccionCalcula'
+
+o:
+
+SELECT OBJECT_DEFINITION(
+    OBJECT_ID('Siembra.ProyeccionCalcula')
+)
+
+
+25. TRES MÉTODOS DE PROYECCIÓN IDENTIFICADOS
+
+Tipo 17 – Edad:
+Siembra → CurvaCiclo → CurvaCoeficiente → edad → Área/Plantas × coeficiente
+
+Tipo 11 – Invernadero:
+Fuente = Siembra.CicloVariCoefInverna
+Coeficiente depende de:
+CicloVariedad + Invernadero + Semana/Año
+
+Tipo 12 – Finca:
+Fuente = Siembra.CicloVariCoefFinca
+Coeficiente depende de:
+CicloVariedad + Finca + Semana/Año
+
+Actualmente Carnation observado trabaja con Tipo 17.
+
+
+26. PRÓXIMAS TABLAS A INVESTIGAR
+
+Prioridad:
+1. Siembra.ProyeccionGrado
+2. Siembra.PorcentajeGrado
+3. Siembra.ProyInvernaVariedad
+4. Siembra.ProyFincaVariedad
+5. Siembra.CicloVariCoefInverna
+6. Siembra.CicloVariCoefFinca
+
+Después investigar:
+- clasificación real;
+- productividad real;
+- comparación proyección vs producción real;
+- precisión del forecast;
+- evolución por finca;
+- evolución por variedad;
+- cambios históricos en curvas.
+
+
+27. FILOSOFÍA DEL ANÁLISIS
+
+Al trabajar con esta base:
+
+NO asumir que nombres similares significan la misma cosa.
+
+Siempre revisar:
+- FKs;
+- procedimientos;
+- vistas;
+- datos reales;
+- granularidad;
+- unidad temporal;
+- nivel de agregación.
+
+Clasificar hallazgos como:
+CONFIRMADO
+INFERENCIA FUERTE
+HIPÓTESIS
+PENDIENTE DE VALIDAR
+
+
+28. OBJETIVO PARA LOS NOTEBOOKS
+
+Construir notebooks modulares.
+
+Propuesta:
+
+00_conexion.ipynb
+01_arquitectura_bd.ipynb
+02_maestros_producto_variedad.ipynb
+03_estructura_fisica_finca.ipynb
+04_ciclos_productivos.ipynb
+05_curvas_productividad.ipynb
+06_proyeccion_semana.ipynb
+07_proyeccion_grado.ipynb
+08_proyeccion_vs_real.ipynb
+09_calidad_datos.ipynb
+
+Cada notebook debería contener:
+1. Objetivo
+2. Tablas involucradas
+3. Relaciones
+4. Query SQL
+5. Carga pandas
+6. Validaciones
+7. Análisis
+8. Visualizaciones
+9. Hallazgos confirmados
+10. Preguntas abiertas
+
+
+29. REGLA PARA CODEX
+
+Cuando se escriba código:
+- favorecer consultas de solo lectura;
+- nunca ejecutar DELETE/UPDATE/INSERT/TRUNCATE sin autorización;
+- usar queries pequeñas para validación;
+- documentar granularidad;
+- evitar SELECT * para procesos finales;
+- preservar IDs originales;
+- validar duplicados antes de JOIN;
+- comprobar cardinalidad de JOINs;
+- comparar conteos antes/después del JOIN;
+- usar pandas para análisis, no para ocultar problemas de SQL;
+- producir resultados reproducibles.
+
+Cuando una interpretación no esté demostrada por la base:
+NO inventarla.
+Marcarla como pendiente.

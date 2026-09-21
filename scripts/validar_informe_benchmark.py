@@ -21,7 +21,7 @@ class Metricas(unittest.TestCase):
         r = resumir(base).iloc[0]
         self.assertEqual(r.tallos_estimados, 270)
         self.assertEqual(r.tallos_reales, 230)
-        self.assertEqual(r.diferencia_tallos, 40)
+        self.assertEqual(r.diferencia_tallos, -40)
         self.assertEqual(r.error_absoluto_total, 200)
         self.assertEqual(r.MAE_tallos, 40)
         self.assertAlmostEqual(r.WAPE_pct, 200/230*100)

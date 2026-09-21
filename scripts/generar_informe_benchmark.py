@@ -40,7 +40,8 @@ def preparar_base(df):
     base.loc[base.cero_estimado_por_union, 'tallos_estimados'] = 0
     base.loc[base.cero_real_por_union, 'tallos_reales'] = 0
     base['cantidad_por_revisar'] = base[['tallos_estimados', 'tallos_reales']].isna().any(axis=1)
-    base['diferencia_tallos'] = base.tallos_estimados - base.tallos_reales
+    # Convención gerencial: real - estimado. Positivo = subestimación; negativo = sobreestimación.
+    base['diferencia_tallos'] = base.tallos_reales - base.tallos_estimados
     base['error_absoluto'] = base.diferencia_tallos.abs()
     return base
 
@@ -61,13 +62,13 @@ def resumir(base, dimensiones=()):
         volumen = grupo.tallos_estimados.fillna(0) + grupo.tallos_reales.fillna(0)
         fila.update(registros=len(grupo), comparaciones=len(validas),
                     por_revisar=int(grupo.cantidad_por_revisar.sum()),
-                    tallos_estimados=est, tallos_reales=real, diferencia_tallos=est-real,
+                    tallos_estimados=est, tallos_reales=real, diferencia_tallos=real-est,
                     error_absoluto_total=error, MAE_tallos=error/len(validas) if len(validas) else np.nan,
                     WAPE_pct=100*error/real if real > 0 else np.nan,
-                    sesgo_pct=100*(est-real)/real if real > 0 else np.nan,
+                    sesgo_pct=100*(real-est)/real if real > 0 else np.nan,
                     participacion_error_pct=100*error/total_error if total_error > 0 else np.nan,
-                    sobreestimacion_tallos=validas.diferencia_tallos.clip(lower=0).sum(min_count=1),
-                    subestimacion_tallos=(-validas.diferencia_tallos.clip(upper=0)).sum(min_count=1),
+                    sobreestimacion_tallos=(-validas.diferencia_tallos.clip(upper=0)).sum(min_count=1),
+                    subestimacion_tallos=validas.diferencia_tallos.clip(lower=0).sum(min_count=1),
                     solo_estimado=int(grupo.estado.eq('solo_estimado').sum()),
                     solo_produccion=int(grupo.estado.eq('solo_produccion').sum()),
                     sin_contraparte_con_volumen=int((sin & volumen.gt(0)).sum()),
@@ -125,7 +126,7 @@ NOTAS = [
     ('Unidad de error', 'Año + semana + finca + producto + color + variedad del consolidado. Se calcula el error antes de agrupar.'),
     ('Ceros', 'Solo se imputa cero en la fuente ausente según estado; se conservan originales y marcas de imputación.'),
     ('Cantidades desconocidas', 'Otros faltantes se conservan en el detalle y se excluyen de ambos lados de las métricas.'),
-    ('Diferencia', 'Estimado - real. Positivo: sobreestimación; negativo: subestimación.'),
+    ('Diferencia', 'Real - estimado. Positivo: subestimación; negativo: sobreestimación.'),
     ('WAPE (%)', '100 × suma de errores absolutos / suma de producción real evaluada. No se promedian porcentajes. Puede superar 100%.'),
     ('MAE (tallos)', 'Suma de errores absolutos / número de registros válidos, incluidos ceros. No es el error del total semanal del grupo.'),
     ('Producción cero', 'WAPE y sesgo porcentual quedan sin definir cuando el denominador es cero.'),
