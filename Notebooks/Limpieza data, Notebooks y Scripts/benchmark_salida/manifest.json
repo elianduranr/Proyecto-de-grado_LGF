@@ -1,0 +1,7 @@
+{
+  "fuente_estimados": "C:\\Materias y Cosas Técnicas Uniandes\\Proyecto de grado\\Proyecto de grado 2\\Datos\\Estimados semanales\\datos extraidos\\estimados_crudos_h1_h5.csv",
+  "fuente_produccion": "C:\\Materias y Cosas Técnicas Uniandes\\Proyecto de grado\\Proyecto de grado 2\\Datos\\Producción real\\datos_limpios_multianual\\produccion_limpia_por_anio",
+  "filas_benchmark": 60492,
+  "html": "C:\\Materias y Cosas Técnicas Uniandes\\Proyecto de grado\\Proyecto de grado 2\\Notebooks\\Limpieza data, Notebooks y Scripts\\benchmark_salida\\informe_gerencia_benchmark.html",
+  "excel_informe": "C:\\Materias y Cosas Técnicas Uniandes\\Proyecto de grado\\Proyecto de grado 2\\Notebooks\\Limpieza data, Notebooks y Scripts\\benchmark_salida\\informe_gerencia_benchmark.xlsx"
+}
