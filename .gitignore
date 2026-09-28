@@ -6,3 +6,36 @@ __pycache__/
 /Primer entendimiento con los muchachos/Informe Clima 2026.xlsx
 Datos.rar
 ~$*
+
+# Fuentes y datasets: permanecen locales, nunca se publican.
+*.csv
+*.tsv
+*.parquet
+*.feather
+*.arrow
+*.xlsx
+*.xls
+*.xlsm
+*.xlsb
+*.pkl
+*.pickle
+*.h5
+*.hdf5
+*.sqlite
+*.sqlite3
+*.db
+*.duckdb
+*.rar
+*.zip
+/Datos_analiticos_proyecto/*
+!/Datos_analiticos_proyecto/README.md
+/Notebooks/Extracción SQL/Datos/
+
+# Configuración privada y temporales.
+.env
+.env.*
+!.env.example
+*.log
+*.tmp
+
+# Los notebooks sí conservan resultados y gráficas para revisión.

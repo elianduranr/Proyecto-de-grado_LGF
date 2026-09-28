@@ -766,35 +766,16 @@ HIPÓTESIS
 PENDIENTE DE VALIDAR
 
 
-28. OBJETIVO PARA LOS NOTEBOOKS
+28. NOTEBOOKS VIGENTES — SIMPLIFICACIÓN 2026-09-24
 
-Construir notebooks modulares.
+El estudio 01_exploracion_bases_produccion.ipynb se conserva documental,
+con código comentado y resultados originales. No volver a ejecutar su
+extracción amplia ni sus exportaciones antiguas.
 
-Propuesta:
-
-00_conexion.ipynb
-01_arquitectura_bd.ipynb
-02_maestros_producto_variedad.ipynb
-03_estructura_fisica_finca.ipynb
-04_ciclos_productivos.ipynb
-05_curvas_productividad.ipynb
-06_proyeccion_semana.ipynb
-07_proyeccion_grado.ipynb
-08_proyeccion_vs_real.ipynb
-09_calidad_datos.ipynb
-
-Cada notebook debería contener:
-1. Objetivo
-2. Tablas involucradas
-3. Relaciones
-4. Query SQL
-5. Carga pandas
-6. Validaciones
-7. Análisis
-8. Visualizaciones
-9. Hallazgos confirmados
-10. Preguntas abiertas
-
+El único complemento operativo es 02_webflor_complemento_necesario.ipynb:
+16 objetos seleccionados, dependencias/joins en memoria y dos salidas
+finales en Datos_analiticos_proyecto. Modo local por defecto.
+No crear un notebook por maestro ni exportar cada resultado intermedio.
 
 29. REGLA PARA CODEX
 
@@ -814,3 +795,84 @@ Cuando se escriba código:
 Cuando una interpretación no esté demostrada por la base:
 NO inventarla.
 Marcarla como pendiente.
+
+
+30. ACTUALIZACIÓN ANALÍTICA LOCAL - 2026-09-23
+
+El contexto vigente del proyecto está en CONTEXTO_PROYECTO.md (raíz).
+Los cuadernillos vigentes 06/07/08/09 están en Notebooks/Analisis y consumen
+Parquet fijos de Datos_analiticos_proyecto. El selector de versiones se eliminó.
+Se conservan sólo los originales SQL justificados; el usuario autorizó eliminar
+los descartados del disco, incluyendo cortes, clasificación e inventarios.
+No se realizaron conexiones ni ejecuciones SQL durante esta actualización.
+
+Se revisó COMPLETO el archivo descargado, no una muestra:
+- HistoricoProyeccionSemana: 1.354.556 filas.
+- HistoricoProyeccionDia: 22.985 filas.
+- ProyeccionSemana: 308.449 filas.
+SÍ hay proyecciones anteriores. El problema pendiente es certificar origen,
+vigencia y población completa, no exigir generaciones semanales.
+
+SiembraErradicacion archiva con auditoría nueva y elimina proyecciones también
+en la rama parcial. Se enlazaron 25.171 lotes siembra/instante a evento único
+en +/-30 segundos (candidato temporal auditado, no FK ni generación).
+Se resuelve finca/variedad de todas las filas semanales conservadas usando
+identidad en el evento cuando difiere del estado actual.
+
+Las llaves físicas siembra/año/semana tienen 37 repeticiones, 8 con contenido
+distinto. No sumar copias ni tratarlas automáticamente como generaciones.
+Inicial=Final en las filas descargadas no prueba ausencia de ajustes previos.
+
+ProyeccionCalcula tiene alcance parametrizado. ProyeccionCalcula1 también
+existe: su DELETE semanal filtra año/rango sin filtro explícito de finca.
+No inferir cuál invoca la interfaz por su nombre. ProyeccionAjuste puede
+cambiar Final sin actualizar la auditoría. FechaAuditoria no certifica por
+sí sola una emisión final ni una captura completa.
+
+Una referencia puede persistir varios orígenes de ajuste si estaba conocida
+y vigente; nunca propagarla a través de retiro/erradicación ni hacia atrás
+desde una observación posterior. Guardar ámbito, contenido, disponibilidad,
+eventos y procedencia; no inventar corridas.
+
+Regla de calendario analítico confirmada: toda semana 53 del año A pasa a
+semana 1 del A+1, preservando etiquetas físicas/timestamps originales.
+La comparación retrospectiva con archivo NO se llama error histórico de
+corrida. Ver el complemento SQL 02, la construcción 06 y el EDA 07 del flujo simplificado.
+
+
+31. ESTADO POSTERIOR A LA SIMPLIFICACIÓN — 2026-09-24
+
+Proyecciones limpias: 1.686.034 filas.
+- Estado semanal: 308.449.
+- Archivo semanal: 1.354.556.
+- Archivo diario: 22.985.
+- Captura original del informe sin otro equivalente: 44 filas de GAITANA PPTO,
+  año 2020. Todas las filas de esa captura desde 2021 ya estaban representadas.
+No sumar estas categorías ni convertirlas en corridas con origen inventado.
+
+Coeficientes limpios: 128.567; conservan dimensiones y unidad.
+SiembraCama/Historico/Log se usan como identidad auxiliar en memoria.
+No se exporta un segundo plano SQL. Los planos Excel son la fuente oficial
+de plantas/área/edad del panel, sin sumar las dos representaciones.
+
+El usuario autorizó eliminar las descargas descartadas de cortes,
+clasificación e inventario y todos los outputs derivados obsoletos.
+Se conservaron 16 archivos fuente, la captura anterior del informe y cuatro
+CSV de metadata documental. La extracción opcional no escribe 16 CSV nuevos:
+lee objetos en memoria y sólo reemplaza dos Parquet finales.
+
+Para las cinco limpiezas Excel usar Notebooks/Limpieza data, Notebooks y Scripts.
+Para la base/EDA/features/modelos usar Notebooks/Analisis/06, 07, 08 y 09.
+La ejecución de esta simplificación fue exclusivamente local: no consultó
+SQL ni ejecutó procedimientos, generación de proyecciones o escritura SQL.
+
+Ver CONTEXTO_PROYECTO.md y GUIA_PASO_A_PASO_DATOS_Y_MODELOS.md en la raíz
+para las decisiones vigentes. Los nombres/objetos descritos en secciones
+anteriores documentan el sistema; no implican mantener cada descarga.
+
+Decisión analítica vigente: no enlazar proyecciones mediante última
+FechaAuditoria anterior al origen. No acredita generación/disponibilidad.
+La selección futura exigirá referencia conocida, ámbito y objetivo, con
+vigencia hasta reemplazo o retiro; no generaciones artificiales cada semana.
+09 compara pronóstico directo y corrección de media4, no corrección WebFlor.
+No hubo acceso SQL durante el EDA ni el entrenamiento local de modelos.

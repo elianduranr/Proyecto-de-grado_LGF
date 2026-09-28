@@ -3,6 +3,13 @@
 Esta carpeta contiene únicamente la automatización local de Outlook Web mediante
 Microsoft Edge y Selenium.
 
+Es una herramienta opcional para obtener los Excel originales. No forma parte de
+la ejecución de limpieza, no se ejecuta automáticamente y no consulta SQL. Una
+vez descargados los libros, el flujo oficial comienza en el notebook
+`03_limpieza_estimados_semanales.ipynb` de la carpeta de limpieza. Ese notebook
+recupera las semanas sin entrega mediante el siguiente archivo disponible y
+guarda una única tabla limpia. Ver la guía de la raíz para el proceso completo.
+
 ## Ejecución
 
 1. Cierra libros Excel abiertos dentro de `Datos/Estimados semanales`.
