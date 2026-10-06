@@ -1,0 +1,56 @@
+ .gitignore                                         |     2 [32m+[m
+ CONTEXTO_PROYECTO.md                               |    92 [32m+[m[31m-[m
+ DECISIONES_PENDIENTES_TUTOR.md                     |    39 [32m+[m[31m-[m
+ Datos_analiticos_proyecto/README.md                |    39 [32m+[m[31m-[m
+ GUIA_PASO_A_PASO_DATOS_Y_MODELOS.md                |   418 [32m+[m[31m-[m
+ LEEME.md                                           |    16 [32m+[m[31m-[m
+ Lectura.ipynb                                      |   357 [31m-[m
+ METODOLOGIA.md                                     |   107 [32m+[m[31m-[m
+ Notebooks/03_benchmark_estimado_ingeniero.ipynb    |  9608 [31m-----------[m
+ .../Analisis/06_construccion_base_analitica.ipynb  |  3098 [31m----[m
+ Notebooks/Analisis/07_EDA_base_analitica.ipynb     |  3651 [31m----[m
+ .../08_features_y_preparacion_modelos.ipynb        |   922 [31m-[m
+ Notebooks/Analisis/09_modelos_y_comparacion.ipynb  |  5042 [31m------[m
+ .../Analisis/10_base_analitica_proyecciones.ipynb  |  1625 [32m++[m
+ Notebooks/Analisis/11_EDA_proyecciones.ipynb       |  4163 [32m+++++[m
+ .../Analisis/12_modelo_ajuste_proyecciones.ipynb   |  3205 [32m++++[m
+ .../13_comparacion_ingeniero_modelo_2026.ipynb     |  2772 [32m+++[m
+ .../14_tendencias_diarias_modelo_semanal.ipynb     |  3169 [32m++++[m
+ .../15_calidad_y_mejora_por_horizonte.ipynb        |  2734 [32m+++[m
+ .../16_interpretacion_modelo_semanal.ipynb         |  1074 [32m++[m
+ .../17_inventario_modelos_train_test.ipynb         |  2208 [32m+++[m
+ Notebooks/Analisis/README.md                       |    19 [32m+[m[31m-[m
+ Notebooks/Analisis/README_PROYECCIONES_PROPIAS.md  |     3 [32m+[m
+ .../01_exportar_parquet_a_csv.ipynb                |   699 [32m+[m
+ .../1. Extracci\303\263n de estimados.ipynb"       |   300 [31m-[m
+ ... procesamiento de producci\303\263n real.ipynb" |  2273 [31m---[m
+ .../3_Benchmark estimado ingeniero.ipynb           |  1037 [31m--[m
+ .../01_base_diaria_EDA.ipynb                       |   991 [32m++[m
+ .../02_distribucion_semanal_a_diaria.ipynb         |  1470 [32m++[m
+ .../03_SARIMA_SARIMAX_y_boosting.ipynb             |  1223 [32m++[m
+ .../04_diario_con_memoria_semanal.ipynb            |  2398 [32m+++[m
+ Notebooks/Modelo_de_series_diario/README.md        |    25 [32m+[m
+ .../00_catalogo_variedades.ipynb                   |   533 [32m+[m
+ .../Auditoria_calidad_curvas.ipynb                 |  2891 [32m++++[m
+ .../Proyecciones_teoricas.ipynb                    | 14355 [32m+++++++++++++[m[31m---[m
+ .../Proyecciones_teoricas_todos_los_anios.ipynb    | 16824 [32m+++++++++++++++++++[m
+ Notebooks/Proyecciones Teoricas Propias/README.md  |    13 [32m+[m
+ Notebooks/README.md                                |    36 [32m+[m[31m-[m
+ Trabajo escrito/Desarrollo_del_documento.md        |   434 [32m+[m
+ .../Estructura_actualizada_con_resultados.docx     |   Bin [31m0[m -> [32m1039277[m bytes
+ ...tura_reorganizada_trabajo_grado_La_Gaitana.docx |   Bin [31m0[m -> [32m45685[m bytes
+ .../Figuras_resultados/cobertura_teoria_casos.png  |   Bin [31m0[m -> [32m44353[m bytes
+ .../comparacion_semanal_diarios.png                |   Bin [31m0[m -> [32m37086[m bytes
+ .../Figuras_resultados/curva_y_soporte.png         |   Bin [31m0[m -> [32m65864[m bytes
+ .../diario_memoria_comparacion.png                 |   Bin [31m0[m -> [32m58609[m bytes
+ .../Figuras_resultados/diario_memoria_por_dia.png  |   Bin [31m0[m -> [32m86707[m bytes
+ .../Figuras_resultados/error_por_dia.png           |   Bin [31m0[m -> [32m22297[m bytes
+ .../importancia_bloques_semanal.png                |   Bin [31m0[m -> [32m182563[m bytes
+ .../importancia_variables_semanal.png              |   Bin [31m0[m -> [32m186305[m bytes
+ .../Figuras_resultados/perfil_diario.png           |   Bin [31m0[m -> [32m24885[m bytes
+ .../Figuras_resultados/produccion_composicion.png  |   Bin [31m0[m -> [32m173763[m bytes
+ .../Figuras_resultados/revisiones_cinco_planos.png |   Bin [31m0[m -> [32m128123[m bytes
+ .../Figuras_resultados/train_test_modelos.png      |   Bin [31m0[m -> [32m101939[m bytes
+ Trabajo escrito/LEEME.md                           |    11 [32m+[m
+ Trabajo escrito/actualizar_word.py                 |    64 [32m+[m
+ 55 files changed, 60291 insertions(+), 29649 deletions(-)
