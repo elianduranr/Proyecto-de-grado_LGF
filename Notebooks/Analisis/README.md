@@ -1,12 +1,15 @@
-# Base → EDA/benchmark → features → modelos
+# Análisis vigente
 
-1. **06_construccion_base_analitica.ipynb** lee limpios y exporta sólo `Datos_analiticos_proyecto/base_analitica.parquet`. Conserva producción como tabla izquierda. Para el ingeniero usa unión estricta y, sólo en pendientes inequívocos, recuperación 1:1 por variedad. Conserva color real/estimado, origen solicitado y archivo efectivamente usado.
-2. **07_EDA_base_analitica.ipynb** lee esa base. Analiza cobertura, composición, siembras/edad, clima, rezagos y diferencias frente al ingeniero. Separa referencias recuperadas desde un archivo posterior y distintos métodos de unión. No exporta datasets.
-3. **08_features_y_preparacion_modelos.ipynb** lee la misma base. Construye calendario regular, rezagos y ventanas pasadas, casos origen/horizonte y partición temporal en memoria. No entrena ni exporta otra base.
-4. **09_modelos_y_comparacion.ipynb** incluye su preparación explícita, entrena Ridge/boosting y compara con baselines en cortes temporales. Prueba el aporte de producción reciente, siembras y clima; muestra una corrección a media4 y una simulación desde el último origen local. No exporta datasets ni declara validada la corrección WebFlor.
+1. [10 — Base analítica](10_base_analitica_proyecciones.ipynb).
+2. [11 — EDA](11_EDA_proyecciones.ipynb).
+3. [12 — Ajuste de proyecciones](12_modelo_ajuste_proyecciones.ipynb).
+4. [13 — Comparación con el ingeniero en 2026](13_comparacion_ingeniero_modelo_2026.ipynb).
+5. [14 — Tendencias diarias en el pronóstico semanal](14_tendencias_diarias_modelo_semanal.ipynb), después de ejecutar [diario 01](../Modelo_de_series_diario/01_base_diaria_EDA.ipynb).
+6. [15 — Calidad y mejora por horizonte](15_calidad_y_mejora_por_horizonte.ipynb): diagnóstico del error, comparación antes/después de calidad, separación de horizontes, memoria larga, revisiones y combinación con pesos anteriores a 2026.
 
-Ninguno vuelve a limpiar Excel ni consulta SQL. Las transformaciones están en las celdas, no en módulos propios.
+El nivel diario continúa en [su guía breve](../Modelo_de_series_diario/README.md): reparto coherente H1 y comparación SARIMA/SARIMAX frente a boosting.
 
-Se excluyen de X el potencial construido con todo el histórico, clima objetivo futuro, Tipo Corte imputado retrospectivamente, estimados sin disponibilidad al origen y WebFlor sin vigencia certificada. Cierre semanal es un supuesto por validar. Para planos se usa el último anterior con disponibilidad supuesta posterior al cierre nominal y a AL1; se prueba una demora adicional. AL1 sirve para validar edad, no certifica publicación.
+Prerrequisitos y explicación completa en la [guía única](../../GUIA_PASO_A_PASO_DATOS_Y_MODELOS.md). Cada notebook contiene su código y lee entradas explícitas, sin variables de otro kernel ni módulos propios.
 
-Una base estructuralmente correcta no implica cobertura completa de predictores ni un modelo ya validado. Consultar la guía y la metodología de la raíz.
+
+La revisión actual añade `16_interpretacion_modelo_semanal.ipynb` (importancia por permutación y reproducción de agosto) y `17_inventario_modelos_train_test.ipynb` (inventario de algoritmos, errores train/test por corte y resultados completos separados). Diario 04 aplica el candidato de 15 a la distribución diaria. Ejecutar según la guía principal; 17 requiere también diario 04.

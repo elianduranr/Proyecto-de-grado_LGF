@@ -39,3 +39,5 @@ Datos.rar
 *.tmp
 
 # Los notebooks sí conservan resultados y gráficas para revisión.
+Notebooks/Proyecciones Teoricas Propias/Respaldos/
+Notebooks/Limpieza data, Notebooks y Scripts/coso para generar el html antes/

@@ -1,39 +1,16 @@
-# Datasets oficiales
+# Datos procesados
 
-Ocho Parquet, sin subcarpetas por ejecución ni formatos duplicados. Cada proceso reemplaza su propia salida. Los originales no se modifican.
+La revisión de calidad alimenta `modelo_con_proyecciones_teoricas/experimentos_horizontes_2026.parquet` y `resultados_experimentos_horizontes.xlsx`. El notebook 15 compara las mismas observaciones antes/después de calidad y por candidato. La referencia previa se conserva sólo como evidencia en la carpeta `auditoria_calidad` de las proyecciones; no es otra base activa.
 
-| Archivo | Grano y función |
-|---|---|
-| produccion_real_limpio.parquet | Movimiento Excel por archivo/hoja/fila; tallos, dimensiones y limpieza original de Tipo Corte identificada |
-| planos_siembra_limpio.parquet | Línea de un plano original, edición seleccionada y banderas de calidad |
-| curvas_variedad_limpio.parquet | Observación piloto desduplicada entre entregas, con trazabilidad y validez |
-| clima_limpio.parquet | Medición por finca/instante o registro inválido identificado; sin mezclar copias |
-| estimados_semanales_limpio.parquet | Línea de estimado por archivo/fila_cache/origen solicitado; H1–H5, archivo exacto o posterior |
-| proyecciones_webflor_limpio.parquet | Registro actual/archivado/captura previa, con periodicidad e identidad; no sumar categorías |
-| coeficientes_webflor_limpio.parquet | Coeficiente interno curva/edad/ciclo, con dimensiones y unidad |
-| base_analitica.parquet | Gaitana/producto/color/variedad/semana con producción observada y variables auxiliares |
+`modelo_diario/` contiene el calendario diario conciliado, las variables de corte y clima calculadas con información pasada, los pronósticos diarios y las comparaciones con SARIMA/SARIMAX. La comparación semanal ampliada permanece en `modelo_con_proyecciones_teoricas/comparacion_features_diarias_2026.parquet` y `resultados_features_diarias_2026.xlsx`. La ausencia de reporte diario se conserva como dato faltante.
 
-## Base analítica
+Flujo y salidas vigentes: [guía paso a paso](../GUIA_PASO_A_PASO_DATOS_Y_MODELOS.md).
 
-Llave: `finca, producto, color, variedad, semana_inicio`. 44.053 filas, 108 columnas, 663 series comerciales, semanas 2021-01-04 a 2026-08-31 y 327.991.200 tallos reportados. No denominarlos exportables sin confirmar equivalencia.
+Las entradas limpias del flujo son `produccion_real_limpio.parquet`, `clima_limpio.parquet` y, para comparar al ingeniero, `estimados_semanales_limpio.parquet`. `planos_siembra_limpio.parquet` aporta la referencia AL1 a la etapa previa de proyecciones. Los datos de curvas y SQL se conservan como fuentes auxiliares de investigación; no entran al nuevo modelo.
 
-La producción es la tabla izquierda. Los estimados de distintos horizontes son columnas, no copias para sumar. Las fuentes auxiliares sin producción siguen en sus limpios.
+Las salidas activas están en `modelo_con_proyecciones_teoricas/`: panel semanal, base de casos, evaluaciones, simulación y comparación con el ingeniero. Tienen nombres fijos, sin versiones por ejecución. La base antigua de 108 columnas fue retirada.
 
-## Columnas importantes
+No sumar targets repetidos desde distintos orígenes ni confundir ausencia con cero. Los originales permanecen intactos; los Parquet no se publican en Git.
 
-- `tallos_reales, registros_corte, dias_con_reporte`: producción observada agregada.
-- `temperatura_*, humedad_semana, radiacion_semana, dias_clima`: contexto climático observado; rezagar para modelar.
-- `plantas_plano, area_plano, camas_plano, edad_media_plano`: estado del plano coincidente y edad ponderada.
-- `fecha_referencia_edad_plano`: referencia AL1 para validar la fórmula de edad, no publicación. La edad media representa semanas completas al lunes nominal, no la edad redondeada en AL1.
-- `cobertura_curva, plantas_ambiguas, potencial_descriptivo`: soporte y proxy empírico, no WebFlor exacto.
-- `estimado_ingeniero_h1…h5`: cantidad agregada de la solicitud.
-- `origen_ingeniero_h*`: origen solicitado; `origen_archivo_ingeniero_h*`: origen nominal del archivo realmente usado.
-- `archivo_posterior_ingeniero_h*, desfase_archivo_ingeniero_h*`: recuperación por entrega faltante.
-- `metodo_union_ingeniero_h*, color_estimado_ingeniero_h*`: coincidencia estricta o recuperación por variedad y color fuente.
-- `desviacion_ingeniero_h*`: real menos estimado; no error WebFlor.
-- `webflor_estado_descargado`: referencia actual, sin sumar histórico/diario.
-- Banderas de confirmación: no atribuyen fechas o equivalencias no acreditadas.
 
-Los conteos, coberturas y uniones se muestran en los notebooks y en la guía. Faltante no equivale a cero. Edad válida: 42.818 filas (97,20%); potencial descriptivo: 9.058 (20,56%). La cobertura del potencial y las fechas de disponibilidad siguen siendo limitaciones.
-
-07, 08 y 09 consumen esta base sin crear otra tabla de modelos. Sus resultados están en memoria y en los notebooks ejecutados. Sólo las columnas temporalmente admisibles definidas en 08/09 entran como predictores; no usar indiscriminadamente las 108 columnas.
+Revisión diaria/memoria: `modelo_diario/predicciones_diarias_memoria_2026.parquet`, `resultados_diarios_memoria.xlsx` y `piloto_sarima_memoria.parquet`. Interpretación: `modelo_con_proyecciones_teoricas/importancias_memoria_larga.parquet` e `interpretacion_modelo_semanal.xlsx`. Inventario: `diagnostico_train_test.parquet` e `inventario_modelos_train_test.xlsx`; los errores de train son del ajuste indicado, no un backtest histórico.

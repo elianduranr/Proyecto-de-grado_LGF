@@ -1,37 +1,13 @@
 # Notebooks vigentes
 
-## Limpieza de los cinco Excel
+La revisión de calidad comienza en `Proyecciones Teoricas Propias/00_catalogo_variedades.ipynb` y `Auditoria_calidad_curvas.ipynb`, antes de las proyecciones. [15: calidad y mejora por horizonte](Analisis/15_calidad_y_mejora_por_horizonte.ipynb) identifica el candidato semanal. La extensión continúa con [diario 04](Modelo_de_series_diario/04_diario_con_memoria_semanal.ipynb), [16: interpretación](Analisis/16_interpretacion_modelo_semanal.ipynb) y [17: inventario train/test](Analisis/17_inventario_modelos_train_test.ipynb). Consultar la guía única para el orden exacto de corrida y las cifras vigentes.
 
-En `Limpieza data, Notebooks y Scripts/`, ejecutar independientemente:
+La extensión ejecutada continúa con [base diaria y EDA](Modelo_de_series_diario/01_base_diaria_EDA.ipynb), [14 tendencias diarias en el modelo semanal](Analisis/14_tendencias_diarias_modelo_semanal.ipynb), [distribución semanal a diaria](Modelo_de_series_diario/02_distribucion_semanal_a_diaria.ipynb) y [SARIMA/SARIMAX](Modelo_de_series_diario/03_SARIMA_SARIMAX_y_boosting.ipynb). El [índice diario](Modelo_de_series_diario/README.md) explica dependencias y alcance.
 
-1. `01_limpieza_curvas_variedad.ipynb`.
-2. `02_limpieza_clima.ipynb`.
-3. `03_limpieza_estimados_semanales.ipynb`.
-4. `04_limpieza_planos_siembra.ipynb`.
-5. `05_limpieza_produccion_real.ipynb`.
+El único recorrido de lectura es la [guía paso a paso](../GUIA_PASO_A_PASO_DATOS_Y_MODELOS.md): proyecciones de todos los años → [10 base](Analisis/10_base_analitica_proyecciones.ipynb) → [11 EDA](Analisis/11_EDA_proyecciones.ipynb) → [12 modelo](Analisis/12_modelo_ajuste_proyecciones.ipynb) → [13 ingeniero 2026](Analisis/13_comparacion_ingeniero_modelo_2026.ipynb).
 
-Cada uno contiene sus imports, rutas, limpieza, controles y una exportación Parquet. Las funciones necesarias están visibles en el cuadernillo.
+Las limpiezas en `Limpieza data, Notebooks y Scripts/` son procesos de actualización de fuentes, no lectura adicional obligatoria. Para el nuevo flujo se utilizan producción, clima, estimados y los metadatos AL1 indicados en la guía. No se requiere ejecutar WebFlor ni los benchmarks originales.
 
-03 conserva la recuperación exacta/siguiente archivo del mismo año y H1–H5 desde la solicitud. 05 conserva la imputación de Tipo Corte con su marca retrospectiva. No hay pérdida de movimientos por desduplicación indiscriminada.
+La carpeta `coso para generar el html antes` conserva las referencias originales señaladas por el usuario. La investigación SQL y notas de campo se mantienen como evidencia documental; no forman otra cadena de ejecución. Los notebooks 06–09 sustituidos y el visor Lectura se retiraron.
 
-## WebFlor
-
-`Extracción SQL/02_webflor_complemento_necesario.ipynb`: usa originales locales y genera proyecciones/coeficientes limpios. La conexión está desactivada por defecto. Sólo exporta las dos tablas finales.
-
-## Análisis
-
-En `Analisis/`: 06 construye la base única y el enlace de benchmark; 07 hace EDA orientado a actualización; 08 prepara features y prueba fuga; 09 entrena y compara primeros modelos. Sólo 06 exporta un dataset. Todos consumen datos de `Datos_analiticos_proyecto/`.
-
-## Referencias conservadas
-
-Los originales recuperados `1. Extracción de estimados.ipynb`, `2_ procesamiento de producción real.ipynb` y `3_Benchmark estimado ingeniero.ipynb`, y el resumen 2026 `03_benchmark_estimado_ingeniero.ipynb`, sirven para consultar las reglas de partida. No ejecutar su antigua cadena de exports; usar las limpiezas y el análisis vigentes.
-
-`00_entendimiento del estimado.ipynb` conserva notas/fotos de campo y `Extracción SQL/01_exploracion_bases_produccion.ipynb` conserva el estudio SQL; su código está comentado para lectura documental.
-
-Recorrido completo: guía de la raíz. Diseño analítico: `METODOLOGIA.md`.
-
-## Revisión en GitHub
-
-Las cinco limpiezas oficiales, el complemento WebFlor local y 06–09 conservan ejecución completa sin errores y salidas visibles. `Lectura.ipynb` muestra la base vigente. Se publican código, documentación, tablas de revisión y gráficas dentro de los notebooks; no se publican los archivos de datos Excel/CSV/Parquet.
-
-Los notebooks originales de referencia conservan su código y el estado histórico disponible, que puede ser parcial o contener errores antiguos. No se han reejecutado sus exportaciones retiradas ni sus conexiones SQL. No confundirlos con los notebooks oficiales ejecutados. Para reproducir el flujo se necesitan las fuentes locales autorizadas; GitHub permite revisar los resultados ya guardados.
+La exportación opcional a CSV convierte los Parquet actuales para consulta, sin alimentar EDA/modelos. No publicar datos fuente. Los notebooks activos conservan las tablas y gráficas ejecutadas.
