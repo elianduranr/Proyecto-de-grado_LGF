@@ -1,11 +1,13 @@
 # Trabajo escrito actualizado
 
-`Desarrollo_del_documento.md` es el texto editable. `Estructura_actualizada_con_resultados.docx` es su versión Word. El documento incluye contexto, curvas, calidad, EDA, modelos semanales, comparación diaria con memoria larga, interpretación por permutación e inventario train/test. Las referencias E1–E13 ubican la evidencia en los notebooks.
+Desarrollo_del_documento.md es el texto editable; Estructura_actualizada_con_resultados.docx es su versión Word. Incluye contexto, curvas, calidad, EDA, clima y desplazamiento, modelos semanales, WAPE y sesgo frente al ingeniero, reparto diario, interpretación e inventario train/test. Las referencias E1–E18 ubican las evidencias.
 
-La guía de la raíz contiene el orden exacto de corrida. Primero ejecutar las etapas afectadas, luego revisar cifras y redacción, y finalmente regenerar el Word desde la raíz:
+Seguir la guía de la raíz para ejecutar las etapas afectadas. Después, revisar cifras y conclusiones y generar el Word desde la raíz:
 
 ```powershell
 .\entorno_tesis\Scripts\python.exe "Trabajo escrito/actualizar_word.py"
 ```
 
-El script no recalcula modelos ni interpreta resultados nuevos. Las figuras están en `Figuras_resultados`. Los documentos originales se conservan. El borrador requiere revisión bibliográfica y validación empresarial; las métricas actuales son retrospectivas.
+El script convierte el Markdown y sus figuras; no recalcula modelos ni interpreta resultados nuevos. Las fuentes originales se conservan. Los resultados son retrospectivos y requieren validación empresarial y revisión bibliográfica.
+
+La sección 5.6 y la evidencia E18 añaden el origen del error por producto, color y variedad, con concentración temporal y ejemplos de H1. Son diagnósticos del test ya observado, no cambios al modelo.

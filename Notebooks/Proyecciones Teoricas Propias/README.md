@@ -11,3 +11,7 @@ Con fuentes Excel nuevas: catálogo → todos los años con recálculo → audit
 `Proyecciones_teoricas.ipynb` conserva la explicación y resultados de la construcción original, identificados como referencia anterior. No es una segunda implementación vigente. Los originales y respaldos del usuario se conservan.
 
 La auditoría usa identidad comercial, no un ID SQL arbitrario, y no fusiona colores distintos ni ciclos. Las diferencias de obtentor requieren revisión agronómica. Tener historia no garantiza cobertura de todas las edades; los faltantes no se convierten en cero.
+
+## Procedencia de las curvas
+
+01_procedencia_pilotos_y_curvas_gaitana.ipynb se ejecuta después de las proyecciones de todos los años. Atribuye pilotos por coincidencia exacta de bloque, cama, identidad comercial y fecha de siembra; conserva la primera evidencia y los desconocidos. Genera una alternativa de curvas restringidas a evidencia de GAITANA sin sustituir las proyecciones compartidas. Analisis/19 compara ambas alternativas sobre los mismos casos. No se modela ARABELLA.

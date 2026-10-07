@@ -1,15 +1,14 @@
 # Análisis vigente
 
-1. [10 — Base analítica](10_base_analitica_proyecciones.ipynb).
-2. [11 — EDA](11_EDA_proyecciones.ipynb).
-3. [12 — Ajuste de proyecciones](12_modelo_ajuste_proyecciones.ipynb).
-4. [13 — Comparación con el ingeniero en 2026](13_comparacion_ingeniero_modelo_2026.ipynb).
-5. [14 — Tendencias diarias en el pronóstico semanal](14_tendencias_diarias_modelo_semanal.ipynb), después de ejecutar [diario 01](../Modelo_de_series_diario/01_base_diaria_EDA.ipynb).
-6. [15 — Calidad y mejora por horizonte](15_calidad_y_mejora_por_horizonte.ipynb): diagnóstico del error, comparación antes/después de calidad, separación de horizontes, memoria larga, revisiones y combinación con pesos anteriores a 2026.
+Consultar la [guía única](../../GUIA_PASO_A_PASO_DATOS_Y_MODELOS.md) para las dependencias y el orden exacto de ejecución.
 
-El nivel diario continúa en [su guía breve](../Modelo_de_series_diario/README.md): reparto coherente H1 y comparación SARIMA/SARIMAX frente a boosting.
+- 10–13: base analítica, EDA, ajuste inicial y benchmark del ingeniero.
+- 14–15: tendencias diarias, memoria y referencias de calidad. El contraste histórico de calidad incluye ahora también la actualización climática; no aísla ambos efectos.
+- 18: cobertura climática, lluvia y EDA de error de volumen y desplazamiento del corte.
+- 19: comparación controlada sin clima/con clima y curvas atribuibles a GAITANA; selección anterior a 2026, WAPE y sesgo por H1–H5.
+- 16: importancia por permutación del candidato de 19; requiere ejecutar 19 primero.
+- 17: inventario train/test de referencias y componentes de entrenamiento para diario 05.
 
-Prerrequisitos y explicación completa en la [guía única](../../GUIA_PASO_A_PASO_DATOS_Y_MODELOS.md). Cada notebook contiene su código y lee entradas explícitas, sin variables de otro kernel ni módulos propios.
+El reparto diario vigente está en Modelo_de_series_diario/05. Cada notebook contiene su código y lee archivos explícitos, sin depender de variables de otro kernel.
 
-
-La revisión actual añade `16_interpretacion_modelo_semanal.ipynb` (importancia por permutación y reproducción de agosto) y `17_inventario_modelos_train_test.ipynb` (inventario de algoritmos, errores train/test por corte y resultados completos separados). Diario 04 aplica el candidato de 15 a la distribución diaria. Ejecutar según la guía principal; 17 requiere también diario 04.
+20_EDA_origen_error_modelo_ingeniero.ipynb cierra el recorrido: descomposición del error por producto, color y variedad, H1 separado y cada horizonte, semanas críticas y foco en tres variedades. Requiere salidas vigentes de 10 y 19; no reentrena.

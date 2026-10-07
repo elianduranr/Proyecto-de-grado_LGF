@@ -8,13 +8,13 @@ Universidad de los Andes · Facultad de Ingeniería Industrial · Maestría en I
 
 ## Resumen
 
-El proyecto estudia cómo anticipar la producción registrada de La Gaitana Farms por producto, color y variedad, utilizando planos y curvas de rendimiento como punto de partida y producción reciente y clima como información de ajuste. El entendimiento de las fuentes precede al modelado: los planos son fotografías de existencias, los pilotos permiten estimar rendimientos por edad y los movimientos de corte constituyen la referencia observada.
+El proyecto estudia el pronóstico de tallos reportados de GAITANA mediante proyecciones teóricas, producción reciente y clima. Reconstruye 292 versiones semanales seleccionadas entre 2021 y 2026 y conserva calidad, procedencia y cobertura. La auditoría inicial elevó la cobertura de teoría completa de 17,96 % a 21,25 % de los casos observados; no equivale a porcentaje de plantas ni de volumen.
 
-Se reconstruyeron proyecciones para 292 versiones semanales seleccionadas entre 2021 y 2026. Una auditoría recuperó información excluida por copias equivalentes de pilotos y por exigir un ID SQL único aun cuando la identidad comercial fuera inequívoca. Se centralizó el catálogo de variedades conservando códigos originales y ambigüedades reales. La cobertura de teoría completa pasó de 17,96 % a 21,25 % de los casos con producción observada. Esta cobertura describe casos, no porcentaje de volumen ni de plantas.
+La actualización incorpora clima válido hasta el 21 de septiembre de 2026 y evalúa lluvia, temperatura, humedad y radiación, distinguiendo error de volumen y desplazamiento relativo del corte. Las asociaciones históricas de desplazamiento son débiles y sus intervalos incluyen cero. La atribución exacta de pilotos identifica evidencia de GAITANA, no demuestra que el resto provenga de ARABELLA.
 
-Tras separar el efecto de calidad del cambio de modelos, el candidato separación + memoria larga obtuvo 19,59 % WAPE en los mismos 15.838 casos principales de 2026; el ingeniero obtuvo 19,74 %. El candidato presenta menor error agregado en ese periodo. En diario, cambiar el total por memoria larga reduce el WAPE reconciliado de 28,29 % a 27,45 %, frente a 26,76 % del autónomo. La evaluación distingue precisión libre, conservación del total y sensibilidad a días sin reporte. Se documentan además importancia por permutación y errores de entrenamiento/evaluación de cada ajuste. Los resultados son retrospectivos; equivalencia exportable, publicación histórica y utilidad operativa continúan pendientes de validación.
+La validación anterior a 2026 selecciona Boosting sin clima. En los mismos 15.838 casos principales, obtiene 19,46 % de WAPE frente a 19,74 % del ingeniero. El reparto diario coherente obtiene 27,27 %, frente a 26,72 % del autónomo, sobre 22.973 días reportados. La evidencia es retrospectiva; disponibilidad histórica, unidad exportable y utilidad operativa siguen pendientes de confirmación.
 
-Palabras clave: producción florícola, curvas de rendimiento, calidad de datos, pronóstico semanal, distribución diaria, validación temporal.
+Palabras clave: producción florícola, curvas, calidad, clima, pronóstico semanal, distribución diaria, validación temporal.
 
 ## 1. Introducción: qué se necesita anticipar y por qué
 
@@ -91,6 +91,14 @@ El catálogo común se ubica en `01_maestros_y_geografia/Catalogo_analitico` y s
 
 Las recuperaciones de ediciones diferentes no se suman como historia única porque los libros repiten periodos. Tampoco toda fila recuperada modifica una curva: la última columna cuenta sólo las observaciones que entran en alguna ventana de 78 semanas de los planos de esa edición. Se verificó que las observaciones previamente utilizables conservaran corte, plantas, fechas y edad, y que no se multiplicaran movimientos. Las proyecciones se reconstruyeron antes de reentrenar los modelos.
 
+### 3.1.2. Procedencia: qué puede atribuirse a GAITANA
+
+Las tablas de pilotos no contienen finca explícita. Los números de bloque se repiten entre GAITANA y ARABELLA, por lo que se exige coincidencia exacta de bloque, cama, identidad comercial y fecha de siembra. Se preservan sufijos como 64A: no equivalen a cama 64. Se utiliza la primera fecha de plano coincidente y se exige que la evidencia exista antes de construir la curva. La atribución sigue siendo inferida y requiere confirmación empresarial. [E14]
+
+En la edición 2026 se atribuyen 241.564 de 444.476 observaciones utilizables a GAITANA; 202.912 quedan sin pareja. Ningún piloto coincide inequívocamente con ARABELLA. Por ello no es correcto afirmar que las curvas originales mezclaban comprobablemente las dos fincas, ni asignar a GAITANA los casos desconocidos por intuición. Las cifras son historia de una edición y no deben sumarse entre años que comparten observaciones.
+
+Restringir la curva a esa evidencia reduce la cobertura de plantas de GAITANA de 79,12 % a 74,78 % en 2026, ponderada por exposiciones de plano/horizonte. Son plantas de GAITANA, un denominador distinto al de la auditoría anterior de ambas fincas. Se conserva la curva compartida como referencia y se compara la alternativa sobre los mismos casos de producción, informando dónde cambia la ruta a respaldo. No se inventan rendimientos para completar la cobertura.
+
 ### 3.2. Cómo se obtiene y cómo se lee una curva
 
 En cada fecha de plano se utilizan las 78 semanas anteriores de historia. Cada observación aporta el cociente entre corte y plantas. Dentro de cada grupo variedad–edad se calcula el promedio de esos rendimientos, después de limitar los extremos con el criterio de 1,5 rangos intercuartílicos cuando existen al menos cuatro observaciones. El dato original permanece disponible para auditoría; con menos observaciones no se aplica ese ajuste. No se extrapolan edades sin datos. [E1–E2]
@@ -145,19 +153,34 @@ Este diagnóstico no se compara directamente con el WAPE del ingeniero de 2026: 
 
 El resultado orienta el problema de modelado hacia el ajuste de la diferencia entre real y teoría. A la vez, la falta de cobertura exige una referencia alternativa para los demás casos. Ambas decisiones proceden del EDA: hay un error que corregir donde existe teoría completa y un problema de información donde no existe.
 
-### 3.7. Producción reciente, clima e historia de las proyecciones
+### 3.7. Clima, error de volumen y desplazamiento del corte
 
-Para evitar que las series grandes dominen una correlación conjunta, el EDA calcula asociaciones de Spearman dentro de cada serie y horizonte, exige al menos veinte pares y resume sus resultados. Esta exploración utiliza objetivos cerrados antes del 7 de julio de 2025. Con las proyecciones corregidas, en H1 la mediana de asociación entre producción de la semana anterior y error real menos teoría es 0,28; para el cambio reciente es 0,20. En H5 son -0,03 y 0,06, respectivamente. Son asociaciones descriptivas, no efectos causales. [E4]
+La revisión previa utilizaba clima hasta el 28 de julio de 2026 mientras interpretaba un ajuste de agosto; por ello una importancia nula no acreditaba ausencia de influencia. La nueva limpieza conserva mediciones válidas de GAITANA hasta el 21 de septiembre. Se auditan conflictos entre ediciones, valores imposibles, huecos y frecuencia. Las observaciones son predominantemente de treinta minutos. El campo RAIN muestra cantidades que vuelven a cero entre eventos, no un contador creciente; se suman registros en las unidades originales, pendientes de confirmación con la estación. Se exige cobertura diaria suficiente antes de construir acumulados. [E15]
 
-El clima se examina dentro de las series, con rezagos conocidos al origen y cobertura explícita. Una asociación agregada pequeña no demuestra ausencia de importancia productiva: puede ocultar diferencias entre variedades o respuestas no lineales. Su utilidad predictiva debe contrastarse sobre las mismas observaciones, sin introducir clima futuro realizado.
+![Figura 5. Disponibilidad del clima ampliado al lunes de emisión. Verde indica valor disponible; rojo, faltante conservado. Fuente: E15.](Figuras_resultados/clima_cobertura_origen.png)
 
-La revisión de teoría en H1 tiene una mediana de asociación de -0,05 y la teoría anterior de -0,35. La segunda requiere cautela porque el error incluye la teoría actual, relacionada con las versiones anteriores. Por eso el proyecto prueba explícitamente el bloque de revisiones en lugar de dar por demostrado su aporte.
+El EDA usa objetivos cerrados antes del 7 de julio de 2025. Para error de volumen estudia (real − teoría)/media4 dentro de cada serie y horizonte, con al menos veinte pares y teoría completa. Las medianas de Spearman son pequeñas y hay diferencias entre series. Las variables meteorológicas son comunes a la finca; repetirlas en varias variedades no crea observaciones meteorológicas independientes. El clima de estación no equivale necesariamente al microclima de cada invernadero.
+
+![Figura 6. Asociación del clima previo con el error de la teoría dentro de cada serie. Fuente: E15.](Figuras_resultados/clima_error_teoria.png)
+
+Para desplazamiento se requieren cinco horizontes con teoría y real completos. El centro de producción es la posición de semana (0–4) ponderada por tallos; centro real menos teórico positivo indica corte relativamente más tardío dentro de la ventana. No mide el corte fuera de esas cinco semanas ni prueba un retraso fisiológico: la composición de cohortes y las decisiones de corte también pueden influir. Se agregan series por origen y se separan al menos cinco semanas los orígenes analizados, evitando ventanas objetivo superpuestas.
+
+| Señal previa | Ventanas | Spearman con desplazamiento | Intervalo exploratorio 95 % |
+| --- | ---: | ---: | --- |
+| temperatura_media14_clima | 40 | -0,149 | [-0,439; 0,217] |
+| humedad_media14_clima | 40 | -0,100 | [-0,409; 0,263] |
+| radiacion_media14_clima | 40 | 0,202 | [-0,095; 0,479] |
+| lluvia_suma28_clima | 28 | -0,093 | [-0,484; 0,279] |
+
+![Figura 7. Clima y desplazamiento relativo del corte en ventanas sin superposición. Fuente: E15.](Figuras_resultados/clima_desfase_teoria.png)
+
+Los intervalos incluyen cero. El resultado no respalda una regla universal de adelanto o retraso por clima, pero tampoco descarta un aporte no lineal o específico por variedad. El remuestreo es exploratorio y no elimina confusión por temporada y manejo. La prueba siguiente evalúa si usar esas señales reduce error fuera del entrenamiento, con información estrictamente anterior a cada origen.
 
 ### 3.8. El calendario diario plantea una pregunta adicional
 
 Al desagregar la producción aparecen 227.623 días-serie observados dentro de un calendario de 1.374.399 filas para 663 series. La suma de los cortes diarios coincide exactamente con el panel semanal por cada llave. Las filas restantes mantienen un valor faltante: construir un calendario no prueba que todas las series estuvieran activas durante todo el intervalo. [E6]
 
-![Figura 5. Volumen registrado y frecuencia de reporte por día de semana. Fuente: EDA diario, E6.](Figuras_resultados/perfil_diario.png)
+![Figura 8. Volumen registrado y frecuencia de reporte por día de semana. Fuente: EDA diario, E6.](Figuras_resultados/perfil_diario.png)
 
 En el agregado de la finca, los sábados reúnen 65,54 millones de tallos reportados y los domingos 3,65 millones. Además, hay reporte dominical en sólo treinta fechas del periodo, frente a varios centenares para los demás días. El patrón muestra que un reparto uniforme de una séptima parte por día desconoce la distribución registrada. No permite concluir que la producción física del domingo sea siempre nula: calendario de corte y calendario de registro pueden diferir y requieren validación operativa.
 
@@ -194,15 +217,34 @@ Los candidatos semanales usan parámetros fijos de boosting: tasa de aprendizaje
 
 ### 4.2.1. Experimentos acotados después de corregir calidad
 
-El experimento 15 separa el efecto de las dos correcciones de datos del cambio de arquitectura. Compara la misma arquitectura diaria antes y después de calidad; luego separa modelos para H1–H2 y H3–H5, añade memoria de doce semanas, dispersión y conteos, y finalmente añade historia de proyecciones a las rutas teórica y de respaldo. Las medias de cuatro/ocho semanas y la referencia de un año ya existían y no se presentan como variables nuevas. Cada etapa conserva la anterior y añade un bloque. [E10]
+El experimento 15 documenta la corrección de calidad y los cambios de arquitectura. Su referencia anterior a calidad conserva el clima de aquella ejecución: tras actualizar la fuente, ese contraste ya no aísla sólo calidad. Dentro de los candidatos recalculados mantiene el clima común; luego separa modelos para H1–H2 y H3–H5, añade memoria de doce semanas, dispersión y conteos, y finalmente añade historia de proyecciones a las rutas teórica y de respaldo. Las medias de cuatro/ocho semanas y la referencia de un año ya existían y no se presentan como variables nuevas. Cada etapa conserva la anterior y añade un bloque. [E10]
 
 La combinación sencilla usa pesos de 0, 0,25, 0,50, 0,75 o 1 sobre el modelo y una referencia de media4 o teoría con respaldo. Los pesos por grupo de horizontes se eligen mediante predicciones de noviembre–diciembre de 2025, con entrenamiento anterior a cada origen y objetivos cerrados antes de enero de 2026. Se mantienen fijos al evaluar 2026. El periodo 2026 continúa siendo desarrollo retrospectivo y no selecciona esos pesos.
+
+### 4.2.2. Prueba acotada del clima y de la procedencia de curvas
+
+El experimento 19 mantiene HistGradientBoostingRegressor, parámetros, memoria larga, separación H1–H2/H3–H5 y rutas teórica/respaldo. Compara retirar todo el clima, usar el clima básico actualizado, añadir señales de catorce/veintiocho días y lluvia, y cambiar la referencia a la curva atribuida a GAITANA manteniendo el mismo clima ampliado. La última comparación afecta tanto referencia como cobertura; se desglosa por rutas y se compara la teoría cruda sobre casos completos para ambas alternativas. [E16]
+
+La selección utiliza el menor WAPE de noviembre–diciembre de 2025, con objetivos cerrados antes de enero de 2026. Se conserva al evaluar 2026. Los modelos se reentrenan mensualmente usando sólo semanas objetivo terminadas antes del corte; imputación y codificación se ajustan en train. Los predictores climáticos terminan antes del lunes de emisión. No se usa clima futuro observado ni pronóstico meteorológico externo. Las pruebas de perturbación del futuro comprueban que no cambien las variables pasadas.
+
+Actualizar clima básico permite medir el efecto de completar la fuente manteniendo la arquitectura anterior. Añadir el bloque ampliado mide una pregunta distinta. La historia previa al arreglo de calidad de 15 se conserva como referencia, pero su contraste con modelos de clima nuevo ya no aísla sólo calidad de curvas. Ningún periodo examinado durante el desarrollo se presenta como prueba prospectiva intacta.
+
+La validación anterior a 2026 produce esta comparación; no es el test frente al ingeniero:
+
+| Método | Casos | MAE (tallos) | WAPE | Sesgo |
+| --- | ---: | ---: | ---: | ---: |
+| Boosting sin clima | 3.548 | 2.054,06 | 21,79 % | 1,46 % |
+| Boosting con clima básico actualizado | 3.548 | 2.070,30 | 21,96 % | 2,29 % |
+| Boosting con clima ampliado y lluvia | 3.548 | 2.090,09 | 22,17 % | 3,43 % |
+| Clima ampliado + curva atribuida a GAITANA | 3.548 | 2.201,03 | 23,35 % | 4,53 % |
+
+Una diferencia pequeña entre candidatos en estos dos meses no acredita superioridad estable. Se conserva la elección para evitar escoger de nuevo mirando el resultado de 2026.
 
 ### 4.3. Comparación con el ingeniero
 
 La evaluación principal exige misma finca, producto, color, variedad, origen, objetivo y horizonte, además de un archivo del ingeniero no posterior al origen bajo la regla nominal adoptada. Los emparejamientos recuperados por color, los archivos posteriores y los casos sin pareja se separan. El pronóstico del ingeniero se utiliza para evaluar; no alimenta los modelos candidatos. [E5]
 
-Se informa MAE en tallos, RMSE, WAPE y sesgo, con cortes por horizonte y segmento. El WAPE es la suma de errores absolutos dividida por la suma de producción real: un 20 % no significa 80 % de casos acertados. En las tablas de modelos el sesgo se expresa como real menos predicción, consistente con el diagnóstico de teoría. El remuestreo por semana objetivo aporta intervalos exploratorios, sin convertir retrospectivamente estos periodos en una prueba independiente intacta.
+Se informa MAE en tallos, RMSE, WAPE y sesgo, con cortes por horizonte y segmento. El WAPE es la suma de errores absolutos dividida por la suma de producción real: un 20 % no significa 80 % de casos acertados. En las tablas vigentes de 19 y diario 05, sesgo = predicción menos real: positivo indica sobreestimar y negativo subestimar. Su versión porcentual divide la suma de errores firmados por la suma real y multiplica por cien. Los diagnósticos históricos de teoría y algunos notebooks anteriores usan real menos predicción; sus signos no se comparan sin invertirlos. El remuestreo por semana objetivo aporta intervalos exploratorios, sin convertir retrospectivamente estos periodos en una prueba independiente intacta.
 
 ### 4.4. Pronóstico diario autónomo y distribución del total semanal
 
@@ -214,146 +256,199 @@ Como contraste de series de tiempo se prueban SARIMA (1,0,1)×(0,1,1,7) y SARIMA
 
 ## 5. Resultados: qué mejoró y dónde persisten las dificultades
 
-### 5.1. Precisión semanal frente al estimado experto
+### 5.1. Precisión semanal: efecto del clima y comparación con el ingeniero
 
-La comparación mantiene 15.838 casos principales, con identidad comercial estricta y entrega nominal no posterior, dentro de 19.174 casos con predicción y real observado. Las entregas posteriores, recuperaciones de color y casos sin pareja se conservan separados. H2–H5 del ingeniero proceden de sus estimados para esas semanas objetivo, no de repetir H1. [E5, E10]
+La configuración semanal seleccionada no utiliza variables meteorológicas. El componente diario conserva temperatura, humedad y radiación en sus pesos; son etapas distintas.
 
-| Método | Casos | MAE (tallos) | WAPE |
-| --- | --- | --- | --- |
-| Sistema diario antes de corregir calidad | 15.838 | 2.570,36 | 20,04 % |
-| Combinación con pesos previos a 2026 | 15.838 | 2.520,50 | 19,65 % |
-| Separación + memoria larga | 15.838 | 2.512,65 | 19,59 % |
-| Memoria larga + revisiones | 15.838 | 2.520,50 | 19,65 % |
-| Separación H1–H2 / H3–H5 | 15.838 | 2.524,21 | 19,68 % |
-| Misma arquitectura con calidad corregida | 15.838 | 2.573,17 | 20,06 % |
-| Ingeniero | 15.838 | 2.531,72 | 19,74 % |
+Se mantienen 15.838 casos principales con las mismas llaves, orígenes y objetivos. El ingeniero no alimenta los modelos. La alternativa seleccionada por validación previa es **Boosting sin clima**; no se reemplaza por otro candidato mirando 2026. [E16]
 
-La misma arquitectura pasa de 20,04 % antes de calidad a 20,06 % con proyecciones corregidas. La diferencia favorable al sistema corregido es -0,02 puntos de WAPE; un valor negativo indica deterioro. Este contraste separa la recuperación de información de la modificación de modelos. Más cobertura no garantiza automáticamente menor error.
+| Método | Casos | MAE (tallos) | WAPE | Sesgo |
+| --- | ---: | ---: | ---: | ---: |
+| Memoria larga antes de actualizar clima | 15.838 | 2.512,65 | 19,59 % | -3,54 % |
+| Boosting con clima ampliado y lluvia | 15.838 | 2.496,43 | 19,46 % | -2,96 % |
+| Boosting con clima básico actualizado | 15.838 | 2.510,25 | 19,57 % | -3,58 % |
+| Clima ampliado + curva atribuida a GAITANA | 15.838 | 2.515,81 | 19,61 % | -2,76 % |
+| Boosting sin clima | 15.838 | 2.496,17 | 19,46 % | -2,42 % |
+| Ingeniero | 15.838 | 2.531,72 | 19,74 % | -9,75 % |
 
-![Figura 6. Referencias de calidad y candidato con memoria larga por horizonte; la tabla incluye todos los experimentos. Fuente: E10.](Figuras_resultados/comparacion_semanal_diarios.png)
+| Horizonte | Casos | WAPE anterior | WAPE actual | WAPE ingeniero | Ventaja actual vs. ingeniero (pp) |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| H1 | 3.413 | 15,68 % | 15,66 % | 17,09 % | 1,43 |
+| H2 | 3.289 | 17,56 % | 17,37 % | 19,28 % | 1,91 |
+| H3 | 3.166 | 20,39 % | 20,39 % | 20,32 % | -0,07 |
+| H4 | 3.045 | 22,14 % | 21,96 % | 20,91 % | -1,04 |
+| H5 | 2.925 | 22,77 % | 22,50 % | 21,40 % | -1,10 |
+| Conjunto | 15.838 | 19,59 % | 19,46 % | 19,74 % | 0,28 |
 
-El menor WAPE retrospectivo entre los candidatos con datos corregidos corresponde a separación + memoria larga: 19,59 %, frente a 19,74 % del ingeniero. El detalle por H1–H5, producto, variedad, periodo y ruta permanece en el notebook y su Excel. La tabla permite reconocer si una mejora corta compensa o no el deterioro en horizontes largos. No se adopta un modelo únicamente porque tenga el menor error en un periodo ya examinado.
-
-El diagnóstico prioriza combinaciones por exceso de error absoluto frente al ingeniero. Así se evita que porcentajes extremos de series pequeñas dominen la discusión. Los cambios por calidad y los experimentos constituyen hallazgos de desarrollo; una nueva prueba debe fijar el candidato antes de observar sus resultados.
-
-La sensibilidad con cinco horizontes completos conserva 14.585 casos: el candidato obtiene 19,88 % frente a 20,02 %. El intervalo exploratorio de su ventaja frente al experto va de -1,16 a 1,48 puntos de WAPE e incluye cero. La mejora observada no demuestra una ventaja estable. Además, el RMSE sigue favoreciendo al ingeniero (4.404 frente a 4.507 tallos); el candidato tiene mejor WAPE y MAE, no todas las métricas.
-
-El diagnóstico de la arquitectura corregida sitúa a clavel y miniclavel entre las principales dificultades de H4–H5, con LORENZO y EPSILON entre las variedades que más aportan al exceso de error absoluto. En los casos principales de 2026 sólo 9,10 % utiliza la ruta de teoría completa: la cobertura global de 21,25 % corresponde a otro denominador, que incluye años anteriores. La mayor parte de la desventaja larga se concentra en el respaldo. Las revisiones adicionales no superan al candidato de memoria larga, y los pesos fijados con datos anteriores a 2026 dejan 100 % al modelo de revisiones; la mezcla no aporta una mejora adicional.
-
-### 5.2. Precisión diaria y coherencia semanal
-
-La nueva comparación mantiene 28.973 predicciones para 4.139 combinaciones de serie y semana y evalúa los mismos 22.973 días observados. El experimento 02 conserva el sistema semanal de 14 como referencia. En 04 se reemplaza únicamente ese total por el candidato Memoria_larga de 15, manteniendo los pesos originales: así se mide cuánto de la mejora diaria procede del total semanal. Los métodos reconciliados suman exactamente al total correspondiente. Los siete días se emiten al lunes; no hay actualización con producción o clima observado durante esa semana. [E7, E11]
-
-| Método | Casos | MAE (tallos) | WAPE |
+| Horizonte | Sesgo anterior | Sesgo actual | Sesgo ingeniero |
 | --- | ---: | ---: | ---: |
-| Boosting diario autónomo | 22.973 | 543,76 | 26,76 % |
-| Boosting reconciliado · memoria larga | 22.973 | 557,78 | 27,45 % |
-| Perfil de ocho semanas · memoria larga | 22.973 | 566,31 | 27,87 % |
-| Boosting reconciliado · total anterior | 22.973 | 574,79 | 28,29 % |
-| Perfil de ocho semanas · total anterior | 22.973 | 582,12 | 28,65 % |
-| Uniforme · memoria larga | 22.973 | 589,88 | 29,03 % |
-| Uniforme · total anterior | 22.973 | 607,35 | 29,89 % |
+| H1 | -1,71 % | -1,23 % | -7,56 % |
+| H2 | -3,41 % | -2,40 % | -8,17 % |
+| H3 | -3,89 % | -2,70 % | -9,46 % |
+| H4 | -4,63 % | -3,27 % | -11,32 % |
+| H5 | -4,23 % | -2,63 % | -12,63 % |
+| Conjunto | -3,54 % | -2,42 % | -9,75 % |
 
-El boosting reconciliado reduce su WAPE de 28,29 % a 27,45 % y su MAE de 574,79 a 557,78 tallos por día-serie. La mejora es 0,84 puntos de WAPE, con intervalo exploratorio de 0,38 a 1,27 puntos al remuestrear 35 semanas de origen. Es progreso medible para el sistema coherente. El autónomo sigue con menor error, 26,76 %, pero su suma no está restringida al pronóstico semanal. La diferencia entre el nuevo reconciliado y el autónomo no demuestra una ventaja del primero: su WAPE es 0,69 puntos mayor.
+Sesgo = 100 × suma(predicción − real) / suma(real). Positivo: sobreestimación; negativo: subestimación. Cero no implica poco error: errores opuestos pueden compensarse. WAPE y sesgo se calculan sobre los mismos casos por horizonte.
 
-![Figura 7. Comparación diaria conservando los mismos días observados y cambiando sólo el total semanal. Fuente: E11.](Figuras_resultados/diario_memoria_comparacion.png)
+H1 por separado, sobre los mismos 3.413 casos:
 
-La cobertura modifica la lectura. Sólo 274 semanas-serie tienen siete días reportados (1.918 días). En ellas, el uniforme con memoria obtiene 24,52 %, el autónomo 24,73 % y el boosting reconciliado 33,77 %. La ponderación por frecuencia histórica de reporte puede asignar poco volumen a días que sí se reportan en esas semanas. La comparación exige conservar esta contradicción, no ocultarla con el promedio general. Tampoco se puede escoger un método usando la completitud futura de la semana, desconocida al emitir.
+| H1: método | WAPE | MAE (tallos) | Sesgo medio (tallos) | Sesgo (%) |
+| --- | ---: | ---: | ---: | ---: |
+| Anterior | 15,68 % | 1.980,53 | -216,37 | -1,71 % |
+| Actual: boosting sin clima | 15,66 % | 1.978,16 | -155,84 | -1,23 % |
+| Ingeniero | 17,09 % | 2.158,89 | -955,34 | -7,56 % |
 
-En el panel estricto del benchmark semanal quedan 19.411 días y el nuevo reconciliado baja de 28,00 % a 27,09 %, frente a 26,76 % del autónomo. Sólo el 6,98 % de los domingos del panel tiene reporte. El dato faltante no demuestra producción cero; la calidad y el significado del registro diario siguen limitando la evaluación. El error porcentual agregado no equivale a un porcentaje de días acertados.
+En H1, la ventaja frente al ingeniero es 1,43 puntos de WAPE y el sesgo es más cercano a cero. No equivale a ganar en todos los horizontes.
 
-![Figura 8. Error diario por día de semana para el nuevo total y el modelo autónomo. Fuente: E11.](Figuras_resultados/diario_memoria_por_dia.png)
+La ventaja conjunta de la selección frente al ingeniero es 0,28 puntos de WAPE (positivo favorece al modelo), con intervalo exploratorio [-1,27; 1,72]. Se conserva el desglose por horizonte y mes: una ventaja acumulada no implica ganar todos los periodos. El WAPE mide error absoluto respecto al volumen total, no porcentaje de casos acertados.
 
-La conclusión operativa debe distinguir tareas: para distribuir un compromiso semanal se conserva el candidato reconciliado como referencia; para anticipar corte sin esa restricción, el autónomo sigue siendo la referencia más precisa en la muestra principal. No existe aquí un benchmark diario del ingeniero ni un umbral de suficiencia diaria validado por la empresa. La selección semanal y esta extensión son retrospectivas.
+El conjunto agrega casos de pronóstico. Una misma semana objetivo puede aparecer desde distintos orígenes y horizontes; su denominador no representa producción física única de la finca. La comparación por horizonte evita esconder diferencias de anticipación.
 
-### 5.3. Alcance del piloto SARIMA/SARIMAX
+![Figura 9. Comparación semanal del clima y la curva atribuida a GAITANA, en los mismos casos. Fuente: E16.](Figuras_resultados/clima_modelos_horizonte.png)
 
-El piloto conserva UCHUVA–ORANGE, ACADEMY–LIGHT PINK y CAESAR–YELLOW, elegidas por volumen y frecuencia de reporte de 2025. Las tres son de miniclavel. Se compara sobre 135 días observados comunes a todos los métodos y se mantiene la auditoría de convergencia de 03. La extensión 04 cambia sólo el total semanal de las versiones reconciliadas; no reestima SARIMA buscando un resultado favorable. [E8, E11]
+![Figura 10. Sesgo semanal antes y después de la actualización y frente al ingeniero. Positivo indica sobreestimación; negativo, subestimación. Fuente: E16.](Figuras_resultados/clima_sesgo_horizonte.png)
 
-| Método | Casos | MAE (tallos) | WAPE |
-| --- | ---: | ---: | ---: |
-| SARIMAX | 135 | 2.214,36 | 24,49 % |
-| SARIMA | 135 | 2.252,11 | 24,91 % |
-| Perfil de ocho semanas · memoria larga | 135 | 2.540,96 | 28,10 % |
-| Boosting reconciliado · memoria larga | 135 | 2.572,85 | 28,46 % |
-| Perfil de ocho semanas · total anterior | 135 | 2.707,81 | 29,95 % |
-| Boosting reconciliado · total anterior | 135 | 2.720,14 | 30,09 % |
-| Uniforme · memoria larga | 135 | 2.778,69 | 30,73 % |
-| Boosting diario autónomo | 135 | 2.789,07 | 30,85 % |
-| SARIMA_memoria | 135 | 2.793,94 | 30,90 % |
-| SARIMAX_memoria | 135 | 2.800,31 | 30,97 % |
-| Semana_anterior | 135 | 2.839,95 | 31,41 % |
-| SARIMA_reconciliado | 135 | 2.924,44 | 32,35 % |
-| Uniforme · total anterior | 135 | 2.938,87 | 32,51 % |
-| SARIMAX_reconciliado | 135 | 2.946,49 | 32,59 % |
+![Figura 11. Cuánto cambia el estimado al añadir clima. Cambiar una predicción y mejorarla son preguntas distintas. Fuente: E16.](Figuras_resultados/clima_movimiento_estimado.png)
 
-SARIMAX autónomo mantiene 24,49 % y SARIMA 24,91 %. El nuevo total mejora las variantes reconciliadas a 30,97 % y 30,90 %, respectivamente, pero no supera a sus variantes autónomas. El perfil de ocho semanas con memoria obtiene 28,10 % y el boosting reconciliado 28,46 % en esta misma muestra. Estas cifras no se extrapolan al conjunto de la finca ni demuestran un efecto causal del clima.
+Los Excel conservan cambios medios con signo, magnitud absoluta y mejora de WAPE por horizonte. Las hojas Rutas_curvas y Teorias_mismos_casos permiten separar los casos que mantienen teoría completa de los que cambian al respaldo. Una mejora por restringir pilotos no certifica que la curva represente mejor la fisiología; puede proceder de cambiar de ruta. Las atribuciones desconocidas no se fuerzan.
 
-### 5.4. Qué información utiliza el candidato semanal
+### 5.2. Precisión diaria y coherencia semanal con el clima actualizado
 
-El notebook 16 reconstruye el ajuste del 3 de agosto de 2026 y comprueba que sus predicciones coinciden con las de 15. Después calcula importancia por permutación en 1.560 casos principales de agosto. Al alterar una variable o un bloque se mide cuánto aumenta el WAPE de la predicción final, incluida la referencia de media4 o teoría. Son cinco permutaciones con semilla fija; las barras de error representan variación entre permutaciones, no intervalos de confianza. No son valores SHAP ni explicaciones causales. [E12]
+El experimento 05 usa la alternativa semanal elegida en 2025 y mantiene los pesos diarios de 02, recalculados con temperatura, humedad y radiación actualizadas. El bloque adicional de lluvia influye en el total semanal sólo si lo utiliza la alternativa seleccionada; no se añade directamente al estimador de pesos diarios. Se emiten siete días al lunes sin usar reportes de la semana en curso. [E17]
 
-![Figura 9. Importancia por bloques del candidato semanal: aumento del WAPE al permutar. Fuente: E12.](Figuras_resultados/importancia_bloques_semanal.png)
+| Método | Casos | MAE (tallos) | WAPE | Sesgo |
+| --- | ---: | ---: | ---: | ---: |
+| Diario autónomo antes de actualizar clima | 22.973 | 543,76 | 26,76 % | -7,23 % |
+| Boosting reconciliado · selección semanal | 22.973 | 554,07 | 27,27 % | -5,91 % |
+| Boosting diario autónomo | 22.973 | 542,84 | 26,72 % | -7,11 % |
+| Boosting reconciliado · memoria actualizada | 22.973 | 557,45 | 27,44 % | -6,21 % |
+| Perfil histórico · selección semanal | 22.973 | 562,66 | 27,69 % | -5,48 % |
+| Perfil histórico · memoria actualizada | 22.973 | 565,88 | 27,85 % | -5,78 % |
+| Diario reconciliado antes de actualizar clima | 22.973 | 557,78 | 27,45 % | -6,21 % |
+| Uniforme · selección semanal | 22.973 | 584,97 | 28,79 % | -16,81 % |
+| Uniforme · memoria actualizada | 22.973 | 589,48 | 29,01 % | -17,03 % |
 
-En respaldo domina la producción semanal reciente; al permutar ese bloque, el WAPE aumenta cerca de 84,05 puntos en H1–H2 y 83,08 en H3–H5. Este efecto grande incluye romper la escala de la media4 que se suma directamente al corrector: no significa que el bloque aporte ese porcentaje de producción. En teoría completa, el bloque de teoría y desvío es el principal. Los tamaños son distintos: respaldo cuenta con 857 y 577 casos; teoría completa con 79 y 47. Las últimas dos muestras son pequeñas para generalizar un ranking.
+El WAPE del boosting reconciliado al candidato es 27,27 %; el autónomo obtiene 26,72 %. Como referencia histórica, el reconciliado con memoria antes de esta actualización obtenía 27,45 %. Esta comparación histórica incluye actualizar el componente diario y el total; el contraste entre repartos actuales mantiene fijos pesos y días para aislar el cambio de total. Todos los repartos coherentes suman exactamente su total semanal.
 
-Las señales de corte diario también se utilizan: al permutarlas juntas, el aumento de WAPE es 5,43 puntos en respaldo H1–H2 y 13,44 en teoría H1–H2. Entre variables individuales aparecen media4, teoría actual, desvío reciente de teoría, producción rezagada y media exponencial de corte de cinco días. La memoria larga adicional tiene una importancia marginal pequeña en algunos segmentos de agosto aunque mejoró el resultado acumulado al reentrenar en 15: permutar una variable en un modelo ya ajustado no responde la misma pregunta que comparar modelos entrenados con bloques diferentes.
+![Figura 12. Precisión diaria del candidato climático y referencias sobre los mismos días observados. Fuente: E17.](Figuras_resultados/diario_clima_actualizado.png)
 
-![Figura 10. Variables con mayor importancia por permutación, separadas por ruta y grupo de horizonte. Fuente: E12.](Figuras_resultados/importancia_variables_semanal.png)
+La sensibilidad de semanas con siete reportes conserva 274 semanas-serie: uniforme 24,88 %, autónomo 24,73 %, boosting reconciliado 33,33 %. Su composición difiere de la muestra general. No se puede usar la completitud futura para elegir método al lunes. Las ausencias permanecen faltantes y no certifican corte cero; no existe aquí un benchmark diario del ingeniero ni un umbral operativo validado.
 
-Las correlaciones permiten que unas variables sustituyan a otras. Además, permutar entre series puede producir combinaciones poco habituales. Una barra cercana a cero no demuestra irrelevancia agronómica del clima o de una ventana de producción; una barra negativa tampoco autoriza eliminarla automáticamente. Las revisiones de proyección no aparecen porque el candidato Memoria_larga no incluye ese bloque; su experimento permanece en 15.
+### 5.3. Piloto SARIMA/SARIMAX
 
-### 5.5. Entrenamiento frente a evaluación y modelos utilizados
+Se mantienen las tres series elegidas por volumen de 2025, los órdenes SARIMA (1,0,1)×(0,1,1,7), clima rezagado siete días en SARIMAX y auditoría de convergencia. El clima se actualiza, no se cambian los órdenes buscando mejorar 2026. El nuevo total sólo modifica la reconciliación. La tabla utiliza días comunes a todos los métodos; no se compara directamente con el WAPE diario de toda la finca. [E8, E17]
 
-El notebook 17 reúne un inventario y reconstruye los ajustes necesarios para medir error dentro de muestra. Las predicciones fuera de entrenamiento se cotejan contra los archivos originales antes de reportar métricas. Se distinguen cuatro escenarios: modelos iniciales sobre teoría completa (corte 4 de mayo, ocho semanas de evaluación); semanal vigente (corte 3 de agosto, evaluación de agosto); diario (mismo corte, 104 semanas previas de entrenamiento); y SARIMA/SARIMAX (último origen del piloto, 365 días previos). Los resultados completos de los experimentos se conservan en hojas separadas. [E13]
+| Método | Casos | MAE (tallos) | WAPE | Sesgo |
+| --- | ---: | ---: | ---: | ---: |
+| Boosting reconciliado · selección semanal | 135 | 2.452,89 | 27,13 % | -11,67 % |
+| Boosting diario autónomo | 135 | 2.791,97 | 30,88 % | -12,53 % |
+| Perfil histórico · selección semanal | 135 | 2.443,59 | 27,03 % | -11,88 % |
+| SARIMA | 135 | 2.252,11 | 24,91 % | -2,61 % |
+| SARIMAX | 135 | 2.217,70 | 24,53 % | -2,98 % |
+| SARIMAX_clima | 135 | 2.700,66 | 29,87 % | -21,89 % |
+| SARIMA_clima | 135 | 2.685,61 | 29,70 % | -21,77 % |
+| Semana_anterior | 135 | 2.839,95 | 31,41 % | -2,87 % |
+| Uniforme · selección semanal | 135 | 2.676,18 | 29,60 % | -22,25 % |
 
-El train usa objetivos que el ajuste ya vio: sirve para describir ajuste y posibles diferencias de generalización, no para demostrar precisión futura. El test es temporal y posterior al corte, pero pertenece al desarrollo retrospectivo ya examinado. No se resta train de agosto al WAPE acumulado de todo 2026 ni se mezclan poblaciones. En SARIMA/SARIMAX se excluyen al menos catorce días de inicialización y se evalúan predicciones condicionales dentro de muestra; no son un backtest diario de entrenamiento.
+### 5.4. Interpretación de variables del modelo seleccionado
 
-| Situación y método | WAPE train | WAPE test del ajuste | Casos train / test |
-| --- | ---: | ---: | ---: |
-| Semanal agosto · Memoria_larga | 22,00 % | 15,31 % | 140.994 / 1.560 |
-| Semanal agosto · Sistema_diario | 23,13 % | 15,66 % | 140.994 / 1.560 |
-| Diario agosto · Boosting diario autónomo | 25,90 % | 26,98 % | 70.448 / 3.192 |
-| Diario agosto · Boosting reconciliado · memoria larga | 26,40 % | 27,14 % | 70.448 / 3.192 |
-| Diario agosto · Uniforme · memoria larga | 28,52 % | 30,84 % | 70.448 / 3.192 |
-| Piloto SARIMA agosto · SARIMA | 19,48 % | 29,83 % | 888 / 15 |
-| Piloto SARIMA agosto · SARIMAX | 19,47 % | 29,25 % | 888 / 15 |
+El notebook 16 reconstruye el ajuste de agosto de la selección de 19 y verifica sus predicciones. Mide aumento de WAPE al permutar bloques y variables, incluyendo la referencia sumada al corrector. Cinco repeticiones, semilla fija; la dispersión no es un intervalo de confianza. No son valores SHAP, porcentajes de producción ni efectos causales. El gráfico anterior que mostraba clima nulo con datos faltantes queda sustituido por esta ejecución con cobertura actualizada. [E12]
 
-En agosto, el candidato semanal obtiene 22,00 % en train y 15,31 % en test, mientras el ingeniero obtiene 14,89 % en ese mismo test. La pequeña ventaja acumulada del candidato no se mantiene en todos los meses. El diario autónomo obtiene 25,90 % y 26,98 %; el reconciliado con memoria, 26,40 % y 27,14 %. En el último piloto, los errores SARIMA/SARIMAX pasan de aproximadamente 19,5 % en train a 29,8 % y 29,2 % en test, pero este último contiene sólo quince días comunes. Las diferencias merecen seguimiento sin convertir muestras pequeñas en conclusiones generales.
+Como la selección es Sin_clima, no aparecen variables meteorológicas en sus importancias: no forman parte de ese modelo. Esto no es una importancia climática estimada de cero. Su aporte adicional se evalúa con las comparaciones controladas de 19.
 
-![Figura 11. Error de entrenamiento y evaluación del mismo ajuste de agosto. Cambian las poblaciones entre tareas; no comparar alturas de semanal y diario como una única escala. Fuente: E13.](Figuras_resultados/train_test_modelos.png)
+![Figura 13. Importancia por bloques de la alternativa seleccionada, agosto de 2026. Fuente: E12.](Figuras_resultados/importancia_bloques_semanal.png)
 
-El inventario completo aparece al final del documento y en 17. El candidato semanal es HistGradientBoostingRegressor aditivo con separación H1–H2/H3–H5, dos rutas y memoria larga. En diario, HistGradientBoostingRegressor aprende una corrección en logaritmos respecto a media4/7; la reconciliación se aplica después. Ridge, pérdida absoluta, corrección relativa, ablaciones e historia de teoría permanecen como comparaciones explícitas. SARIMA/SARIMAX son un piloto de tres series. El ingeniero es una referencia externa y no tiene un error de entrenamiento de nuestro algoritmo.
+![Figura 14. Variables con mayor importancia dentro de cada ruta y grupo de horizonte. Fuente: E12.](Figuras_resultados/importancia_variables_semanal.png)
 
-## 6. Discusión: qué aporta el recorrido completo
+En H1_H2/Respaldo, permutar Producción semanal reciente aumenta el WAPE en 82,43 puntos (857 casos). En H3_H5/Respaldo, permutar Producción semanal reciente aumenta el WAPE en 80,50 puntos (577 casos). En H1_H2/Teoria_completa, permutar Teoría y desvío aumenta el WAPE en 69,37 puntos (79 casos). En H3_H5/Teoria_completa, permutar Teoría y desvío aumenta el WAPE en 41,34 puntos (47 casos). En H1_H2/Teoria_completa, permutar Corte diario reciente aumenta el WAPE en 11,99 puntos (79 casos). En H1_H2/Respaldo, permutar Corte diario reciente aumenta el WAPE en 7,02 puntos (857 casos). En H3_H5/Respaldo, permutar Identidad comercial aumenta el WAPE en 2,09 puntos (577 casos). En H3_H5/Teoria_completa, permutar Identidad comercial aumenta el WAPE en 1,56 puntos (47 casos). 
 
-El aporte comienza antes de entrenar un algoritmo. Reconocer fotografías de inventario, ciclos de pilotos y edades con soporte cambia qué se puede proyectar y cómo evaluarlo. La auditoría mostró que parte de la falta de curvas provenía del procesamiento: consultar varias veces una referencia idéntica y exigir un código SQL único para una identidad comercial inequívoca. Recuperar esa historia eleva la cobertura de teoría completa a 21,25 %, sin ocultar las limitaciones restantes.
+Las variables correlacionadas pueden sustituirse entre sí y permutar entre series puede producir combinaciones poco habituales. Una importancia pequeña no demuestra irrelevancia agronómica. Se interpreta junto al experimento con/sin clima de 19 y al soporte de cada ruta, especialmente cuando hay pocas observaciones con teoría completa.
 
-La categoría comercial compartida permite trabajar de forma consistente entre fuentes, pero no certifica equivalencia biológica entre códigos del maestro. Las diferencias de obtentor y las edades con poco soporte se conservan como preguntas agronómicas concretas. El catálogo central ofrece un lugar único para revisar esas decisiones y evita introducir equivalencias distintas en cada unión.
+### 5.5. Entrenamiento y evaluación del mismo ajuste
 
-Las curvas conectan inventario, edad y rendimiento esperado; su error contra producción real justifica el ajuste. El contraste antes/después de calidad muestra por qué recuperar información y mejorar precisión son logros que deben medirse por separado. La evaluación posterior por horizonte, memoria y revisiones permite estudiar qué transformación aprovecha mejor la información recuperada.
+Los errores dentro de muestra se separan del test temporal. La tabla semanal usa train del último ajuste y test principal de ese mismo mes; no se resta de la evaluación acumulada de 2026. La tabla diaria usa los componentes dentro de muestra del último ajuste y su test de agosto. Estos errores de train no son un backtest histórico: los parámetros ya vieron esos objetivos. El inventario 17 conserva además Ridge, ablaciones, variantes relativas/MAE y el piloto inicial sobre sus respectivas poblaciones. [E13, E16, E17]
 
-En la comparación conjunta, el candidato separación + memoria larga tiene menor WAPE que el ingeniero durante el periodo examinado. El resultado debe leerse con el desglose por horizonte y segmento y con el hecho de que 2026 fue analizado iterativamente. No constituye una selección operativa validada en datos nuevos.
+| Modelo semanal | WAPE train | WAPE test principal del mismo corte |
+| --- | ---: | ---: |
+| Boosting con clima ampliado y lluvia | 21,90 % | 15,23 % |
+| Boosting con clima básico actualizado | 22,00 % | 15,10 % |
+| Clima ampliado + curva atribuida a GAITANA | 22,33 % | 15,43 % |
+| Boosting sin clima | 22,43 % | 15,24 % |
 
-En el nivel diario, acertar el total y acertar su distribución siguen siendo problemas distintos. Las versiones reconciliadas conservan el pronóstico semanal, pero pueden heredar su error. El pequeño piloto SARIMA/SARIMAX aporta un contraste útil en tres series, no una justificación para ampliar complejidad sin nueva evidencia.
+| Modelo diario | WAPE train compuesto | WAPE test del mismo corte |
+| --- | ---: | ---: |
+| Boosting reconciliado · selección semanal | 26,57 % | 27,25 % |
+| Boosting diario autónomo | 25,90 % | 26,65 % |
+| Perfil histórico · selección semanal | 27,41 % | 27,32 % |
+| Uniforme · selección semanal | 28,70 % | 30,95 % |
 
-## 7. Conclusiones y continuidad del trabajo
+El ingeniero no tiene un train de nuestro algoritmo. SARIMA/SARIMAX dentro de muestra excluyen la inicialización del filtro y no equivalen a pronósticos emitidos día a día. Una diferencia entre train histórico y un mes de test también refleja composición y dificultad del periodo; no prueba por sí sola fuga ni ausencia de sobreajuste.
 
-El proyecto construyó una cadena verificable desde planos y pilotos hasta proyecciones, base analítica, ajuste semanal y evaluación diaria. La conciliación de cantidades y el tratamiento explícito de faltantes hacen posible interpretar el resultado del modelo sin perder la relación con las fuentes. El EDA desempeña una función metodológica concreta: define cobertura, referencias, señales candidatas y dimensiones de evaluación.
+### 5.6. De dónde proviene el WAPE: productos, colores y variedades
 
-La auditoría recuperó historia utilizable y el experimento por horizontes obtuvo 19,59 % WAPE con su mejor candidato retrospectivo, frente a 19,74 % del ingeniero. En el nivel diario, el nuevo total reduce el WAPE del boosting reconciliado de 28,29 % a 27,45 %, pero el autónomo conserva 26,76 %. La ventaja de los perfiles sobre el uniforme en la muestra general se invierte en las pocas semanas con siete reportes. El piloto temporal conserva un alcance de tres series que no debe extrapolarse. Estas conclusiones se sostienen en poblaciones delimitadas y no constituyen todavía una validación de uso empresarial.
+El notebook 20 conserva exactamente los casos estrictos y las predicciones de 19. Descompone el error por producto, color dentro de producto y variedad dentro de producto/color, con H1 separado y cada horizonte explícito. El aporte de un grupo al WAPE total es su error absoluto dividido por el volumen real del panel, multiplicado por cien; esos aportes sí se suman. El WAPE local de los grupos no se suma. Se mantienen los grupos pequeños, faltantes y soporte bajo visibles; no se escoge otro modelo con este diagnóstico de test. [E18]
 
-Las siguientes prioridades son confirmar la unidad exportable y la latencia de las fuentes, revisar los faltantes de curvas y edades con mayor impacto, y evaluar los candidatos en un periodo nuevo con reglas fijadas antes de observarlo. Para el nivel diario se requiere aclarar si los días sin reporte corresponden a ausencia de corte, aplazamiento de registro u otras situaciones. Estas verificaciones son más útiles para la siguiente etapa que aumentar indiscriminadamente el número de algoritmos.
+H1: principales aportes del modelo. «Error del modelo (%)» es participación en su error absoluto, no WAPE local.
 
-### 7.1. Límites que condicionan las conclusiones
+| Producto | Volumen (%) | WAPE modelo | WAPE ingeniero | Error del modelo (%) | Aporte WAPE (pp) |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| MINICARNATION | 60,34 | 14,33 % | 14,53 % | 55,23 | 8,65 |
+| CARNATION | 18,52 | 18,91 % | 20,17 % | 22,36 | 3,50 |
+| SOLOMIO | 11,34 | 15,17 % | 18,77 % | 10,99 | 1,72 |
+| RAFFINE | 6,04 | 15,96 % | 25,58 % | 6,15 | 0,96 |
 
-Persisten la disponibilidad histórica supuesta de archivos, la representatividad no confirmada de pilotos, la equivalencia pendiente entre tallos reportados y exportables y la ambigüedad de ausencias diarias. Los resultados fueron examinados durante el desarrollo y no provienen de un conjunto prospectivo intacto. Las comparaciones de teoría, benchmark de 2026 y piloto diario utilizan poblaciones diferentes y no se interpretan como una sola escala de mejora.
+![Figura 15. Aporte de cada producto al WAPE total, con idénticos casos para ambos métodos. Fuente: E18.](Figuras_resultados/error_aporte_productos.png)
 
-No se han medido ahorros, adopción ni cambios en cumplimiento comercial. Tampoco se atribuyen resultados a PCA, MCA o PDN: esos componentes figuraban en la estructura anterior, pero no cuentan con evidencia nueva ejecutada en este flujo. Su inclusión definitiva debe responder a una pregunta útil y a resultados verificables, además de la revisión con el asesor.
+En H1, MINICARNATION representa 60,34 % del volumen y 55,23 % del error absoluto del modelo; CARNATION añade 22,36 %. Juntos concentran 77,59 % del error del modelo. MINICARNATION también domina el error del ingeniero (51,31 %). Su prioridad se explica sobre todo por escala: el WAPE del modelo en MINICARNATION es 14,33 %, inferior al 18,91 % de CARNATION. No significa que sea el producto de peor tasa.
+
+La mayor parte de la ventaja en H1 procede de RAFFINE y SOLOMIO: reducen respectivamente 0,58 y 0,41 puntos del WAPE total, aproximadamente 69,11 % de la ventaja neta frente al ingeniero. MINICARNATION mejora poco en el agregado y el modelo gana allí sólo 3 de 8 meses. Sus tres semanas de mayor error concentran 16,85 % de su error: no se explica todo por un episodio aislado. En el extremo opuesto, ACHILLEA tiene WAPE 380,92 %, pero menos de 0,01 % del volumen y apenas 0,01 puntos del WAPE total. Requiere revisar sus casos, pero priorizar sólo ese porcentaje ocultaría los grupos de mayor impacto.
+
+En horizontes largos aparece un problema distinto. CARNATION pasa de WAPE 18,91 % en H1 a 26,87 % en H5; el ingeniero obtiene 23,22 % en H5. Allí CARNATION aporta 0,67 puntos a la desventaja global del modelo. Esto orienta a revisar la anticipación y los cambios de producción en ese producto, sin dar por demostrada su causa.
+
+![Figura 16. Diferencia de WAPE dentro de cada producto y horizonte: positivo desfavorece al modelo. El color se satura en ±15 puntos para facilitar la lectura; las cifras conservan sus valores reales. Fuente: E18.](Figuras_resultados/error_producto_horizonte.png)
+
+Dentro de MINICARNATION, ORANGE, HOT PINK y LIGHT PINK son los colores con mayor aporte al error H1 de ambos métodos. En el ingeniero, ORANGE tiene sesgo de -12,67 %, frente a -5,36 % del modelo. Sus variedades de mayor error son UCHUVA, LORENZO y NENUFAR. UCHUVA también es la variedad de mayor error del modelo (0,96 puntos del WAPE total). EPSILON aporta la mayor desventaja por variedad: WAPE 15,17 % frente a 10,11 % del ingeniero, diferencia que añade 0,17 puntos al WAPE total. Son criterios distintos: mayor error propio y mayor oportunidad frente al benchmark.
+
+ACADEMY ilustra por qué el sesgo pequeño no basta: sesgo del modelo 0,19 %, pero WAPE 19,15 %, frente a 16,36 % del ingeniero. En H1 agregado, las sobreestimaciones del modelo aportan 7,21 puntos y las subestimaciones 8,45: se compensan en el sesgo de -1,23 %, pero se suman en el WAPE de 15,66 %. Corregir sólo el nivel promedio no resolvería esos errores de dinámica temporal.
+
+Las subidas fuertes —real superior a 1,5 veces la media de cuatro semanas— presentan WAPE 28,12 % y sesgo -27,29 % en el modelo, frente a 26,78 % de WAPE del ingeniero. El modelo queda corto en esos episodios. Sin embargo, 89,39 % de su error H1 ocurre en casos dentro de 0,5–1,5 veces la media: no todo el problema son picos extremos. Esta clasificación usa el real conocido después y sólo sirve para diagnosticar.
+
+La variabilidad previa moderada también identifica dificultad: en CARNATION, WAPE del modelo 26,32 % frente a 17,41 % con baja variabilidad; en MINICARNATION, 21,94 % frente a 13,81 %. Son asociaciones dentro de producto, no efectos causales; los casos de variabilidad alta tienen poco soporte. Tampoco se puede culpar automáticamente a la falta de curva: en MINICARNATION, los 66 casos con teoría completa tienen menor WAPE (11,78 %) que los 913 con respaldo (14,44 %), pero son poblaciones distintas. El Excel conserva esas comparaciones también para el ingeniero.
+
+La revisión práctica debe concentrarse primero en MINICARNATION por volumen y en CARNATION H3–H5 por desventaja de anticipación; después en las semanas de UCHUVA, EPSILON y ACADEMY y sus referencias de producción previa. Las trayectorias muestran picos, alternancia de sobre/subestimaciones y huecos de comparación sin inventar ceros. Son hipótesis de seguimiento temporal y cobertura, no diagnósticos agronómicos ni evidencia de errores de registro. Antes de cambiar el modelo conviene contrastar esos episodios con información operativa; cualquier ajuste posterior necesita evaluación temporal nueva.
+
+![Figura 17. H1 en tres variedades seleccionadas por error y desventaja, con media previa conocida al origen. Los huecos son semanas fuera del panel comparable. Fuente: E18.](Figuras_resultados/error_variedades_foco_h1.png)
+
+El notebook incluye además gráficos de colores y variedades, trayectorias de los productos, aportes de sobre/subestimación, estabilidad mensual, semanas críticas y tablas completas. La descomposición reproduce exactamente WAPE, sesgo y número de casos del benchmark.
+
+## 6. Discusión: calidad, clima y distribución del error
+
+El error no se distribuye uniformemente. MINICARNATION concentra el mayor volumen y la mayor parte del error, mientras CARNATION explica una desventaja relevante a horizontes largos. Los porcentajes extremos de productos pequeños no sustituyen esa lectura por impacto. El detalle por color y variedad aporta casos concretos para revisar: un sesgo casi nulo, como en ACADEMY, puede coexistir con errores semanales importantes. Por eso una corrección general del nivel no resuelve por sí sola el seguimiento de los cambios de producción. Estas explicaciones son descriptivas del periodo evaluado y requieren contrastar información operativa antes de atribuir causas.
+
+La calidad de fuentes condiciona qué puede aprender y qué puede explicar el sistema. Un clima ausente en el periodo de interpretación puede producir importancia nula sin que eso describa el proceso agrícola. Actualizar la fuente, medir cobertura y comparar modelos temporales es necesario antes de concluir sobre su utilidad.
+
+El EDA distingue cantidad y momento del corte, y no encuentra una regla general de desplazamiento climático con soporte estadístico claro. Los modelos evalúan relaciones no lineales e interacciones, pero una mejora de error tampoco certifica un mecanismo causal. Sólo se usa clima pasado: la meteorología futura hasta H5 sigue siendo desconocida para este experimento.
+
+La procedencia de pilotos tampoco se resuelve suponiendo que números de bloque identifican finca. La coincidencia exacta aporta evidencia de GAITANA y deja desconocidos explícitos. Reducir el conjunto de pilotos puede perder cobertura y cambiar la ruta del pronóstico. Por eso se preservan ambos tipos de curva y sus comparaciones.
+
+## 7. Conclusiones y continuidad
+
+La cadena actual integra clima válido hasta septiembre, lluvia y ventanas recientes, una medida exploratoria de desplazamiento, curvas atribuibles a GAITANA y comparaciones temporales sobre los mismos casos. La elección anterior a 2026 es Boosting sin clima, con 19,46 % WAPE frente a 19,74 % del ingeniero en el panel principal. El reparto diario coherente obtiene 27,27 %, frente a 26,72 % del autónomo.
+
+La siguiente comprobación útil es fijar esta configuración y registrar emisiones en un periodo nuevo. También se requiere confirmar las unidades de lluvia, disponibilidad real de reportes, identidad de los pilotos sin pareja y significado de días sin corte registrado. No ampliar a ARABELLA: el alcance de modelado y las conclusiones siguen restringidos a GAITANA.
+
+El diagnóstico del origen del WAPE orienta esa continuidad: revisar MINICARNATION por volumen, CARNATION H3–H5 por anticipación y las semanas críticas de UCHUVA, EPSILON y ACADEMY. La prioridad se sostiene en aportes al error, persistencia y comparación emparejada, no sólo en el mayor WAPE local. No se cambiaron los modelos a partir de este EDA; cualquier mejora propuesta deberá evaluarse en datos posteriores.
+
+### 7.1. Límites
+
+Persisten la disponibilidad histórica supuesta de archivos, procedencia inferida de pilotos, representatividad agronómica y equivalencia entre tallos reportados y exportables. El EDA de desplazamiento analiza una ventana parcial y no mide retraso fisiológico de cohortes individuales. Los periodos fueron examinados durante desarrollo y no son test prospectivo intacto. El clima de estación no garantiza representar cada invernadero. No se han medido beneficios económicos ni adopción empresarial.
+
+La literatura verificada, la validación empresarial y la pertinencia de PCA/MCA/PDN continúan pendientes; no se atribuyen resultados a componentes no ejecutados.
 
 ## Referencias de la evidencia y pendientes editoriales
 
-Las referencias E1–E13 permiten ubicar la evidencia interna que sostiene las cifras y decisiones de este borrador. No sustituyen la bibliografía académica. La revisión de literatura del anteproyecto debe integrarse con lectura y citas verificadas de sus fuentes; aquí no se convierten nombres de artículos de la estructura original en afirmaciones bibliográficas no comprobadas.
+Las referencias E1–E18 permiten ubicar la evidencia interna que sostiene las cifras y decisiones de este borrador. No sustituyen la bibliografía académica. La revisión de literatura del anteproyecto debe integrarse con lectura y citas verificadas de sus fuentes; aquí no se convierten nombres de artículos de la estructura original en afirmaciones bibliográficas no comprobadas.
 
 | Referencia | Evidencia reproducible | Uso en el documento |
 | --- | --- | --- |
@@ -370,6 +465,11 @@ Las referencias E1–E13 permiten ubicar la evidencia interna que sostiene las c
 | E11 | Modelo_de_series_diario/04_diario_con_memoria_semanal.ipynb | Efecto del nuevo total semanal, cobertura y sensibilidad diaria |
 | E12 | Analisis/16_interpretacion_modelo_semanal.ipynb | Importancia por permutación y reproducción del ajuste |
 | E13 | Analisis/17_inventario_modelos_train_test.ipynb | Inventario y errores de entrenamiento/evaluación por corte |
+| E14 | Proyecciones Teoricas Propias/01_procedencia_pilotos_y_curvas_gaitana.ipynb | Procedencia inferida y sensibilidad de curvas |
+| E15 | Analisis/18_EDA_clima_y_desfase.ipynb | Cobertura, lluvia, error de volumen y desplazamiento |
+| E16 | Analisis/19_modelos_clima_y_curvas_gaitana.ipynb | Comparación temporal y elección previa a 2026 |
+| E17 | Modelo_de_series_diario/05_diario_clima_actualizado.ipynb | Reparto del candidato y train/test compuesto |
+| E18 | Analisis/20_EDA_origen_error_modelo_ingeniero.ipynb | Descomposición del WAPE y sesgo por producto, color, variedad y semanas |
 
 Referencia técnica utilizada en la implementación: documentación oficial de SARIMAX de statsmodels, https://www.statsmodels.org/stable/generated/statsmodels.tsa.statespace.sarimax.SARIMAX.html.
 
@@ -379,56 +479,56 @@ La introducción conserva problema, objetivos y alcance. Los capítulos 2 y 3 de
 
 La literatura verificada, la revisión agronómica, la decisión sobre PCA/MCA/PDN y la validación empresarial siguen pendientes. Sus títulos no se mantienen como capítulos extensos vacíos. La documentación detallada de llaves, parámetros y tablas por segmento permanece en los notebooks y puede constituir anexos según las exigencias de entrega. Este documento es un borrador desarrollado del trabajo empírico, no una tesis lista para radicar.
 
-### Inventario de modelos y diagnóstico por corte
+### Inventario adicional de algoritmos y referencias
 
-Cada tabla usa el mismo ajuste para train y test. En el semanal de agosto, las referencias con faltantes se puntúan sólo donde existe su predictor; el número de casos permite verificarlo. La teoría sin ajuste, medias y repartos son reglas, no modelos nuevos entrenados. El ingeniero sólo tiene test. Las versiones SARIMA reconciliadas comparten el ajuste autónomo; su precisión diaria completa se informa en 5.3, no se inventa un entrenamiento independiente.
+Se mantiene el diagnóstico de los ajustes de referencia de 17; no sustituye la selección climática de 19 ni sus tablas anteriores.
 
 ### Semanal agosto
 
-| Modelo | WAPE train | WAPE test | Casos train / test |
-| --- | ---: | ---: | ---: |
-| Sistema_anterior | 23,30 % | 16,06 % | 140.994 / 1.560 |
-| Sistema_diario | 23,13 % | 15,66 % | 140.994 / 1.560 |
-| Separado | 22,16 % | 15,23 % | 140.994 / 1.560 |
-| Memoria_larga | 22,00 % | 15,31 % | 140.994 / 1.560 |
-| Revisiones | 22,08 % | 15,37 % | 140.994 / 1.560 |
-| Ajuste_relativo_diario | 25,29 % | 15,91 % | 140.994 / 1.560 |
-| Boosting_diario_MAE | 24,69 % | 14,97 % | 140.994 / 1.560 |
-| Combinacion | 22,08 % | 15,37 % | 140.994 / 1.560 |
-| Media4 | 32,21 % | 16,02 % | 140.994 / 1.560 |
-| Ultimo_valor | 28,86 % | 15,28 % | 140.994 / 1.560 |
-| ingeniero | No aplica | 14,89 % | — / 1.560 |
+| Modelo | WAPE train | WAPE test |
+| --- | ---: | ---: |
+| Ajuste_relativo_diario | 25,29 % | 16,12 % |
+| Boosting_diario_MAE | 24,69 % | 14,95 % |
+| Combinacion | 22,08 % | 15,02 % |
+| Media4 | 32,21 % | 16,02 % |
+| Memoria_larga | 22,00 % | 15,10 % |
+| Revisiones | 22,08 % | 15,02 % |
+| Separado | 22,16 % | 15,17 % |
+| Sistema_anterior | 23,30 % | 15,82 % |
+| Sistema_diario | 23,13 % | 15,39 % |
+| Ultimo_valor | 28,86 % | 15,28 % |
+| Ingeniero | No aplica | 14,89 % |
 
 ### Teoria completa mayo
 
-| Modelo | WAPE train | WAPE test | Casos train / test |
-| --- | ---: | ---: | ---: |
-| Ajuste_media4_sin_planos | 26,88 % | 16,21 % | 41.036 / 250 |
-| Modelo_teorico | 21,11 % | 23,75 % | 41.036 / 250 |
-| Modelo_teorico_historia | 21,06 % | 23,14 % | 41.036 / 250 |
-| Teorico_sin_clima | 21,62 % | 22,77 % | 41.036 / 250 |
-| Teorico_sin_memoria | 23,12 % | 30,42 % | 41.036 / 250 |
-| Ridge_ajuste_teoria | 25,56 % | 19,80 % | 41.036 / 250 |
-| Ultimo_valor | 30,98 % | 17,35 % | 41.036 / 250 |
-| Media4 | 34,34 % | 18,25 % | 41.036 / 250 |
-| Teoria_sin_ajuste | 42,44 % | 23,85 % | 41.036 / 250 |
+| Modelo | WAPE train | WAPE test |
+| --- | ---: | ---: |
+| Ajuste_media4_sin_planos | 26,88 % | 16,21 % |
+| Media4 | 34,34 % | 18,25 % |
+| Modelo_teorico | 21,11 % | 23,75 % |
+| Modelo_teorico_historia | 21,06 % | 23,14 % |
+| Ridge_ajuste_teoria | 25,56 % | 19,80 % |
+| Teoria_sin_ajuste | 42,44 % | 23,85 % |
+| Teorico_sin_clima | 21,62 % | 22,77 % |
+| Teorico_sin_memoria | 23,12 % | 30,42 % |
+| Ultimo_valor | 30,98 % | 17,35 % |
 
 ### Diario agosto
 
-| Modelo | WAPE train | WAPE test | Casos train / test |
-| --- | ---: | ---: | ---: |
-| Uniforme · total anterior | 29,27 % | 31,57 % | 70.448 / 3.192 |
-| Perfil de ocho semanas · total anterior | 28,20 % | 27,75 % | 70.448 / 3.192 |
-| Boosting reconciliado · total anterior | 27,34 % | 27,65 % | 70.448 / 3.192 |
-| Boosting diario autónomo | 25,90 % | 26,98 % | 70.448 / 3.192 |
-| Uniforme · memoria larga | 28,52 % | 30,84 % | 70.448 / 3.192 |
-| Perfil de ocho semanas · memoria larga | 27,24 % | 27,29 % | 70.448 / 3.192 |
-| Boosting reconciliado · memoria larga | 26,40 % | 27,14 % | 70.448 / 3.192 |
+| Modelo | WAPE train | WAPE test |
+| --- | ---: | ---: |
+| Boosting diario autónomo | 25,90 % | 26,65 % |
+| Boosting reconciliado · memoria actualizada | 26,40 % | 27,02 % |
+| Boosting_reconciliado | 27,34 % | 27,65 % |
+| Perfil_8semanas | 28,20 % | 27,73 % |
+| Perfil histórico · memoria actualizada | 27,24 % | 27,14 % |
+| Uniforme · memoria actualizada | 28,52 % | 30,69 % |
+| Uniforme_semanal | 29,27 % | 31,85 % |
 
 ### Piloto SARIMA agosto
 
-| Modelo | WAPE train | WAPE test | Casos train / test |
-| --- | ---: | ---: | ---: |
-| SARIMA | 19,48 % | 29,83 % | 888 / 15 |
-| SARIMAX | 19,47 % | 29,25 % | 888 / 15 |
+| Modelo | WAPE train | WAPE test |
+| --- | ---: | ---: |
+| SARIMA | 19,48 % | 29,83 % |
+| SARIMAX | 19,47 % | 29,54 % |
 
