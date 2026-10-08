@@ -15,3 +15,9 @@ El recorrido reproducible está en la [guía paso a paso](GUIA_PASO_A_PASO_DATOS
 Los periodos ya examinados constituyen desarrollo retrospectivo. Permanecen pendientes disponibilidad histórica de fuentes, microclima representado, unidades de lluvia, pilotos desconocidos y significado de días sin reporte. No imputar producción objetivo, usar clima futuro observado ni afirmar utilidad económica o aprobación operativa sin evidencia.
 
 El EDA final 20 descompone exactamente WAPE y sesgo en el panel común, sin cambiar las predicciones. Producto, producto/color y producto/color/variedad son niveles separados. Los aportes de error absoluto divididos por el real total sí son aditivos; los WAPE locales no. Se explicitan soporte, volumen, sobre/subestimaciones, concentración temporal y diagnósticos dentro de producto. Los cambios respecto a media4 que utilizan y son ex post y nunca predictores. Las explicaciones son hipótesis a contrastar y no autorizan recalibrar usando el test.
+
+## Lectura metodológica detallada
+
+El escrito desarrolla: homologación de nombres y rendimiento por planta (3.2), cobertura y ejemplo DINO (3.3), evidencia de memoria semanal/diaria (3.6.1), correspondencia entre las 26 entradas climáticas y los modelos (3.7), base y diccionario (4.1 y anexo), catálogo de modelos/variables y evaluación temporal (4.2), evolución de resultados y errores por producto (5). La evidencia del EDA motiva hipótesis; las comparaciones predictivas prueban bloques, no cada variable individualmente.
+
+(Pronóstico diario en revisión: desarrollo preliminar y siguientes pasos.) Se conservan notebooks y resultados. Esto no excluye las señales diarias de corte que ya alimentan el modelo semanal. Los siguientes experimentos y la presentación de cuatro bloques se registran en BITACORA_REVISION_CONVERSADA.md.

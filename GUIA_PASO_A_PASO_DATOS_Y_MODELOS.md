@@ -2,7 +2,16 @@
 
 ## Qué leer primero
 
-El [trabajo escrito](Trabajo%20escrito/Estructura_actualizada_con_resultados.docx) contiene contexto, calidad, EDA, método, resultados y límites; su [Markdown editable](Trabajo%20escrito/Desarrollo_del_documento.md) contiene la misma redacción. Para esta revisión, estudiar procedencia de pilotos, 18 (EDA climático), 19 (comparación semanal), diario 05 (resultado diario) y 16 (interpretación). Los notebooks conservan salidas ejecutadas.
+El [trabajo escrito](Trabajo%20escrito/Estructura_actualizada_con_resultados.docx) y su [Markdown editable](Trabajo%20escrito/Desarrollo_del_documento.md) conservan resultados y desarrollan ahora el recorrido metodológico. Para entender, leer en este orden:
+
+1. **Antes del modelo:** capítulos 2–3, fuentes, homologación comercial, tallos por planta, curvas y cobertura. Distinguir cero de dato ausente.
+2. **Qué es una fila:** 4.1, anexo de 47 columnas y [lectura.ipynb](lectura.ipynb). Separar origen, objetivo y versiones previas.
+3. **Por qué esas variables:** 3.6.1 y 3.7; asociaciones de 11, tendencias de diario 01 y puente climático de 18. Una asociación propone una hipótesis; no demuestra mejora predictiva.
+4. **Qué hace cada modelo:** 4.2 y diccionario del notebook 12; referencias → correcciones Ridge/boosting → dos rutas → información diaria para semanas → grupos de horizonte y memoria larga → comparación climática de 19.
+5. **Qué evidencia respalda las decisiones:** recorrido de resultados del capítulo 5, selección temporal, benchmark, WAPE y sesgo, y errores por producto/color/variedad en 5.6 y notebook 20.
+6. **Pasos siguientes:** capítulo 7. Pronóstico diario y SARIMA/SARIMAX se conservan como desarrollo preliminar en revisión; no son un requisito para entender primero el sistema semanal.
+
+La [bitácora](BITACORA_REVISION_CONVERSADA.md) registra decisiones, límites y el esquema de presentación en cuatro bloques. El orden de lectura anterior explica la metodología; el orden de corrida de abajo respeta dependencias de archivos.
 
 ## Resultado actual
 
@@ -30,7 +39,7 @@ Elección fijada con validación anterior a 2026: **Boosting sin clima**. WAPE c
 
 Sesgo = 100 × suma(predicción − real) / suma(real). Positivo: sobreestimación; negativo: subestimación. Cero no implica poco error: errores opuestos pueden compensarse. WAPE y sesgo se calculan sobre los mismos casos por horizonte.
 
-Diario reconciliado al candidato: **27,27 %**; autónomo: **26,72 %**, mismos 22.973 días. No confundir precisión libre con conservar el total semanal. Leer sensibilidad de semanas con siete reportes, que no puede usarse para escoger método al origen.
+(Pronóstico diario en revisión: desarrollo preliminar y siguientes pasos.) Diario reconciliado al candidato: **27,27 %**; autónomo: **26,72 %**, mismos 22.973 días. No confundir precisión libre con conservar el total semanal. Leer sensibilidad de semanas con siete reportes, que no puede usarse para escoger método al origen.
 
 ## Lo que sabemos de las curvas
 
@@ -48,29 +57,29 @@ Usar el intérprete `entorno_tesis`. Abrir cada notebook, reiniciar su kernel y 
 4. [Proyecciones](Notebooks/Proyecciones%20Teoricas%20Propias/Proyecciones_teoricas_todos_los_anios.ipynb): Recuperar proyecciones compartidas auditadas.
 5. [Procedencia](Notebooks/Proyecciones%20Teoricas%20Propias/01_procedencia_pilotos_y_curvas_gaitana.ipynb): Probar curva atribuible a GAITANA.
 6. [Base semanal](Notebooks/Analisis/10_base_analitica_proyecciones.ipynb): Integración de producción, teoría y clima.
-7. [EDA climático](Notebooks/Analisis/18_EDA_clima_y_desfase.ipynb): Cobertura, lluvia, error y desplazamiento.
-8. [EDA general](Notebooks/Analisis/11_EDA_proyecciones.ipynb): Composición y señales históricas.
-9. [Modelos iniciales](Notebooks/Analisis/12_modelo_ajuste_proyecciones.ipynb): Referencias, Ridge y boosting.
-10. [Benchmark](Notebooks/Analisis/13_comparacion_ingeniero_modelo_2026.ipynb): Mismos casos del ingeniero.
-11. [Base diaria](Notebooks/Modelo_de_series_diario/01_base_diaria_EDA.ipynb): Calendario y señales conocidas al origen.
-12. [Tendencias](Notebooks/Analisis/14_tendencias_diarias_modelo_semanal.ipynb): Señales diarias en el pronóstico semanal.
-13. [Memoria](Notebooks/Analisis/15_calidad_y_mejora_por_horizonte.ipynb): Arquitectura de referencia con memoria larga.
+7. [EDA general](Notebooks/Analisis/11_EDA_proyecciones.ipynb): Composición y señales históricas.
+8. [Modelos iniciales](Notebooks/Analisis/12_modelo_ajuste_proyecciones.ipynb): Referencias, Ridge y boosting.
+9. [Benchmark](Notebooks/Analisis/13_comparacion_ingeniero_modelo_2026.ipynb): Mismos casos del ingeniero.
+10. [Base diaria](Notebooks/Modelo_de_series_diario/01_base_diaria_EDA.ipynb): Calendario y señales conocidas al origen. Este paso construye entradas del SEMANAL; no exige entrenar pronósticos diarios.
+11. [Tendencias](Notebooks/Analisis/14_tendencias_diarias_modelo_semanal.ipynb): Señales diarias en el pronóstico semanal.
+12. [Memoria](Notebooks/Analisis/15_calidad_y_mejora_por_horizonte.ipynb): Arquitectura de referencia con memoria larga.
+13. [EDA climático](Notebooks/Analisis/18_EDA_clima_y_desfase.ipynb): Relacionar las 26 variables climáticas originales/diarias/ampliadas con los modelos; cobertura, error y desplazamiento. Requiere base semanal y señales de diario 01.
 14. [Comparación climática](Notebooks/Analisis/19_modelos_clima_y_curvas_gaitana.ipynb): Ablaciones y selección pre2026.
-15. [Distribución diaria](Notebooks/Modelo_de_series_diario/02_distribucion_semanal_a_diaria.ipynb): Autónomo y pesos de reparto.
-16. [Piloto temporal](Notebooks/Modelo_de_series_diario/03_SARIMA_SARIMAX_y_boosting.ipynb): Tres series, convergencia y clima lag7.
-17. [Reparto con memoria](Notebooks/Modelo_de_series_diario/04_diario_con_memoria_semanal.ipynb): Referencia actualizada.
-18. [Inventario train/test](Notebooks/Analisis/17_inventario_modelos_train_test.ipynb): Errores por corte y componentes train del diario.
-19. [Diario vigente](Notebooks/Modelo_de_series_diario/05_diario_clima_actualizado.ipynb): Propagar selección y medir train/test compuesto.
-20. [Interpretación](Notebooks/Analisis/16_interpretacion_modelo_semanal.ipynb): Importancia del candidato seleccionado.
-21. [EDA del origen del error](Notebooks/Analisis/20_EDA_origen_error_modelo_ingeniero.ipynb): Producto → color → variedad; H1 y H1–H5, aportes al WAPE, sesgo y semanas críticas. Usa salidas de 10 y 19; no reentrena.
+15. [Interpretación](Notebooks/Analisis/16_interpretacion_modelo_semanal.ipynb): Importancia del candidato seleccionado.
+16. [EDA del origen del error](Notebooks/Analisis/20_EDA_origen_error_modelo_ingeniero.ipynb): Producto → color → variedad; H1 y H1–H5, aportes al WAPE, sesgo y semanas críticas. Usa salidas de 10 y 19; no reentrena.
+17. [Distribución diaria](Notebooks/Modelo_de_series_diario/02_distribucion_semanal_a_diaria.ipynb): Autónomo y pesos de reparto. **(En revisión: desarrollo preliminar y siguientes pasos.)**
+18. [Piloto temporal](Notebooks/Modelo_de_series_diario/03_SARIMA_SARIMAX_y_boosting.ipynb): Tres series, convergencia y clima lag7. **(En revisión: desarrollo preliminar y siguientes pasos.)**
+19. [Reparto con memoria](Notebooks/Modelo_de_series_diario/04_diario_con_memoria_semanal.ipynb): Referencia actualizada. **(En revisión: desarrollo preliminar y siguientes pasos.)**
+20. [Inventario train/test](Notebooks/Analisis/17_inventario_modelos_train_test.ipynb): Errores por corte y componentes train del diario.
+21. [Diario vigente](Notebooks/Modelo_de_series_diario/05_diario_clima_actualizado.ipynb): Propagar selección y medir train/test compuesto. **(En revisión: desarrollo preliminar y siguientes pasos.)**
 
 En proyecciones de todos los años, `RECALCULAR_DESDE_EXCEL=False` recupera la auditoría vigente. Si cambian fuentes de planos/pilotos: catálogo → todos los años con `True` → auditoría → todos los años con `False` → procedencia y resto de la cadena. Conservar referencias históricas de calidad y clima: no sustituir el “antes” por el resultado actualizado.
 
-Para sólo estudiar no hace falta reentrenar. Para reproducir sólo la extensión con entradas ya actualizadas: procedencia → 18 → 19 → 17 (si faltan componentes train diarios) → diario 05 → 16 → 20. Los resultados de 10, diario 01, 14, 15 y diario 02/03/04 deben corresponder al mismo clima vigente; no mezclar archivos de revisiones anteriores.
+Para sólo estudiar no hace falta reentrenar. Para reproducir solo la extensión semanal con entradas ya actualizadas: procedencia → 18 → 19 → 16 → 20. Para estudiar o ejecutar el diario en revisión, continuar por diario 02/03/04 → 17 → diario 05 según las dependencias existentes. Los resultados de 10, diario 01, 14, 15 y diario 02/03/04 deben corresponder al mismo clima vigente; no mezclar archivos de revisiones anteriores.
 
 ## Cómo se evalúa
 
-No hay división aleatoria. Cada ajuste mensual entrena sólo con semanas objetivo terminadas antes del primer origen de ese mes. Los pesos/preparación se ajustan en train y los predictores usan datos anteriores al lunes. El experimento 19 selecciona entre cuatro alternativas con noviembre–diciembre de 2025, objetivos cerrados antes de 2026, y mantiene esa elección durante la evaluación. Todo el proyecto sigue siendo desarrollo retrospectivo porque esos periodos ya se examinaron.
+No hay división aleatoria. Cada ajuste mensual entrena sólo con semanas objetivo terminadas antes del primer origen de ese mes. Los pesos/preparación se ajustan en train y los predictores usan datos anteriores al lunes. El notebook 12 usa tres cortes (2025-07-07, 2026-01-05 y 2026-05-04), con ocho semanas de orígenes por evaluación; 13–19 pasan al reentrenamiento mensual. El experimento 19 selecciona entre cuatro alternativas con noviembre–diciembre de 2025, objetivos cerrados antes de 2026, y mantiene esa elección durante la evaluación. Todo el proyecto sigue siendo desarrollo retrospectivo porque esos periodos ya se examinaron.
 
 Las tablas train/test de 19 y diario 05 corresponden al mismo corte. El test principal semanal usa el emparejamiento estricto del ingeniero; `test` sin sufijo en los controles de 19 incluye todos los casos elegibles, mientras `test_principal` conserva sólo la comparación estricta. No restar train del último ajuste al test acumulado de todo el año como si fueran la misma población. El inventario 17 mantiene referencias iniciales con sus propios periodos.
 
@@ -78,6 +87,7 @@ Las tablas train/test de 19 y diario 05 corresponden al mismo corte. El test pri
 
 - `Datos_analiticos_proyecto/revision_clima_finca/auditoria_finca_curvas.xlsx`: atribuciones, ambigüedades y cobertura.
 - `eda_clima_y_desfase.xlsx`, en esa carpeta: cobertura, asociaciones dentro de serie, ventanas sin superposición e incertidumbre.
+- `eda_clima_variables_modelos.xlsx`: las 26 columnas climáticas, soporte por variable y común, correlaciones por serie/horizonte; figura `clima_variables_modelos.png` en el escrito.
 - `resultados_clima_curvas.xlsx`: validación, modelos, horizontes, movimiento del estimado, rutas y train/test por corte.
 - `Datos_analiticos_proyecto/modelo_diario/resultados_diarios_clima.xlsx`: precisión diaria, siete reportes, panel estricto, piloto y train/test compuesto.
 - `Datos_analiticos_proyecto/modelo_con_proyecciones_teoricas/interpretacion_modelo_semanal.xlsx`: importancia por permutación del candidato. No es SHAP ni causalidad.
@@ -102,3 +112,7 @@ Confirmar unidades de lluvia, microclima representado por la estación, latencia
 En 20 empezar por aportes por producto y después por color/variedad. Separar WAPE local, participación en el error y aporte al WAPE total. Leer las sobre/subestimaciones antes de concluir por sesgo. Revisar estabilidad mensual, curvas disponibles y variabilidad previa; los cambios del real frente a media4 son diagnóstico ex post, no predictores.
 
 Las salidas están en `Datos_analiticos_proyecto/eda_origen_error/`: Excel con todos los grupos, horizontes y casos; Parquet de casos comparables; Markdown de hallazgos calculados. El foco de tres variedades es exploratorio, elegido mirando test. No modifica ni mejora artificialmente las predicciones. Para reproducir sólo este EDA, ejecutar 20 con las salidas vigentes de 10 y 19. Si cambian esas fuentes, revisar la interpretación escrita tras ejecutar y regenerar el Word. Mantener el Word cerrado al guardarlo.
+
+## Próximos experimentos, todavía sin ejecutar
+
+Comparar cinco ajustes H1–H5 frente a los dos grupos actuales; especialización por producto y prueba n−1 retirando un producto del entrenamiento pero evaluando los productos restantes sobre los mismos casos; verificar si edades tempranas de DINO sin soporte corresponden a ceros documentados. Fijar decisiones en validación y comprobarlas en un período nuevo, sin prometer reducción de WAPE. El pronóstico diario requiere profundizar calendario, cobertura y ajuste de parámetros; sus resultados se conservan como avance.

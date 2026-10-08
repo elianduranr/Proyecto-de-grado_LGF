@@ -1,3 +1,4 @@
+
 # Modelos de pronóstico: revisión con clima actualizado
 
 Todos los modelos semanales aprendidos de esta tabla son variantes de HistGradientBoostingRegressor (árboles de decisión). La validación anterior a 2026 selecciona Boosting sin clima; no se cambia por el resultado de test.
@@ -48,6 +49,8 @@ Mismos **3.413 casos**. H1 es la primera semana pronosticada desde el lunes de e
 Frente al ingeniero, el WAPE baja **1,43 puntos**, equivalente a **8,37 % menos error absoluto** en estos casos. El sesgo negativo indica subestimación; cuanto más cerca de cero, menor desvío del volumen total.
 
 ## Diarios: mismos días observados
+
+(En revisión: desarrollo preliminar y siguientes pasos.)
 
 | Método | Casos | MAE (tallos) | WAPE | Sesgo |
 | --- | ---: | ---: | ---: | ---: |
