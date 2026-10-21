@@ -137,7 +137,7 @@ Resultados ejecutados actuales del 15, mismos 15.838 casos: Sistema_diario 20,03
 1. **Contexto.** Necesidad de anticipar tallos por producto/color/variedad en GAITANA, fuentes y alcance. Diferenciar plantas, rendimiento por planta, tallos reportados y estimado exportable. Definir origen, objetivo y H1–H5.
 2. **EDA y descubrimientos metodológicos.** Calidad y homologación central de variedades; pilotos, camas/ciclos, ceros y faltantes; normalización corte/plantas, soporte e IQR; cohortes y cobertura; comparación de planos para objetivos comunes. Luego composición de producción, error teórico, memoria semanal/diaria y comparación climática que motiva hipótesis. Cada hallazgo debe ir acompañado de una decisión y su limitación.
 3. **Modelos: qué es cada uno y por qué se probó.** Referencias simples, Ridge y boosting; aprendizaje de correcciones y dos rutas; memoria productiva frente a historia de planos; columnas añadidas/retiradas; 12 → benchmark13 → información diaria14 → grupos de horizontes y memoria15 → clima19. Separar train, validación y evaluación temporal, poblaciones y signos de sesgo. Mostrar resultados con una descripción al lado del nombre, y diagnóstico del error por producto/color/variedad.
-4. **Pasos siguientes.** Comparar cinco modelos por horizonte con los dos grupos actuales. Evaluar especialización por producto y n−1: retirar un producto del entrenamiento y comparar sobre los mismos casos de los productos restantes, no obtener una mejora artificial borrando sus errores del denominador. Fijar reglas en validación y comprobar en datos nuevos. Verificar edades tempranas sin soporte antes de asignar cero. Pronóstico diario: profundizar EDA del calendario y faltantes, ajustar ventanas/parámetros y contrastar autonomía frente a coherencia semanal; presentarlo como desarrollo en revisión, conservando lo existente.
+4. **Pasos siguientes.** Los cuadernos 21–25 ya compararon modelos por horizonte, especialización por producto y n−1 sobre los mismos casos. La evaluación reciente favorece claramente H1, deja H2 prácticamente empatado y mantiene ventaja del ingeniero en H3–H5 y el total. El siguiente paso es probar la configuración en semanas futuras completas y seguir mejorando H3–H5; no vender una diferencia mínima como mejora confirmada. Verificar con el área agronómica las edades sin soporte antes de asignar cero. Pronóstico diario: profundizar EDA de calendario y faltantes, ajustar ventanas/parámetros y contrastar autonomía frente a coherencia semanal; presentarlo como desarrollo en revisión, conservando lo existente.
 
 Este esquema queda registrado para preparar la presentación posteriormente; no se creó una presentación ni se ejecutaron aún estos experimentos.
 
@@ -155,3 +155,48 @@ Este esquema queda registrado para preparar la presentación posteriormente; no 
 ### Cierre verificado de esta actualización
 
 El Word se regeneró correctamente desde el Markdown: 26 tablas y 18 figuras. Se validaron los siete notebooks afectados; EDA18 tiene todas sus celdas ejecutadas sin errores. Se verificó que el código y las salidas de los modelos de 12 y diarios02–05 permanecen idénticos; solo cambió su documentación. El anexo contiene las 47 columnas. Se sincronizaron en lectura.ipynb únicamente las copias exactas del resumen y la guía anteriores, conservando sus demás celdas. Las comprobaciones no requieren repetir entrenamientos. Los experimentos futuros y la presentación quedan propuestos, no ejecutados.
+
+## Revisión del 9 de octubre: edades tempranas y cobertura
+
+El usuario pidió revisar rápidamente si las edades sin rendimiento correspondían a plantas que aún no debían producir y luego solicitó explícitamente un notebook separado, ejecutado y con tablas. Se creó `Notebooks/Proyecciones Teoricas Propias/02_EDA_edades_sin_cobertura.ipynb`. Es diagnóstico: no cambia ceros, curvas, proyecciones ni modelos. Lee ediciones 2021–2026 y verifica causas contra los casos de la base analítica.
+
+Evidencia previa a ejecutar el resumen: en la ventana de DINO anterior al plano 2026-07-13 hay un positivo a edad 14 (288 tallos, 1.330 plantas, referencia dino-16-175, corte 2026-02-23, siembra 2025-11-18, fila estadística 234608). Edad original y calculada coinciden. Ese piloto solo aporta una observación en la ventana: requiere contraste antes de considerarlo una pauta general. Otro piloto registra ceros a 20 y 21 semanas. Las edades 9 y 16 no tienen puntos en la curva utilizada. No corresponde inferir automáticamente que ambas sean ceros: 9 es anterior al rango observado; 16 es un hueco posterior a un positivo observado. Tampoco se declara el punto de 14 erróneo sin verificación adicional.
+
+La tabla de causas debe distinguir casos sin plano, sin pareja, teoría completa y grupos incompletos; el 78,75 % no significa fracaso de todas las uniones ni ausencia total de proyección. El diagnóstico de edades tempranas es una candidatura a revisión, no una corrección agronómica autorizada por sí sola.
+
+### Recuento histórico verificado en la base (9 de octubre; reemplazado por la revisión del 19 de octubre)
+
+Sobre los mismos 211.001 casos con y observado: teoría completa 44.848 (21,25 %); solo edades tempranas por verificar 33.047 (15,66 %); solo huecos interiores 18.172 (8,61 %); solo edades posteriores al rango 29.478 (13,97 %); mezcla de edades sin soporte 34.935 (16,56 %); otros estados o combinaciones 44.024 (20,86 %); sin pareja comercial/objetivo 5.523 (2,62 %); sin plano disponible 974 (0,46 %). Las categorías de casos son excluyentes y suman el total. Los 159.656 casos de teoría incompleta coinciden exactamente con el número de grupos faltantes reconstruido desde las proyecciones originales.
+
+Los 33.047 casos tempranos representan 20,70 % de los incompletos y son candidatos a revisar, no producción cero confirmada. La clasificación depende del soporte de cada curva a la fecha del plano; no equivale a etapa fisiológica certificada. Para DINO no aparecen filas a edades 9/16 ni en la ventana utilizable, ni en la auditoría de esa ventana, ni en todo el pasado utilizable de la edición 2026. No es un cero observado eliminado durante la limpieza. La observación aislada positiva a 14 y los ceros a 20/21 exigen revisión de pilotos; no validan rellenar ambos grupos automáticamente. Mantener esta precisión al explicar la cobertura en la presentación.
+
+
+## Revisión de cruces y regeneración de resultados — 19 de octubre de 2026
+
+El usuario pidió comprobar los cruces entre camas piloto y estadísticas, corregir el vocabulario de cobertura y regenerar la cadena. La curva representa productividad por edad; cada plano calcula esa edad desde la siembra hasta la semana objetivo.
+
+- Se normalizaron mayúsculas, espacios y etiquetas homologadas al comparar candidatas. Las copias equivalentes del mismo ciclo dejaron de generar ambigüedad. La identidad de variedad ausente se recupera sólo si la referencia completa en el mismo libro identifica una combinación comercial única compatible con el producto. No se sumaron ni borraron movimientos de corte.
+- Cortes fechados en 2026: 32.986 de 33.039 estadísticas con correspondencia única (99,84 %). Quedan 52 estadísticas ambiguas y una identidad incompleta; sus referencias están en `revision_cruces_20261019/referencias_pendientes_cortes_2026.csv`.
+- La edad coincide con fechas de siembra y corte en 477.426 estadísticas utilizables y con siembra y objetivo en 1.064.620 filas de proyección de 2026.
+- Base analítica: 46.051 de 211.001 casos con producción real observada (21,83 %) permiten aplicar la curva a todas las edades de sus cohortes, frente a 44.848 (21,25 %) antes de la revisión. Es serie–origen–horizonte; no es tasa de cruce ni porcentaje de datos conservados. En los demás casos, la referencia directa de curva no aplica a todas las cohortes; la producción real permanece y el sistema usa producción reciente como ruta de respaldo cuando el caso es admisible.
+- Se ejecutaron las 20 etapas: auditoría, proyecciones 2021–2026, procedencia, base/EDA, modelos semanales, benchmark, clima, error por producto/color/variedad y diarios. Los estados terminaron completos. Se mantuvieron ceros registrados, edades por fecha y ventana de 78 semanas.
+- WAPE semanal seleccionado: 19,33 % frente a 19,74 % del ingeniero en 15.838 casos; sesgo −2,59 % frente a −9,75 %. H1: 15,66 % frente a 17,09 %; sesgo −1,34 % frente a −7,56 %. Diario reconciliado: 27,26 %; autónomo: 26,72 %, en 22.973 días reportados. Diario sigue en revisión.
+- El ejemplo DINO conserva edades sin rendimiento. Edad 9 está antes del rango observado y 16 es un hueco; primera positiva observada: 14. No se rellenan automáticamente con cero.
+- Se regeneraron escrito, Word v4, guía, metodología, resumen de modelos y esta bitácora. El Word contiene 34 tablas y 18 figuras. Los conteos del 9 de octubre quedan identificados como históricos.
+
+### Aclaración de vocabulario y diagrama — 19 de octubre de 2026
+
+El 21,83 % se calcula **en la base analítica final** sobre casos con producción real observada. Significa que la curva empírica representa las edades de todas las cohortes del plano en esos casos y, por eso, puede calcularse un total teórico directo. No significa que solo se haya cruzado ese porcentaje, que el resto de la producción real se haya perdido o que esos casos queden sin pronóstico. El cruce se mide aparte: 99,84 % de las estadísticas fechadas en 2026 tienen correspondencia única.
+
+El notebook 11 incorpora un diagrama de las dos rutas. Ejemplo: si un plano tiene dos cohortes y la curva representa la edad de una, pero no la de la otra, no se usa la suma parcial como total del plano; se conserva la fila real y el pronóstico admisible pasa a producción reciente. Es normal que una curva construida con observaciones piloto no represente todas las edades de todas las variedades. El EDA de edades describe ese alcance empírico; no diagnostica pérdida de filas de producción. Las etiquetas técnicas `curva_completa` y `sin_cobertura` se conservan por compatibilidad, pero se explican como aplicabilidad de curva a todas las cohortes.
+
+## Comparación reciente por horizonte y actualización del informe — 21 de octubre de 2026
+
+Se integraron los resultados de los cuadernos 21–25 en el resumen, la guía, la metodología y el trabajo escrito. La evaluación reciente comprende 1.226 casos de GAITANA en tres semanas objetivo y se presenta aparte de la evaluación anual para no mezclar periodos.
+
+- H1: el candidato obtiene 12,28 % WAPE frente a 15,23 % del ingeniero; ventaja clara de 2,95 puntos.
+- H2: 14,96 % frente a 14,98 %; diferencia de 0,02 puntos, descrita como empate práctico y pendiente de confirmación con más semanas.
+- Total: 17,53 % frente a 16,34 %; el ingeniero conserva ventaja. También gana en H3–H5.
+- El cuaderno 25 mejora el WAPE total del candidato propio previo (17,80 %) a 17,53 %, pero no demuestra que ya reemplacemos al ingeniero globalmente. La comparación del ingeniero es benchmark; no es entrada del modelo.
+- La cobertura se resume en lenguaje directo: la producción real permanece en la base; la curva es una referencia directa cuando representa todas las edades del plano, y la producción reciente puede respaldar los casos admisibles restantes. No equivale a producción faltante ni a un cruce fallido.
+- Se regenerará el Word desde el Markdown actualizado y se publicarán los documentos y notebooks de esta revisión.

@@ -1,105 +1,163 @@
+# Modelos de pronóstico: revisión de correspondencias del 19 de octubre de 2026
 
-# Modelos de pronóstico: revisión con clima actualizado
+Los modelos semanales aprendidos son variantes de HistGradientBoostingRegressor: árboles que corrigen una referencia usando información disponible al emitir. El ingeniero es el benchmark, no una entrada del modelo. La selección previa a 2026 es Boosting sin clima.
 
-Todos los modelos semanales aprendidos de esta tabla son variantes de HistGradientBoostingRegressor (árboles de decisión). La validación anterior a 2026 selecciona Boosting sin clima; no se cambia por el resultado de test.
+## Semanales
 
-La configuración semanal seleccionada no utiliza variables meteorológicas. El componente diario conserva temperatura, humedad y radiación en sus pesos; son etapas distintas.
-
-## Semanales: mismos 15.838 casos principales de 2026
-
-| Método | Casos | MAE (tallos) | WAPE | Sesgo |
-| --- | ---: | ---: | ---: | ---: |
-| Memoria larga antes de actualizar clima | 15.838 | 2.512,65 | 19,59 % | -3,54 % |
-| Boosting con clima ampliado y lluvia | 15.838 | 2.496,43 | 19,46 % | -2,96 % |
-| Boosting con clima básico actualizado | 15.838 | 2.510,25 | 19,57 % | -3,58 % |
-| Clima ampliado + curva atribuida a GAITANA | 15.838 | 2.515,81 | 19,61 % | -2,76 % |
-| Boosting sin clima | 15.838 | 2.496,17 | 19,46 % | -2,42 % |
+| Método | Casos | MAE (tallos) | WAPE | Sesgo (%) |
+| --- | --- | --- | --- | --- |
+| Referencia histórica anterior al clima actualizado | 15.838 | 2.512,65 | 19,59 % | -3,54 % |
+| Boosting con clima ampliado y lluvia | 15.838 | 2.477,56 | 19,31 % | -3,19 % |
+| Boosting con clima básico | 15.838 | 2.496,69 | 19,46 % | -3,80 % |
+| Boosting con clima ampliado y curva atribuida a GAITANA | 15.838 | 2.493,94 | 19,44 % | -2,94 % |
+| Boosting sin clima | 15.838 | 2.479,61 | 19,33 % | -2,59 % |
 | Ingeniero | 15.838 | 2.531,72 | 19,74 % | -9,75 % |
 
-| Horizonte | Casos | WAPE anterior | WAPE actual | WAPE ingeniero | Ventaja actual vs. ingeniero (pp) |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| H1 | 3.413 | 15,68 % | 15,66 % | 17,09 % | 1,43 |
-| H2 | 3.289 | 17,56 % | 17,37 % | 19,28 % | 1,91 |
-| H3 | 3.166 | 20,39 % | 20,39 % | 20,32 % | -0,07 |
-| H4 | 3.045 | 22,14 % | 21,96 % | 20,91 % | -1,04 |
-| H5 | 2.925 | 22,77 % | 22,50 % | 21,40 % | -1,10 |
-| Conjunto | 15.838 | 19,59 % | 19,46 % | 19,74 % | 0,28 |
+| Horizonte | Casos | WAPE antes del 19/10 | WAPE actual | WAPE ingeniero | Sesgo actual | Sesgo ingeniero |
+| --- | --- | --- | --- | --- | --- | --- |
+| H1 | 3.413 | 15,66 % | 15,66 % | 17,09 % | -1,34 % | -7,56 % |
+| H2 | 3.289 | 17,37 % | 17,36 % | 19,28 % | -2,48 % | -8,17 % |
+| H3 | 3.166 | 20,39 % | 20,23 % | 20,32 % | -2,84 % | -9,46 % |
+| H4 | 3.045 | 21,96 % | 21,73 % | 20,91 % | -3,49 % | -11,32 % |
+| H5 | 2.925 | 22,50 % | 22,22 % | 21,40 % | -2,92 % | -12,63 % |
+| Conjunto | 15.838 | 19,46 % | 19,33 % | 19,74 % | -2,59 % | -9,75 % |
 
-| Horizonte | Sesgo anterior | Sesgo actual | Sesgo ingeniero |
-| --- | ---: | ---: | ---: |
-| H1 | -1,71 % | -1,23 % | -7,56 % |
-| H2 | -3,41 % | -2,40 % | -8,17 % |
-| H3 | -3,89 % | -2,70 % | -9,46 % |
-| H4 | -4,63 % | -3,27 % | -11,32 % |
-| H5 | -4,23 % | -2,63 % | -12,63 % |
-| Conjunto | -3,54 % | -2,42 % | -9,75 % |
-
-Sesgo = 100 × suma(predicción − real) / suma(real). Positivo: sobreestimación; negativo: subestimación. Cero no implica poco error: errores opuestos pueden compensarse. WAPE y sesgo se calculan sobre los mismos casos por horizonte.
+Sesgo = 100 × suma(predicción − real) / suma(real). Positivo indica sobreestimación; negativo, subestimación. Errores opuestos se compensan en el sesgo, pero se suman en el WAPE. Se informan ambos sobre los mismos casos.
 
 ## H1 por separado
 
-Mismos **3.413 casos**. H1 es la primera semana pronosticada desde el lunes de emisión.
+WAPE modelo **15,66 %**, ingeniero **17,09 %**. Sesgo modelo **-1,34 %**, ingeniero **-7,56 %**. Mismos 3.413 casos.
 
-| H1: método | WAPE | MAE (tallos) | Sesgo medio (tallos) | Sesgo (%) |
-| --- | ---: | ---: | ---: | ---: |
-| Anterior | 15,68 % | 1.980,53 | -216,37 | -1,71 % |
-| Actual: boosting sin clima | 15,66 % | 1.978,16 | -155,84 | -1,23 % |
-| Ingeniero | 17,09 % | 2.158,89 | -955,34 | -7,56 % |
+El WAPE conjunto pasa de 19,46 % a 19,33 % tras la revisión de cruces. Corregir la integración no garantiza mejorar todas las métricas: se informan los resultados obtenidos.
 
-Frente al ingeniero, el WAPE baja **1,43 puntos**, equivalente a **8,37 % menos error absoluto** en estos casos. El sesgo negativo indica subestimación; cuanto más cerca de cero, menor desvío del volumen total.
+## Evaluación reciente: modelos por horizonte (cuadernos 21–25)
 
-## Diarios: mismos días observados
+Esta es una evaluación distinta de la tabla anual anterior: compara 1.226 pronósticos recientes de GAITANA (tres semanas objetivo) contra el ingeniero, en los mismos casos. Es una prueba retrospectiva exploratoria, no una validación prospectiva.
+
+| Horizonte | Modelo seleccionado en el experimento | WAPE modelo / ingeniero | Sesgo modelo / ingeniero | Resultado |
+| --- | --- | ---: | ---: | --- |
+| **H1** | **Boosting agrupado H1–H2** | **12,28 % / 15,23 %** | **+2,75 % / −7,79 %** | **Modelo mejor en WAPE por 2,95 puntos** |
+| **H2** | **Boosting separado H2** | **14,96 % / 14,98 %** | **−0,02 % / −5,80 %** | **Empate práctico en WAPE; modelo con menor sesgo** |
+| H3 | Especialista por producto + modelo general | 17,27 % / 16,51 % | −5,85 % / −7,99 % | Ingeniero mejor en WAPE |
+| H4 | Especialista por producto + modelo general | 18,89 % / 16,79 % | −3,96 % / −7,67 % | Ingeniero mejor en WAPE |
+| H5 | Especialista por producto + modelo general | 19,76 % / 16,95 % | −7,76 % / −7,86 % | Ingeniero mejor en WAPE |
+| Total comparable | Combinación seleccionada del experimento | 17,53 % / 16,34 % | −4,22 % / −7,51 % | Ingeniero mejor en WAPE por 1,19 puntos |
+
+**Lectura:** la ventaja clara de esta evaluación está en H1; H2 queda prácticamente empatado en WAPE, aunque el sesgo del modelo es menor. Un sesgo positivo indica sobreestimación y uno negativo subestimación. La especialización explorada en el cuaderno 25 bajó el WAPE global del candidato previo de 17,80 % a 17,53 %, pero todavía no supera al ingeniero en el total ni en H3–H5. Los modelos se entrenan con variables disponibles al origen; el pronóstico del ingeniero se usa únicamente como referencia de comparación.
+
+## Diarios
 
 (En revisión: desarrollo preliminar y siguientes pasos.)
 
-| Método | Casos | MAE (tallos) | WAPE | Sesgo |
-| --- | ---: | ---: | ---: | ---: |
-| Diario autónomo antes de actualizar clima | 22.973 | 543,76 | 26,76 % | -7,23 % |
-| Boosting reconciliado · selección semanal | 22.973 | 554,07 | 27,27 % | -5,91 % |
+| Método | Casos | MAE (tallos) | WAPE | Sesgo (%) |
+| --- | --- | --- | --- | --- |
+| Autónomo: referencia histórica anterior al clima | 22.973 | 543,76 | 26,76 % | -7,23 % |
+| Boosting diario reconciliado con selección semanal | 22.973 | 553,80 | 27,26 % | -6,03 % |
 | Boosting diario autónomo | 22.973 | 542,84 | 26,72 % | -7,11 % |
-| Boosting reconciliado · memoria actualizada | 22.973 | 557,45 | 27,44 % | -6,21 % |
-| Perfil histórico · selección semanal | 22.973 | 562,66 | 27,69 % | -5,48 % |
-| Perfil histórico · memoria actualizada | 22.973 | 565,88 | 27,85 % | -5,78 % |
-| Diario reconciliado antes de actualizar clima | 22.973 | 557,78 | 27,45 % | -6,21 % |
-| Uniforme · selección semanal | 22.973 | 584,97 | 28,79 % | -16,81 % |
-| Uniforme · memoria actualizada | 22.973 | 589,48 | 29,01 % | -17,03 % |
+| Boosting reconciliado con memoria semanal | 22.973 | 556,82 | 27,41 % | -6,27 % |
+| Perfil histórico con selección semanal | 22.973 | 562,31 | 27,68 % | -5,60 % |
+| Perfil histórico con memoria semanal | 22.973 | 565,17 | 27,82 % | -5,85 % |
+| Reconciliado: referencia histórica anterior al clima | 22.973 | 557,78 | 27,45 % | -6,21 % |
+| Uniforme con selección semanal | 22.973 | 585,22 | 28,80 % | -16,92 % |
+| Uniforme con memoria semanal | 22.973 | 589,21 | 29,00 % | -17,09 % |
 
-El autónomo no está obligado a sumar al total semanal. Los repartos sí. SARIMA/SARIMAX se evalúan sólo en tres series y no se mezclan con esta población; consultar el piloto en diario 05. El EDA no demuestra una regla causal de retraso por clima. Para train/test del mismo ajuste consultar 19, diario 05 y el inventario 17.
+Reconciliado: 27,27 % antes → 27,26 % ahora. Autónomo: 26,72 %. SARIMA/SARIMAX se comparan sólo en su piloto de tres series, no con este panel completo.
 
-## Qué mejoró
+## Cuándo se aplica directamente la curva
 
-- Semanal conjunto: WAPE **19,59 % → 19,46 %**; ingeniero **19,74 %**. Sesgo **-3,54 % → -2,42 %**; ingeniero **-9,75 %**.
-- El modelo supera al ingeniero en WAPE en **H1 y H2**; el ingeniero conserva menor WAPE en **H3–H5**. El modelo tiene menor sesgo absoluto en los cinco horizontes.
-- Diario reconciliado: **27,45 % → 27,27 %**. Diario autónomo: **26,76 % → 26,72 %**. La mejora es pequeña y el autónomo sigue teniendo menor WAPE.
-- La ventaja semanal conjunta frente al ingeniero es 0,28 puntos, con intervalo exploratorio de 95 % [-1,27; 1,72]. Incluye cero: el resultado retrospectivo es favorable, pero no demuestra superioridad estable.
+La producción real permanece en la base analítica. La curva teórica se usa como referencia directa cuando representa las edades de todas las cohortes del plano; si no, el modelo puede apoyarse en la producción reciente cuando hay historia suficiente. Por eso, el indicador de cobertura describe en qué casos aplica directamente la curva, no cuánta producción o cuántos registros existen.
 
-La lluvia y las ventanas ampliadas mejoran frente al clima básico en el test. Sin clima y clima ampliado quedan prácticamente empatados (19,458 % y 19,460); se conserva el candidato elegido en la validación. Restringir las curvas a pilotos atribuibles a GAITANA pierde cobertura y empeora el WAPE respecto a la curva compartida con el mismo clima ampliado; se conserva la referencia compartida. Esto no prueba ausencia de efecto agronómico del clima.
+## Entrenamiento y test
 
-## De dónde viene el error
+No hay división aleatoria. Se entrena con semanas objetivo terminadas antes del corte, se selecciona en noviembre–diciembre de 2025 y se evalúa 2026 con reentrenamiento mensual. El inventario 17 y las hojas Ultimo_ajuste de 19 y Train_test_ultimo_ajuste de diario 05 permiten comparar train y test del mismo ajuste. Son resultados retrospectivos.
 
-[Notebook 20](Notebooks/Analisis/20_EDA_origen_error_modelo_ingeniero.ipynb): conserva las predicciones y descompone los mismos casos. «Error del modelo (%)» es su participación en el error absoluto; el aporte se expresa en puntos del WAPE total.
+## Origen del error
 
-### H1: cuatro productos principales
+Mismos casos estrictos de 19. Aportes en puntos del WAPE total; sesgo positivo significa sobreestimar. Los grupos se ordenan por su aporte, no sólo por WAPE local.
 
-| Producto | Volumen (%) | WAPE modelo | WAPE ingeniero | Error del modelo (%) | Aporte WAPE (pp) |
+## H1: productos
+
+| Producto | Casos | WAPE modelo | WAPE ingeniero | Aporte modelo (pp) | Aporte ingeniero (pp) | Sesgo modelo | Sesgo ingeniero |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| MINICARNATION | 979 | 14,33 % | 14,53 % | 8,64 | 8,77 | -1,92 % | -6,86 % |
+| CARNATION | 1258 | 18,90 % | 20,17 % | 3,50 | 3,74 | -1,30 % | -7,85 % |
+| SOLOMIO | 396 | 15,14 % | 18,77 % | 1,72 | 2,13 | 0,24 % | -9,63 % |
+| RAFFINE | 203 | 16,16 % | 25,58 % | 0,98 | 1,54 | -0,70 % | -9,41 % |
+| STAR | 35 | 16,74 % | 19,10 % | 0,17 | 0,19 | -0,83 % | -17,00 % |
+| BARBATUS | 165 | 25,46 % | 29,20 % | 0,15 | 0,17 | 4,07 % | -0,75 % |
+| TRACHELIUM | 33 | 35,19 % | 41,93 % | 0,10 | 0,12 | -2,73 % | -24,17 % |
+| VERONICA | 66 | 22,18 % | 26,54 % | 0,09 | 0,11 | 2,87 % | -7,91 % |
+| GREEN BALL | 33 | 13,93 % | 16,10 % | 0,08 | 0,10 | 2,82 % | -1,39 % |
+| VERONICA SPRAY | 66 | 23,02 % | 23,72 % | 0,09 | 0,09 | 3,82 % | -3,33 % |
+| STATICE | 109 | 27,55 % | 29,79 % | 0,08 | 0,08 | 0,82 % | -2,23 % |
+| AMAZON | 33 | 28,99 % | 22,66 % | 0,05 | 0,04 | 6,11 % | 0,39 % |
+| ACHILLEA | 37 | 380,92 % | 99,26 % | 0,01 | 0,00 | 350,26 % | -89,63 % |
+
+Modelo: los tres mayores aportes (MINICARNATION, CARNATION, SOLOMIO) concentran 88,49 % de su error absoluto.
+
+Ingeniero: los tres mayores aportes (MINICARNATION, CARNATION, SOLOMIO) concentran 85,63 % de su error absoluto.
+
+### Color: mayores aportes del modelo
+
+| Grupo | Casos | WAPE modelo | WAPE ingeniero | Aporte modelo (pp) | Exceso frente al ingeniero (pp) |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| MINICARNATION | 60,34 | 14,33 % | 14,53 % | 55,23 | 8,65 |
-| CARNATION | 18,52 | 18,91 % | 20,17 % | 22,36 | 3,50 |
-| SOLOMIO | 11,34 | 15,17 % | 18,77 % | 10,99 | 1,72 |
-| RAFFINE | 6,04 | 15,96 % | 25,58 % | 6,15 | 0,96 |
+| MINICARNATION / ORANGE | 76 | 17,69 % | 18,69 % | 1,09 | -0,06 |
+| MINICARNATION / HOT PINK | 66 | 14,92 % | 14,87 % | 1,08 | 0,00 |
+| MINICARNATION / LIGHT PINK | 99 | 16,26 % | 14,92 % | 1,02 | 0,08 |
+| MINICARNATION / RED | 66 | 13,20 % | 13,31 % | 0,79 | -0,01 |
+| MINICARNATION / WHITE | 99 | 14,54 % | 16,76 % | 0,76 | -0,12 |
 
-### H1–H5: cuatro productos principales
+### Variedad: mayores aportes del modelo
 
-| Producto | Volumen (%) | WAPE modelo | WAPE ingeniero | Error del modelo (%) | Aporte WAPE (pp) |
+| Grupo | Casos | WAPE modelo | WAPE ingeniero | Aporte modelo (pp) | Exceso frente al ingeniero (pp) |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| MINICARNATION | 60,78 | 17,67 % | 17,75 % | 55,19 | 10,74 |
-| CARNATION | 18,31 | 23,40 % | 22,43 % | 22,02 | 4,28 |
-| SOLOMIO | 11,22 | 18,20 % | 18,54 % | 10,49 | 2,04 |
-| RAFFINE | 6,03 | 22,99 % | 29,36 % | 7,12 | 1,39 |
+| MINICARNATION / ORANGE / UCHUVA | 33 | 18,40 % | 17,50 % | 0,96 | 0,05 |
+| MINICARNATION / HOT PINK / LORENZO | 33 | 16,33 % | 16,11 % | 0,67 | 0,01 |
+| MINICARNATION / LIGHT PINK / ACADEMY | 33 | 19,15 % | 16,36 % | 0,63 | 0,09 |
+| MINICARNATION / YELLOW / CAESAR | 33 | 13,65 % | 14,58 % | 0,51 | -0,03 |
+| MINICARNATION / LAVENDER / NENUFAR | 33 | 13,45 % | 15,00 % | 0,50 | -0,06 |
+## H1–H5: productos
 
-- **Concentración:** MINICARNATION y CARNATION suman 77,59 % del error H1 del modelo. MINICARNATION domina también el del ingeniero (51,31 %), principalmente por volumen.
-- **De dónde ganamos:** RAFFINE y SOLOMIO explican aproximadamente 69,11 % de la ventaja neta H1. En MINICARNATION ganamos sólo 3/8 meses, pese a la pequeña ventaja acumulada. En H5, CARNATION aporta 0,67 puntos a nuestra desventaja.
-- **Colores:** ORANGE, HOT PINK y LIGHT PINK de MINICARNATION concentran el mayor error H1 de ambos métodos. Se comparan dentro de producto, sin mezclar identidades.
-- **Variedades:** UCHUVA es la de mayor error de ambos; le siguen LORENZO y ACADEMY en el modelo, LORENZO y NENUFAR en el ingeniero. La mayor desventaja del modelo es EPSILON: WAPE 15,17 % frente a 10,11 %.
-- **Sesgo no es precisión:** ACADEMY tiene sesgo 0,19 %, pero WAPE 19,15 %. En H1, sobreestimaciones (7,21 pp) y subestimaciones (8,45 pp) se compensan en el sesgo, pero se suman en WAPE.
-- **Explicación a revisar:** el modelo queda corto en subidas fuertes, pero 89,39 % de su error ocurre en casos sin cambios extremos respecto a media4. Variabilidad previa, seguimiento de picos y cobertura merecen revisión; no son causas demostradas. El notebook incluye semanas y trayectorias de UCHUVA, EPSILON y ACADEMY. No se modificaron modelos mirando este test.
+| Producto | Casos | WAPE modelo | WAPE ingeniero | Aporte modelo (pp) | Aporte ingeniero (pp) | Sesgo modelo | Sesgo ingeniero |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| MINICARNATION | 4567 | 17,42 % | 17,75 % | 10,59 | 10,79 | -4,81 % | -9,13 % |
+| CARNATION | 5825 | 23,39 % | 22,43 % | 4,28 | 4,11 | -0,80 % | -8,86 % |
+| SOLOMIO | 1860 | 18,14 % | 18,54 % | 2,04 | 2,08 | 2,16 % | -12,02 % |
+| RAFFINE | 945 | 23,42 % | 29,36 % | 1,41 | 1,77 | 0,20 % | -13,77 % |
+| STAR | 158 | 18,23 % | 20,75 % | 0,18 | 0,20 | 1,52 % | -19,51 % |
+| BARBATUS | 775 | 33,76 % | 28,54 % | 0,20 | 0,17 | 8,83 % | -2,38 % |
+| TRACHELIUM | 148 | 41,96 % | 47,36 % | 0,12 | 0,14 | -4,75 % | -32,12 % |
+| VERONICA | 310 | 28,16 % | 34,39 % | 0,11 | 0,14 | 5,67 % | -17,88 % |
+| GREEN BALL | 155 | 19,12 % | 18,54 % | 0,11 | 0,11 | 9,95 % | 3,06 % |
+| VERONICA SPRAY | 310 | 30,28 % | 26,16 % | 0,11 | 0,10 | 7,99 % | -6,93 % |
+| STATICE | 475 | 35,03 % | 36,07 % | 0,09 | 0,09 | 8,11 % | -5,17 % |
+| AMAZON | 155 | 32,66 % | 22,16 % | 0,06 | 0,04 | 12,81 % | 0,40 % |
+| ACHILLEA | 155 | 821,83 % | 99,81 % | 0,02 | 0,00 | 806,45 % | -97,36 % |
+
+Modelo: los tres mayores aportes (MINICARNATION, CARNATION, SOLOMIO) concentran 87,48 % de su error absoluto.
+
+Ingeniero: los tres mayores aportes (MINICARNATION, CARNATION, SOLOMIO) concentran 86,02 % de su error absoluto.
+
+### Color: mayores aportes del modelo
+
+| Grupo | Casos | WAPE modelo | WAPE ingeniero | Aporte modelo (pp) | Exceso frente al ingeniero (pp) |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| MINICARNATION / HOT PINK | 310 | 18,80 % | 16,26 % | 1,37 | 0,19 |
+| MINICARNATION / LIGHT PINK | 465 | 21,12 % | 20,14 % | 1,32 | 0,06 |
+| MINICARNATION / ORANGE | 350 | 17,62 % | 21,76 % | 1,09 | -0,26 |
+| MINICARNATION / RED | 310 | 17,70 % | 14,37 % | 1,05 | 0,20 |
+| MINICARNATION / WHITE | 465 | 19,38 % | 21,26 % | 1,02 | -0,10 |
+
+### Variedad: mayores aportes del modelo
+
+| Grupo | Casos | WAPE modelo | WAPE ingeniero | Aporte modelo (pp) | Exceso frente al ingeniero (pp) |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| MINICARNATION / ORANGE / UCHUVA | 155 | 17,98 % | 20,43 % | 0,95 | -0,13 |
+| MINICARNATION / HOT PINK / LORENZO | 155 | 19,94 % | 16,24 % | 0,83 | 0,15 |
+| MINICARNATION / LIGHT PINK / ACADEMY | 155 | 21,54 % | 19,38 % | 0,70 | 0,07 |
+| MINICARNATION / YELLOW / CAESAR | 155 | 18,19 % | 19,70 % | 0,69 | -0,06 |
+| MINICARNATION / PURPLE / EPSILON | 155 | 20,02 % | 12,02 % | 0,67 | 0,27 |
+
+## Cómo interpretar
+
+Los diagnósticos de ruta, variabilidad y cambio ex post son asociaciones, no causas. Las tablas dentro de producto ayudan a distinguir composición, pero no eliminan confusión. Los cambios ex post usan producción futura conocida sólo al evaluar. La selección de grupos críticos se hace mirando test: cualquier ajuste posterior debe validarse en otro periodo. No se modifica el modelo con este EDA.

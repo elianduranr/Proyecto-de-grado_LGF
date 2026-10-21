@@ -56,7 +56,7 @@ while i<len(lines):
     elif line.startswith('### '):doc.add_heading(line[4:],level=2)
     else:doc.add_paragraph(line.replace('**',''))
     i+=1
-output=folder/'Estructura_actualizada_con_resultados.docx'
+output=folder/'Estructura_documento_v4_oct192026.docx'
 doc.save(output)
 check=Document(output)
 assert len(check.inline_shapes)==len(re.findall(r'^!\[',text,re.M))

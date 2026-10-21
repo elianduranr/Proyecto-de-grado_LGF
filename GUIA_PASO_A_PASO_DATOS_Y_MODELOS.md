@@ -2,7 +2,7 @@
 
 ## Qué leer primero
 
-El [trabajo escrito](Trabajo%20escrito/Estructura_actualizada_con_resultados.docx) y su [Markdown editable](Trabajo%20escrito/Desarrollo_del_documento.md) conservan resultados y desarrollan ahora el recorrido metodológico. Para entender, leer en este orden:
+El [trabajo escrito](Trabajo%20escrito/Estructura_documento_v4_oct192026.docx) y su [Markdown editable](Trabajo%20escrito/Desarrollo_del_documento.md) conservan resultados y desarrollan ahora el recorrido metodológico. Para entender, leer en este orden:
 
 1. **Antes del modelo:** capítulos 2–3, fuentes, homologación comercial, tallos por planta, curvas y cobertura. Distinguir cero de dato ausente.
 2. **Qué es una fila:** 4.1, anexo de 47 columnas y [lectura.ipynb](lectura.ipynb). Separar origen, objetivo y versiones previas.
@@ -15,37 +15,17 @@ La [bitácora](BITACORA_REVISION_CONVERSADA.md) registra decisiones, límites y 
 
 ## Resultado actual
 
-Clima válido de GAITANA hasta **21 de septiembre de 2026**. Sólo se modela GAITANA: no se amplía el benchmark ni las conclusiones a ARABELLA. La lluvia se incorpora en unidades de fuente, con cobertura explícita. Los intervalos del EDA de desplazamiento incluyen cero: no se demuestra una regla general de retraso/adelanto por clima.
+La evaluación anual de 15.838 casos da 19,33 % de WAPE al boosting seleccionado y 19,74 % al ingeniero. En una evaluación reciente separada, **H1 mejora con claridad: 12,28 % frente a 15,23 %**; **H2 queda prácticamente empatado: 14,96 % frente a 14,98 %**. El ingeniero aún gana en H3–H5 y en el total reciente. No se deben mezclar las ventanas: resultados completos, sesgo y límites en [resumen de modelos](resumen_modelos_pronostico.md).
 
-Elección fijada con validación anterior a 2026: **Boosting sin clima**. WAPE conjunto 19,46 %, ingeniero 19,74 %, mismos 15.838 casos. Una ventaja positiva de WAPE favorece al modelo; el sesgo tiene signo propio:
+(Pronóstico diario en revisión: desarrollo preliminar y siguientes pasos.) El diario reconciliado obtiene 27,26 %; el autónomo, 26,72 %, sobre 22.973 días reportados. El primero conserva el total semanal; el autónomo estima cada día.
 
-| Horizonte | Casos | WAPE anterior | WAPE actual | WAPE ingeniero | Ventaja actual vs. ingeniero (pp) |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| H1 | 3.413 | 15,68 % | 15,66 % | 17,09 % | 1,43 |
-| H2 | 3.289 | 17,56 % | 17,37 % | 19,28 % | 1,91 |
-| H3 | 3.166 | 20,39 % | 20,39 % | 20,32 % | -0,07 |
-| H4 | 3.045 | 22,14 % | 21,96 % | 20,91 % | -1,04 |
-| H5 | 2.925 | 22,77 % | 22,50 % | 21,40 % | -1,10 |
-| Conjunto | 15.838 | 19,59 % | 19,46 % | 19,74 % | 0,28 |
+## Qué verifican los cruces y cuándo aplica la curva
 
-| Horizonte | Sesgo anterior | Sesgo actual | Sesgo ingeniero |
-| --- | ---: | ---: | ---: |
-| H1 | -1,71 % | -1,23 % | -7,56 % |
-| H2 | -3,41 % | -2,40 % | -8,17 % |
-| H3 | -3,89 % | -2,70 % | -9,46 % |
-| H4 | -4,63 % | -3,27 % | -11,32 % |
-| H5 | -4,23 % | -2,63 % | -12,63 % |
-| Conjunto | -3,54 % | -2,42 % | -9,75 % |
+En cortes fechados en 2026 hay 32.986 de 33.039 estadísticas con correspondencia única de cama, identidad comercial y ciclo (99,84 %). Se normalizaron las diferencias de mayúsculas que estaban creando candidatas duplicadas. Las 52 estadísticas ambiguas y la identidad incompleta se conservan para revisar por referencia en `Datos_analiticos_proyecto/revision_cruces_20261019/referencias_pendientes_cortes_2026.csv`.
 
-Sesgo = 100 × suma(predicción − real) / suma(real). Positivo: sobreestimación; negativo: subestimación. Cero no implica poco error: errores opuestos pueden compensarse. WAPE y sesgo se calculan sobre los mismos casos por horizonte.
+El cruce de camas piloto con sus estadísticas se audita por identidad de cama, variedad y ciclo. En cortes fechados en 2026, 32.986 de 33.039 registros quedaron vinculados de forma única (99,84 %); las pocas referencias pendientes se mantienen identificadas para revisión. La edad también se verificó: coincide con las fechas fuente en 477.426 estadísticas utilizables y 1.064.620 filas de proyección.
 
-(Pronóstico diario en revisión: desarrollo preliminar y siguientes pasos.) Diario reconciliado al candidato: **27,27 %**; autónomo: **26,72 %**, mismos 22.973 días. No confundir precisión libre con conservar el total semanal. Leer sensibilidad de semanas con siete reportes, que no puede usarse para escoger método al origen.
-
-## Lo que sabemos de las curvas
-
-La auditoría inicial recuperó 74.304 observaciones utilizables en la edición 2026; la teoría completa global pasó de 17,96 % a 21,25 %. No sumar recuperaciones entre ediciones que repiten historia. El catálogo comercial central conserva IDs y ambigüedades; 33 combinaciones con obtentor discrepante siguen pendientes de revisión agronómica.
-
-La atribución por bloque+cama+variedad+fecha de siembra identifica 241.564 observaciones de 2026 como GAITANA y deja 202.912 sin pareja. No se encontró atribución inequívoca a ARABELLA. No afirmar que la curva original mezclaba comprobablemente fincas. Al restringir a pilotos atribuibles, la cobertura de plantas de GAITANA pasa de 79,12 % a 74,78 %: son exposiciones por plano/horizonte, no plantas físicas únicas ni cobertura del panel de casos. El experimento 19 compara la alternativa sin inventar curvas ni ocultar el cambio al respaldo.
+En la base analítica se conserva la producción real observada. La curva teórica se usa como referencia directa cuando representa todas las edades del plano; si no aplica directamente, el modelo puede usar la producción reciente cuando hay historia suficiente. Así, la cobertura indica cuándo sirve la curva como punto de partida; no significa que falten datos reales ni que haya fallado el cruce de camas.
 
 ## Orden exacto de corrida
 
@@ -57,25 +37,35 @@ Usar el intérprete `entorno_tesis`. Abrir cada notebook, reiniciar su kernel y 
 4. [Proyecciones](Notebooks/Proyecciones%20Teoricas%20Propias/Proyecciones_teoricas_todos_los_anios.ipynb): Recuperar proyecciones compartidas auditadas.
 5. [Procedencia](Notebooks/Proyecciones%20Teoricas%20Propias/01_procedencia_pilotos_y_curvas_gaitana.ipynb): Probar curva atribuible a GAITANA.
 6. [Base semanal](Notebooks/Analisis/10_base_analitica_proyecciones.ipynb): Integración de producción, teoría y clima.
-7. [EDA general](Notebooks/Analisis/11_EDA_proyecciones.ipynb): Composición y señales históricas.
-8. [Modelos iniciales](Notebooks/Analisis/12_modelo_ajuste_proyecciones.ipynb): Referencias, Ridge y boosting.
-9. [Benchmark](Notebooks/Analisis/13_comparacion_ingeniero_modelo_2026.ipynb): Mismos casos del ingeniero.
-10. [Base diaria](Notebooks/Modelo_de_series_diario/01_base_diaria_EDA.ipynb): Calendario y señales conocidas al origen. Este paso construye entradas del SEMANAL; no exige entrenar pronósticos diarios.
-11. [Tendencias](Notebooks/Analisis/14_tendencias_diarias_modelo_semanal.ipynb): Señales diarias en el pronóstico semanal.
-12. [Memoria](Notebooks/Analisis/15_calidad_y_mejora_por_horizonte.ipynb): Arquitectura de referencia con memoria larga.
-13. [EDA climático](Notebooks/Analisis/18_EDA_clima_y_desfase.ipynb): Relacionar las 26 variables climáticas originales/diarias/ampliadas con los modelos; cobertura, error y desplazamiento. Requiere base semanal y señales de diario 01.
-14. [Comparación climática](Notebooks/Analisis/19_modelos_clima_y_curvas_gaitana.ipynb): Ablaciones y selección pre2026.
-15. [Interpretación](Notebooks/Analisis/16_interpretacion_modelo_semanal.ipynb): Importancia del candidato seleccionado.
-16. [EDA del origen del error](Notebooks/Analisis/20_EDA_origen_error_modelo_ingeniero.ipynb): Producto → color → variedad; H1 y H1–H5, aportes al WAPE, sesgo y semanas críticas. Usa salidas de 10 y 19; no reentrena.
-17. [Distribución diaria](Notebooks/Modelo_de_series_diario/02_distribucion_semanal_a_diaria.ipynb): Autónomo y pesos de reparto. **(En revisión: desarrollo preliminar y siguientes pasos.)**
-18. [Piloto temporal](Notebooks/Modelo_de_series_diario/03_SARIMA_SARIMAX_y_boosting.ipynb): Tres series, convergencia y clima lag7. **(En revisión: desarrollo preliminar y siguientes pasos.)**
-19. [Reparto con memoria](Notebooks/Modelo_de_series_diario/04_diario_con_memoria_semanal.ipynb): Referencia actualizada. **(En revisión: desarrollo preliminar y siguientes pasos.)**
-20. [Inventario train/test](Notebooks/Analisis/17_inventario_modelos_train_test.ipynb): Errores por corte y componentes train del diario.
-21. [Diario vigente](Notebooks/Modelo_de_series_diario/05_diario_clima_actualizado.ipynb): Propagar selección y medir train/test compuesto. **(En revisión: desarrollo preliminar y siguientes pasos.)**
+7. [EDA de edades](Notebooks/Proyecciones%20Teoricas%20Propias/02_EDA_edades_sin_cobertura.ipynb): Revisar edades tempranas, huecos y ceros registrados. Es diagnóstico, no modifica curvas.
+8. [EDA general](Notebooks/Analisis/11_EDA_proyecciones.ipynb): Composición y señales históricas.
+9. [Modelos iniciales](Notebooks/Analisis/12_modelo_ajuste_proyecciones.ipynb): Referencias, Ridge y boosting.
+10. [Benchmark](Notebooks/Analisis/13_comparacion_ingeniero_modelo_2026.ipynb): Mismos casos del ingeniero.
+11. [Base diaria](Notebooks/Modelo_de_series_diario/01_base_diaria_EDA.ipynb): Calendario y señales conocidas al origen. Este paso construye entradas del SEMANAL; no exige entrenar pronósticos diarios.
+12. [Tendencias](Notebooks/Analisis/14_tendencias_diarias_modelo_semanal.ipynb): Señales diarias en el pronóstico semanal.
+13. [Memoria](Notebooks/Analisis/15_calidad_y_mejora_por_horizonte.ipynb): Arquitectura de referencia con memoria larga.
+14. [EDA climático](Notebooks/Analisis/18_EDA_clima_y_desfase.ipynb): Relacionar las 26 variables climáticas originales/diarias/ampliadas con los modelos; cobertura, error y desplazamiento. Requiere base semanal y señales de diario 01.
+15. [Comparación climática](Notebooks/Analisis/19_modelos_clima_y_curvas_gaitana.ipynb): Ablaciones y selección pre2026.
+16. [Interpretación](Notebooks/Analisis/16_interpretacion_modelo_semanal.ipynb): Importancia del candidato seleccionado.
+17. [EDA del origen del error](Notebooks/Analisis/20_EDA_origen_error_modelo_ingeniero.ipynb): Producto → color → variedad; H1 y H1–H5, aportes al WAPE, sesgo y semanas críticas. Usa salidas de 10 y 19; no reentrena.
+18. [Distribución diaria](Notebooks/Modelo_de_series_diario/02_distribucion_semanal_a_diaria.ipynb): Autónomo y pesos de reparto. **(En revisión: desarrollo preliminar y siguientes pasos.)**
+19. [Piloto temporal](Notebooks/Modelo_de_series_diario/03_SARIMA_SARIMAX_y_boosting.ipynb): Tres series, convergencia y clima lag7. **(En revisión: desarrollo preliminar y siguientes pasos.)**
+20. [Reparto con memoria](Notebooks/Modelo_de_series_diario/04_diario_con_memoria_semanal.ipynb): Referencia actualizada. **(En revisión: desarrollo preliminar y siguientes pasos.)**
+21. [Inventario train/test](Notebooks/Analisis/17_inventario_modelos_train_test.ipynb): Errores por corte y componentes train del diario.
+22. [Diario vigente](Notebooks/Modelo_de_series_diario/05_diario_clima_actualizado.ipynb): Propagar selección y medir train/test compuesto. **(En revisión: desarrollo preliminar y siguientes pasos.)**
+23. [Semanas recientes frente al ingeniero](Notebooks/Analisis/21_validacion_semanas_nuevas_ingeniero.ipynb): Comparación en el periodo reciente.
+24. [Modelos por horizonte](Notebooks/Analisis/22_modelos_separados_horizonte.ipynb): Contrastar agrupación y especialistas H1–H5.
+25. [Experimento n−1](Notebooks/Analisis/23_experimento_n_menos_1_productos.ipynb): Diagnóstico de interferencia entre productos.
+26. [Mejora y validación temporal](Notebooks/Analisis/24_experimento_mejora_semanal_y_validacion_temporal.ipynb): Selección del candidato reciente en mismos casos.
+27. [Especialistas H3–H5](Notebooks/Analisis/25_modelos_propios_h3_h5.ipynb): Ajuste por producto y combinación sin usar estimados del ingeniero como predictor.
 
 En proyecciones de todos los años, `RECALCULAR_DESDE_EXCEL=False` recupera la auditoría vigente. Si cambian fuentes de planos/pilotos: catálogo → todos los años con `True` → auditoría → todos los años con `False` → procedencia y resto de la cadena. Conservar referencias históricas de calidad y clima: no sustituir el “antes” por el resultado actualizado.
 
 Para sólo estudiar no hace falta reentrenar. Para reproducir solo la extensión semanal con entradas ya actualizadas: procedencia → 18 → 19 → 16 → 20. Para estudiar o ejecutar el diario en revisión, continuar por diario 02/03/04 → 17 → diario 05 según las dependencias existentes. Los resultados de 10, diario 01, 14, 15 y diario 02/03/04 deben corresponder al mismo clima vigente; no mezclar archivos de revisiones anteriores.
+
+## Experimentos semanales recientes
+
+Con producción real, estimados y base analítica actualizados, la secuencia de experimentos recientes es: 21 (benchmark) → 22 (horizontes) → 23 (n−1) → 24 (selección en los mismos casos) → 25 (especialistas para H3–H5). La evaluación reciente favorece claramente H1 y deja H2 prácticamente empatado; el ingeniero todavía gana en el conjunto y en H3–H5. Confirmar en semanas futuras completas antes de adoptar el candidato.
 
 ## Cómo se evalúa
 
@@ -98,6 +88,7 @@ Las tablas train/test de 19 y diario 05 corresponden al mismo corte. El test pri
 Tras ejecutar y revisar cifras e interpretación en `Trabajo escrito/Desarrollo_del_documento.md`, correr desde la raíz:
 
 ```powershell
+.\entorno_tesis\Scripts\python.exe "Trabajo escrito/actualizar_resultados.py"
 .\entorno_tesis\Scripts\python.exe "Trabajo escrito/actualizar_word.py"
 ```
 
@@ -116,3 +107,7 @@ Las salidas están en `Datos_analiticos_proyecto/eda_origen_error/`: Excel con t
 ## Próximos experimentos, todavía sin ejecutar
 
 Comparar cinco ajustes H1–H5 frente a los dos grupos actuales; especialización por producto y prueba n−1 retirando un producto del entrenamiento pero evaluando los productos restantes sobre los mismos casos; verificar si edades tempranas de DINO sin soporte corresponden a ceros documentados. Fijar decisiones en validación y comprobarlas en un período nuevo, sin prometer reducción de WAPE. El pronóstico diario requiere profundizar calendario, cobertura y ajuste de parámetros; sus resultados se conservan como avance.
+
+## Diagnóstico puntual del alcance de las curvas por edad
+
+[02_EDA_edades_sin_cobertura](Notebooks/Proyecciones%20Teoricas%20Propias/02_EDA_edades_sin_cobertura.ipynb) muestra qué edades están representadas por las curvas de pilotos: tempranas, intermedias y posteriores. Lee las curvas/proyecciones existentes de 2021–2026 y la base de 10, sin reconstruir modelos. Incluye DINO y exporta una tabla de diagnóstico. El nombre del archivo se conserva por trazabilidad; su lectura es de alcance empírico de las curvas, no de pérdida de producción. Una edad previa al primer corte observado no demuestra que el rendimiento sea cero; cualquier regla productiva requiere confirmación agronómica. Es un diagnóstico opcional, no una nueva dependencia de entrenamiento.
