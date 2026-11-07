@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "objetivos_del_plan_verificados": 5,
+  "conclusiones_especificas": 4,
+  "fuentes_sin_cambios": 39,
+  "version_6_conservada": true,
+  "figuras": 19,
+  "imagenes_dentro_de_pagina": true,
+  "tablas": 47,
+  "resúmenes_metricas": 122,
+  "metricas_anuales_recalculadas_coinciden": true,
+  "no_reentrenamiento": true
+}

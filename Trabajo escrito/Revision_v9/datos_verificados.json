@@ -1,0 +1,577 @@
+{
+  "base": {
+    "rows": 648030,
+    "cols": 47,
+    "observados": 216127,
+    "admisibles_observados": 148435,
+    "por_estado": {
+      "cohortes_sin_curva": 162340,
+      "curva_completa": 46528,
+      "sin_pareja_comercial_u_objetivo": 5560,
+      "sin_snapshot_disponible": 1699
+    }
+  },
+  "uniones": {
+    "unica": 523336,
+    "llave_incompleta": 10893,
+    "ambigua": 4730,
+    "conflicto_ciclo": 3383,
+    "sin_pareja": 1026
+  },
+  "uniones_cortes_2026": {
+    "unica": 46085,
+    "ambigua": 72
+  },
+  "pilotos": {
+    "entrantes": 543368,
+    "unica": 523336,
+    "utilizables": 490116,
+    "otros_filtros": 33220,
+    "cero": 93488,
+    "desde": "2012-12-31",
+    "hasta": "2026-09-21"
+  },
+  "semanal": {
+    "rows": 45108,
+    "tallos": 338568100.0,
+    "desde": "2021-01-04",
+    "hasta": "2026-10-26"
+  },
+  "composicion": {
+    "MINICARNATION": {
+      "tallos": 212389474.0,
+      "pct": 62.73168499926603
+    },
+    "CARNATION": {
+      "tallos": 62916627.0,
+      "pct": 18.583152695129872
+    },
+    "SOLOMIO": {
+      "tallos": 27655798.0,
+      "pct": 8.168459462069817
+    },
+    "RAFFINE": {
+      "tallos": 18928717.0,
+      "pct": 5.590815259913737
+    },
+    "GREEN BALL": {
+      "tallos": 5902698.0,
+      "pct": 1.7434300514431218
+    },
+    "STAR": {
+      "tallos": 4371534.0,
+      "pct": 1.291183073656378
+    },
+    "BARBATUS": {
+      "tallos": 2255437.0,
+      "pct": 0.666169376264332
+    },
+    "VERONICA": {
+      "tallos": 1727095.0,
+      "pct": 0.5101174623362331
+    },
+    "VERONICA SPRAY": {
+      "tallos": 749350.0,
+      "pct": 0.22132918015607494
+    },
+    "AMAZON": {
+      "tallos": 667127.0,
+      "pct": 0.19704366713816215
+    },
+    "STATICE": {
+      "tallos": 430762.0,
+      "pct": 0.1272305335322495
+    },
+    "TRACHELIUM": {
+      "tallos": 395732.0,
+      "pct": 0.11688401831123488
+    },
+    "CAMPANULA": {
+      "tallos": 89657.0,
+      "pct": 0.02648123080703705
+    },
+    "LEPIDIUM": {
+      "tallos": 38811.0,
+      "pct": 0.011463277255004237
+    },
+    "LILLIPUT": {
+      "tallos": 29469.0,
+      "pct": 0.008704009621697968
+    },
+    "ACHILLEA": {
+      "tallos": 14149.0,
+      "pct": 0.004179070621242817
+    },
+    "FIORINO": {
+      "tallos": 2776.0,
+      "pct": 0.0008199236726673304
+    },
+    "MARIGOLD": {
+      "tallos": 1641.0,
+      "pct": 0.00048468830938295723
+    },
+    "BRASSICA": {
+      "tallos": 982.0,
+      "pct": 0.0002900450455905326
+    },
+    "ORNITHOGALUM": {
+      "tallos": 264.0,
+      "pct": 7.797545013839166e-05
+    }
+  },
+  "schemas": {
+    "clima_limpio": {
+      "rows": 194558,
+      "cols": [
+        "fecha",
+        "temperatura",
+        "temperatura_max",
+        "temperatura_min",
+        "humedad",
+        "lluvia",
+        "radiacion",
+        "evapotranspiracion",
+        "fila_excel",
+        "finca",
+        "hora_original",
+        "hora_con_zona",
+        "instante",
+        "archivo_origen",
+        "hoja_origen",
+        "edicion_anio",
+        "codigo_fuente",
+        "llave_medicion_valida",
+        "conflicto_entre_ediciones",
+        "registros_fuente",
+        "medicion_valida",
+        "semana_inicio"
+      ]
+    },
+    "curvas_variedad_limpio": {
+      "rows": 562987,
+      "cols": [
+        "anio_corte_fuente",
+        "anio_siembra_fuente",
+        "bloque",
+        "cama",
+        "codigo_semana_corte",
+        "color_piloto",
+        "edad_semanas",
+        "fecha_siembra",
+        "flores_por_planta",
+        "producto",
+        "referencia",
+        "semana_siembra_fuente",
+        "tallos_piloto",
+        "variedad",
+        "fila_excel",
+        "semana_corte_fuente",
+        "semana_inicio",
+        "precision_siembra",
+        "plantas_piloto",
+        "rendimiento_recalculado",
+        "familia_archivo",
+        "edicion_anio",
+        "archivo_origen",
+        "hoja_origen",
+        "primera_edicion",
+        "repeticiones_fuente",
+        "conflicto_primera_edicion",
+        "observacion_valida",
+        "disponible_supuesto",
+        "disponibilidad_confirmada"
+      ]
+    },
+    "estimados_semanales_limpio": {
+      "rows": 181301,
+      "cols": [
+        "finca",
+        "producto",
+        "color",
+        "variedad",
+        "semana_inicio",
+        "origen_nominal",
+        "horizonte_nominal",
+        "estimado",
+        "anio_objetivo_fuente",
+        "semana_objetivo_fuente",
+        "archivo_origen",
+        "fila_cache",
+        "es_ajustado",
+        "marca_envio",
+        "fecha_generacion_confirmada",
+        "unidad",
+        "cache_origen",
+        "refresco_cache_excel",
+        "SUPERVISOR",
+        "CODFINCA",
+        "horizonte",
+        "anio_solicitado",
+        "semana_solicitada",
+        "anio_archivo",
+        "semana_archivo",
+        "archivo_es_posterior",
+        "archivo_h1_exacto",
+        "diferencia_semanas_archivo",
+        "origen_solicitado",
+        "en_h1_h5",
+        "disponible_al_origen_confirmado",
+        "llave_comercial_repetida"
+      ]
+    },
+    "planos_siembra_limpio": {
+      "rows": 3356921,
+      "cols": [
+        "finca",
+        "invernadero",
+        "cama",
+        "producto",
+        "color",
+        "variedad",
+        "plantas",
+        "area",
+        "fecha_siembra",
+        "semana_siembra_fuente",
+        "anio_siembra_fuente",
+        "edad_reportada",
+        "curva_fuente",
+        "codigo_siembra",
+        "estado",
+        "sustrato",
+        "densidad",
+        "fila_excel",
+        "semana_inicio",
+        "anio_plano_fuente",
+        "semana_plano_fuente",
+        "edicion_elegida",
+        "edad_calculada",
+        "edad_inconsistente",
+        "archivo_origen",
+        "hoja_origen",
+        "segmento_ambiguo",
+        "fila_utilizable",
+        "fecha_referencia_edad",
+        "formula_edad_reconocida",
+        "edad_diferente_al_lunes",
+        "edad_esperada_referencia"
+      ]
+    },
+    "produccion_real_limpio": {
+      "rows": 6550639,
+      "cols": [
+        "finca",
+        "invernadero",
+        "fecha_corte",
+        "anio_fuente",
+        "semana_fuente",
+        "tipo_corte",
+        "producto",
+        "grado",
+        "color",
+        "variedad",
+        "tallos",
+        "lote",
+        "estado_inventario",
+        "hora_corte",
+        "tipo_inventario",
+        "fila_excel",
+        "semana_inicio",
+        "archivo_origen",
+        "hoja_origen",
+        "llave_completa",
+        "tipo_corte_original",
+        "tipo_corte_imputado",
+        "lote_original",
+        "hora_corte_original"
+      ]
+    }
+  },
+  "planos_seleccionados": 301,
+  "soporte_edades": [
+    {
+      "horizonte": 1.0,
+      "casos": 44431,
+      "directos": 9100,
+      "pct": 20.4811955616574
+    },
+    {
+      "horizonte": 2.0,
+      "casos": 43832,
+      "directos": 9311,
+      "pct": 21.242471253878445
+    },
+    {
+      "horizonte": 3.0,
+      "casos": 43220,
+      "directos": 9390,
+      "pct": 21.726052753354928
+    },
+    {
+      "horizonte": 4.0,
+      "casos": 42615,
+      "directos": 9399,
+      "pct": 22.05561422034495
+    },
+    {
+      "horizonte": 5.0,
+      "casos": 42029,
+      "directos": 9328,
+      "pct": 22.194199243379572
+    }
+  ],
+  "ejemplo_curva": {
+    "clave": "COMERCIAL|SOLOMIO|WHITE|ARD",
+    "fecha_plano": "2026-10-12",
+    "edades": 91,
+    "edad_min": 19.0,
+    "edad_max": 293.0,
+    "max_soporte": 43,
+    "ejemplo_punto": {
+      "edad": 50.0,
+      "rendimiento_curva": 0.25416279069767445,
+      "n_observaciones": 43.0
+    }
+  },
+  "figura_soporte_eje_min": 15,
+  "metricas_2026": [
+    {
+      "metodo": "19_mensual_sin_clima",
+      "horizonte": "Total",
+      "semanas_objetivo": 43,
+      "casos": 20283,
+      "MAE": 2497.828603375359,
+      "RMSE": 4382.251242824176,
+      "WAPE": 19.27255305988299,
+      "sesgo_pct": -2.8293466725908747,
+      "sesgo_tallos": -7437752.778801087,
+      "MAPE_positivos": 42.82632346680616,
+      "dentro_8_pct": 23.073509835823103,
+      "real_tallos": 262878807.0,
+      "reales_positivos": 20283
+    },
+    {
+      "metodo": "Ingeniero",
+      "horizonte": "Total",
+      "semanas_objetivo": 43,
+      "casos": 20283,
+      "MAE": 2514.3315091455897,
+      "RMSE": 4306.342468762273,
+      "WAPE": 19.399884905898865,
+      "sesgo_pct": -9.704440723515608,
+      "sesgo_tallos": -25510918.0,
+      "MAPE_positivos": 28.52848925605419,
+      "dentro_8_pct": 21.860671498299062,
+      "real_tallos": 262878807.0,
+      "reales_positivos": 20283
+    },
+    {
+      "metodo": "19_mensual_sin_clima",
+      "horizonte": "1",
+      "semanas_objetivo": 41,
+      "casos": 4230,
+      "MAE": 1919.568433559165,
+      "RMSE": 3408.8387471237074,
+      "WAPE": 15.04392349966372,
+      "sesgo_pct": -0.9420018937336944,
+      "sesgo_tallos": -508434.048559696,
+      "MAPE_positivos": 28.740330800191543,
+      "dentro_8_pct": 28.29787234042553,
+      "real_tallos": 53973782.0,
+      "reales_positivos": 4230
+    },
+    {
+      "metodo": "Ingeniero",
+      "horizonte": "1",
+      "semanas_objetivo": 41,
+      "casos": 4230,
+      "MAE": 2171.198817966903,
+      "RMSE": 3704.66918872284,
+      "WAPE": 17.0159856502181,
+      "sesgo_pct": -7.970208572747413,
+      "sesgo_tallos": -4301823.0,
+      "MAPE_positivos": 25.67393553755618,
+      "dentro_8_pct": 24.113475177304963,
+      "real_tallos": 53973782.0,
+      "reales_positivos": 4230
+    },
+    {
+      "metodo": "19_mensual_sin_clima",
+      "horizonte": "2",
+      "semanas_objetivo": 41,
+      "casos": 4201,
+      "MAE": 2253.3061596970338,
+      "RMSE": 3956.2132839696887,
+      "WAPE": 17.501759444325714,
+      "sesgo_pct": -1.6702765362422525,
+      "sesgo_tallos": -903398.8957655596,
+      "MAPE_positivos": 33.93874161447367,
+      "dentro_8_pct": 24.851225898595573,
+      "real_tallos": 54086786.0,
+      "reales_positivos": 4201
+    },
+    {
+      "metodo": "Ingeniero",
+      "horizonte": "2",
+      "semanas_objetivo": 41,
+      "casos": 4201,
+      "MAE": 2448.777433944299,
+      "RMSE": 4199.422962026648,
+      "WAPE": 19.020013502003984,
+      "sesgo_pct": -8.058208524351956,
+      "sesgo_tallos": -4358426.0,
+      "MAPE_positivos": 28.532129289287127,
+      "dentro_8_pct": 22.161390145203523,
+      "real_tallos": 54086786.0,
+      "reales_positivos": 4201
+    },
+    {
+      "metodo": "19_mensual_sin_clima",
+      "horizonte": "3",
+      "semanas_objetivo": 40,
+      "casos": 4075,
+      "MAE": 2618.269948488244,
+      "RMSE": 4559.266274596973,
+      "WAPE": 20.221030170914403,
+      "sesgo_pct": -3.15494421392692,
+      "sesgo_tallos": -1664678.7718155514,
+      "MAPE_positivos": 48.99970068190061,
+      "dentro_8_pct": 22.45398773006135,
+      "real_tallos": 52764127.0,
+      "reales_positivos": 4075
+    },
+    {
+      "metodo": "Ingeniero",
+      "horizonte": "3",
+      "semanas_objetivo": 40,
+      "casos": 4075,
+      "MAE": 2567.646380368098,
+      "RMSE": 4347.0839893602415,
+      "WAPE": 19.83006181453547,
+      "sesgo_pct": -9.26610043221221,
+      "sesgo_tallos": -4889177.0,
+      "MAPE_positivos": 29.45508454849023,
+      "dentro_8_pct": 21.30061349693252,
+      "real_tallos": 52764127.0,
+      "reales_positivos": 4075
+    },
+    {
+      "metodo": "19_mensual_sin_clima",
+      "horizonte": "4",
+      "semanas_objetivo": 39,
+      "casos": 3950,
+      "MAE": 2862.27181078921,
+      "RMSE": 4970.083254558719,
+      "WAPE": 21.76091868595422,
+      "sesgo_pct": -4.507090345525628,
+      "sesgo_tallos": -2341677.0878046425,
+      "MAPE_positivos": 50.38053203342943,
+      "dentro_8_pct": 20.10126582278481,
+      "real_tallos": 51955406.0,
+      "reales_positivos": 3950
+    },
+    {
+      "metodo": "Ingeniero",
+      "horizonte": "4",
+      "semanas_objetivo": 39,
+      "casos": 3950,
+      "MAE": 2678.5701265822786,
+      "RMSE": 4540.530189250334,
+      "WAPE": 20.36429471843604,
+      "sesgo_pct": -11.285516660191242,
+      "sesgo_tallos": -5863436.0,
+      "MAPE_positivos": 29.697089923000576,
+      "dentro_8_pct": 20.88607594936709,
+      "real_tallos": 51955406.0,
+      "reales_positivos": 3950
+    },
+    {
+      "metodo": "19_mensual_sin_clima",
+      "horizonte": "5",
+      "semanas_objetivo": 38,
+      "casos": 3827,
+      "MAE": 2900.998228041003,
+      "RMSE": 4911.896102844009,
+      "WAPE": 22.160492965053667,
+      "sesgo_pct": -4.031169936516202,
+      "sesgo_tallos": -2019563.9748556383,
+      "MAPE_positivos": 53.7813389754962,
+      "dentro_8_pct": 19.07499346746799,
+      "real_tallos": 50098706.0,
+      "reales_positivos": 3827
+    },
+    {
+      "metodo": "Ingeniero",
+      "horizonte": "5",
+      "semanas_objetivo": 38,
+      "casos": 3827,
+      "MAE": 2739.27096942775,
+      "RMSE": 4728.2825457841645,
+      "WAPE": 20.92507139805168,
+      "sesgo_pct": -12.172082847808484,
+      "sesgo_tallos": -6098056.0,
+      "MAPE_positivos": 29.48684358020364,
+      "dentro_8_pct": 20.642801149725635,
+      "real_tallos": 50098706.0,
+      "reales_positivos": 3827
+    }
+  ],
+  "pred_columns": [
+    "finca",
+    "producto",
+    "color",
+    "variedad",
+    "origen",
+    "semana_objetivo",
+    "horizonte",
+    "y",
+    "media_4",
+    "prediccion",
+    "ruta",
+    "corte_entrenamiento",
+    "modelo",
+    "ingeniero",
+    "periodo"
+  ],
+  "modelos_pred": [
+    "19_mensual_sin_clima",
+    "19_congelado_03ago"
+  ],
+  "asociaciones_memoria": [
+    {
+      "horizonte": 1,
+      "variable": "produccion_lag1",
+      "mediana_spearman": 0.25139907241169535,
+      "series": 118
+    },
+    {
+      "horizonte": 1,
+      "variable": "cambio_reciente",
+      "mediana_spearman": 0.19038071273361443,
+      "series": 117
+    },
+    {
+      "horizonte": 1,
+      "variable": "media_4",
+      "mediana_spearman": 0.12326012417755539,
+      "series": 117
+    },
+    {
+      "horizonte": 5,
+      "variable": "produccion_lag1",
+      "mediana_spearman": -0.02226333641689793,
+      "series": 115
+    },
+    {
+      "horizonte": 5,
+      "variable": "cambio_reciente",
+      "mediana_spearman": 0.06958720628603879,
+      "series": 114
+    },
+    {
+      "horizonte": 5,
+      "variable": "media_4",
+      "mediana_spearman": -0.03158601114303162,
+      "series": 112
+    }
+  ]
+}

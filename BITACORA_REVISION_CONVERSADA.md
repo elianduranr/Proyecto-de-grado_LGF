@@ -1,5 +1,25 @@
 # Bitácora de la revisión conversada de la metodología
 
+## ETL, SQL Server y actualización directa del corte — 26 de octubre de 2026
+
+Se conectó el prototipo a `Proyectos` usando exclusivamente el esquema `EP`, con migraciones, fuentes limpias tipadas, catálogo, auditoría y una referencia transaccional a la base activa. Se implementó el procesamiento de los originales en versiones privadas, conservando las limpiezas, proyecciones y variables del proyecto. Una carga fallida no sustituye los datos vigentes; una fuente sin cambios reutiliza sus registros SQL. La regresión del adaptador del 19 sigue coincidiendo exactamente en los 584 casos de referencia de H1–H5.
+
+La revisión de producción encontró una hoja adicional de detalle de 2026 que no se estaba leyendo. El limpiador reconoce sus encabezados y excluye resúmenes; `Hoja1` aporta 23.669 registros y 1.984.077 tallos hasta el 10 de octubre. Las fuentes conservan ARABELLA y GAITANA, pero la inferencia validada del prototipo sigue limitada a GAITANA. Se amplió el tipo SQL a `DATETIME2` para guardar fielmente fechas originales y sus banderas de calidad; no se alteró el criterio estadístico para adaptarlo a la base de datos.
+
+Se comprobó la conexión de lectura de WebFlor y el procedimiento real `Reporte.InformeCorteInvVariedad`, que limita la consulta a 45 días. La descarga de días cerrados mostró 4.318 combinaciones comerciales/diarias idénticas al histórico tras normalizar nombres y 43.863 registros nuevos posteriores al 10 de octubre. El botón de actualización archiva la fuente, verifica el período común y añade sólo fechas nuevas mediante el mismo ETL. Una diferencia histórica exige revisión y no provoca sobreescrituras automáticas. La evidencia de activación completa y pronóstico nuevo se guarda separada de este diagnóstico de empalme.
+
+La interfaz ahora distingue lo procesado de lo recomendable para H1: fecha o semana, archivos recientes, período necesario, pendientes y siguiente acción por fuente. Clima y estadísticas históricas no se convierten en una obligación de actualización semanal para Sin clima. Los planos se relacionan con la teoría del origen; si falta el plano, se explica la ruta de producción reciente. El histórico muestra también el sesgo del ingeniero y cada semana del panel de prueba. Las cargas nuevas no reescriben automáticamente la evaluación archivada ni demuestran una mejora de WAPE.
+
+El recorrido y los pendientes verificables están en [el estado del prototipo](plataforma_gaitana/ESTADO_PROTOTIPO.md), [ETL y SQL](plataforma_gaitana/ETL_Y_SQL.md) y [WebFlor](plataforma_gaitana/WEBFLOR.md). El Excel oficial y la validación de emisión del jueves continúan separados de esta integración.
+
+## Primer prototipo funcional — 23 de octubre de 2026
+
+Se creó `plataforma_gaitana/` con React/TypeScript/Vite, FastAPI, trabajador independiente, SQLAlchemy/Alembic, recepción de Excel, ajustes con sumas exactas, auditoría y versiones con publicación explícita. La interfaz tiene los tres módulos solicitados, identidad vinotinto y curvas normalizadas existentes. La regresión del adaptador del 19 coincidió exactamente en 584 casos de H1–H5 de un origen; una generación real produjo 590 líneas y quedó en borrador. Se probaron escritorio, móvil, ajuste/restauración, descarga, permisos y persistencia tras reinicio. El entorno del prototipo está separado del de notebooks y las credenciales se conservan en `.env` local. Los límites —SQLite local, cargas pendientes de ETL, plantilla preliminar y Docker/SQL Server sin ejecución comprobada— se explicitan en [el estado del prototipo](plataforma_gaitana/ESTADO_PROTOTIPO.md); no se declara terminada toda la plataforma.
+
+## Plataforma operativa — 23 de octubre de 2026
+
+El usuario definió la aplicación empresarial y autorizó desarrollar por fases, empezando por revisar antes de programar. El alcance queda en [docs/ESPECIFICACION.md](docs/ESPECIFICACION.md); la evidencia local, arquitectura y plan están en [Fase 1](docs/FASE_1_REVISION_Y_ARQUITECTURA.md). Se acuerdan originales persistentes fuera de SQL, datos normalizados en `proyectos`, separación generar/ajustar/publicar y preservación del cuadernillo 19 antes de mejoras. La revisión recalculó métricas de predicciones existentes (19,36 % WAPE en 16.325 casos estrictos), identificó una ruta duplicada en el código del 19 y diferencias entre emisión real y origen nominal que deben resolverse para reproducir e integrar. Se registran huellas y entorno observado; no se reentrenó, no se modificaron notebooks ni fuentes y no se conectó al servidor. La plataforma, sus migraciones y su despliegue aún están pendientes.
+
 Actualización: 8 de octubre de 2026.
 
 ## Instrucción vigente del usuario
@@ -200,3 +220,71 @@ Se integraron los resultados de los cuadernos 21–25 en el resumen, la guía, l
 - El cuaderno 25 mejora el WAPE total del candidato propio previo (17,80 %) a 17,53 %, pero no demuestra que ya reemplacemos al ingeniero globalmente. La comparación del ingeniero es benchmark; no es entrada del modelo.
 - La cobertura se resume en lenguaje directo: la producción real permanece en la base; la curva es una referencia directa cuando representa todas las edades del plano, y la producción reciente puede respaldar los casos admisibles restantes. No equivale a producción faltante ni a un cruce fallido.
 - Se regenerará el Word desde el Markdown actualizado y se publicarán los documentos y notebooks de esta revisión.
+
+
+### Plataforma: cierre de carga e histórico separado (26/10/2026)
+
+Se activó en SQL Server `Proyectos`, esquema `EP`, la carga consolidada con WebFlor: 6.543.848 registros reales y último corte 24/10/2026. Se generó un borrador Sin_clima para S44, con 565 líneas y 113 series, sin publicarlo. La comprobación de las cinco fuentes, conservación de tallos y versiones quedó aprobada en `plataforma_gaitana/storage/verification_operational.json`.
+
+Para estudiar errores, abrir **Histórico y desempeño → Qué resultados revisar**: entrenamiento (sólo diagnóstico H1), validación 2025, prueba 2026 o seguimiento de nuevas semanas. Cada opción muestra semanas, WAPE y sesgo comparables del modelo y del ingeniero. Entrenamiento no demuestra anticipación. El seguimiento se amplía al llegar producción real de semanas terminadas y publicaciones previas al origen; no incorpora borradores ni simulaciones retrospectivas como si fueran nuevas pruebas. Consultar [estado y límites](plataforma_gaitana/ESTADO_PROTOTIPO.md).
+
+
+### Comparador de errores separado del panorama general (26/10/2026)
+
+La plataforma ahora tiene cuatro secciones: Histórico y desempeño, Comparador de errores, Generar y ajustar, Metodología y guía. Para revisar un problema: abrir **Comparador de errores**, escoger evaluación y horizonte, elegir una semana o un grupo, filtrar producto/color/variedad y revisar los mayores aportes al error del modelo o del ingeniero. Pulsar un grupo lleva al siguiente detalle; por variedad se puede bajar a sus semanas. El botón **Explorar errores** del histórico conserva la evaluación y el horizonte elegidos.
+
+El comparador muestra WAPE, sesgo, tallos reales/estimados, error absoluto y aporte de cada grupo; mantiene los mismos casos para ambos métodos. Los errores se calculan por caso antes de agrupar, sin cancelar diferencias opuestas ni promediar porcentajes. Se verificó que el desglose reproduce el panel original. La búsqueda afecta sólo la tabla; los filtros superiores sí actualizan toda la vista. La primera sección queda como resumen. Comprobación: 27 pruebas aprobadas y revisión de filtros/navegación en escritorio y móvil; evidencia local `plataforma_gaitana/storage/verification_comparison.json`.
+
+
+### Recepción ágil y selección múltiple de planos (26/10/2026)
+
+Se corrigió un bloqueo al abrir Excel grandes durante la recepción: la inspección inicial ahora lee sólo el índice XML y se ejecuta fuera del bucle HTTP, conservando la limpieza completa en el trabajador ETL. La ventana muestra porcentaje de envío, confirmación por archivo, errores y reintento; Planos permite seleccionar varios archivos del mismo año. Un error individual no detiene los demás. Guardar confirma recepción; **Procesar archivos** incorpora y activa los datos después de las validaciones.
+
+El clima hasta S42 y el plano S42 del usuario ya estaban recibidos, pendientes del ETL: no deben subirse otra vez. Prueba de recepción/reconocimiento de archivos existentes sin duplicarlos: dos planos 4,927 s; estimado 3,097 s; clima de 196 MB 5,625 s. Estos tiempos no son los de la limpieza completa. La API siguió respondiendo. Se aprobaron 29 pruebas y se verificaron carga múltiple, error individual y navegación móvil. Evidencia privada: `plataforma_gaitana/storage/verification_upload_fix.json`.
+
+
+### Revisión académica de la tesis según el profesor — 28/10/2026
+
+Nueva versión: `Trabajo escrito/Documento_LaGaitana_v7_revision_profesor_20261028.docx`, con PDF y Markdown propios. Se conserva la versión 6 y su texto base. La revisión transcribe OG y los cuatro objetivos específicos del Plan de proyecto original y los vincula con conclusiones e implicaciones para La Gaitana; distingue logros, avances parciales y validaciones pendientes. Hace explícitos supuestos, decisiones y limitaciones dentro de cada etapa y mejora transiciones entre contexto, método, resultados e implicaciones.
+
+Las métricas se recalcularon desde predicciones archivadas, sin reentrenar: MAE, RMSE, WAPE, sesgo medio y porcentual, con saldo neto en el archivo de auditoría. Se preservan panel histórico de 15.838, anual nominal de 16.325 y reciente de 1.226 casos. El EDA textual por producto/color/variedad se sincronizó con el anual corregido. Se incorporan MAPE y porcentaje dentro de ±8 % en evaluaciones con predicciones individuales; su ausencia en algunos agregados train queda marcada. Se identifican límites antes poco visibles: ingeniero emitido el jueves frente a variables del lunes, muestra máxima de 5.000 filas por ajuste reciente, H1 reciente evaluado en una sola semana y LSTM de un día adelante frente a emisión de siete días. No se atribuyen beneficios económicos ni validaciones prospectivas no realizados.
+
+La revisión conserva 19 figuras numeradas y registra 122 resúmenes de métricas, 14 pendientes y huellas de sus fuentes en `Trabajo escrito/Revision_v7/`. El Word se abrió en una instancia oculta e independiente para paginar y exportar PDF: 74 páginas y 47 tablas. La guía para esta versión y los scripts de reconstrucción están en `Trabajo escrito/LEEME.md`.
+
+
+### 28/10/2026 — Comparador por semanas y selección de H1 en la plataforma
+
+Se revisó el benchmark de los notebooks `03_benchmark_estimado_ingeniero.ipynb` y `3_Benchmark estimado ingeniero.ipynb`, en `Notebooks/Limpieza data, Notebooks y Scripts/coso para generar el html antes`. Se recuperó su exploración con filtros compartidos por semana, producto, color y variedad y la descarga de tablas; se mantiene la identidad visual corporativa. El comparador permite semanas sueltas no consecutivas, rangos, todas y últimas 1/4/8; navegación de regreso por niveles; cantidades, WAPE, sesgo, contribución al error y vista de diferencias netas. La exportación CSV incluye todas las filas de la tabla filtrada, no sólo la página visible.
+
+El histórico distingue mediante botones y texto entrenamiento, validación, prueba y seguimiento. Entrenamiento es un diagnóstico dentro de muestra H1, no una nueva validación. La prueba archivada no crece al cargar nuevos archivos; las publicaciones nuevas se evalúan en seguimiento cuando cumplen el corte temporal.
+
+En Generar y ajustar se elige H1. La consulta de fuentes y el POST de generación usan exactamente ese origen; se verifica la presencia de la edición de plano/ingeniero de esa semana. Elegir una semana sin variables preparadas no desplaza automáticamente variables ni permite pronosticar: hay que actualizar y procesar insumos. Los orígenes pasados se señalan como simulaciones retrospectivas. La ausencia de plano mantiene la ruta de memoria validada; clima e ingeniero siguen siendo opcionales para Sin_clima. Los pendientes obligatorios de procesamiento conservan su bloqueo.
+
+Verificación: compilación del frontend, pruebas del backend y recorrido real en Edge, sin errores JavaScript y sin desbordamiento móvil. H1 de prueba conserva 3.512 casos, WAPE 15,52646 % y sesgo −1,34110 % del modelo. Se comprobó selección de dos semanas no consecutivas, filtros por color/variedad, rangos, CSV y bloqueo de H1 futura. Evidencia local ignorada por Git: `plataforma_gaitana/storage/verification_comparator_weeks_h1.json`. No se reentrenaron modelos, procesaron nuevas cargas ni publicaron pronósticos durante esta mejora de interfaz.
+
+
+### 28/10/2026 — WebFlor con ventana de reemplazo y carga múltiple
+
+Se reemplazó la regla de sólo añadir fechas posteriores por una reconsulta de la ventana retenida (45 días hasta ayer) y sustitución versionada del rango. Las diferencias en días ya guardados se auditan y se incorporan; el histórico anterior se conserva. No se deduplican movimientos por valores. La precedencia entre archivos se aplica antes de la limpieza 05 y se conserva en el manifiesto para reproducir el ETL. Un fallo de validación no activa cambios; las versiones SQL anteriores permanecen consultables. Se comprobaron el contrato temporal real de WebFlor y disponibilidad de datos hasta el 27/10/2026 mediante lectura, sin declarar activada esa descarga de comprobación.
+
+Se retiró el bloqueo del botón por pendientes de clima/planos/estimados. Se mantiene el control de trabajos concurrentes y de un completo de producción pendiente. La carga múltiple se extendió a estimados, estadísticas de distintas familias y adicionales de clima/producción; permite agregar archivos en varias selecciones y quitar pendientes. No se admiten varios completos del mismo alcance ni adicionales con fechas cruzadas.
+
+La revisión semanal solapa las ventanas y protege el empalme con nuestra base persistida. La retención de la fuente no borra el histórico guardado. Sólo una interrupción que deje un tramo fuera de retención exige recuperarlo por Excel. Estos cambios son de ingestión y operación; no alteran las variables ni parámetros estadísticos del modelo 19.
+
+Verificación final de esta mejora: 41 pruebas del backend aprobadas, compilación del frontend y recorrido en Edge sin errores JavaScript ni desbordamiento móvil. Se verificaron selección múltiple en las cinco fuentes según modalidad, agregado en selecciones sucesivas, retiro de pendientes y botón WebFlor habilitado pese a clima y plano pendientes. Evidencia: `plataforma_gaitana/storage/verification_multi_upload_webflor_ui.json`. La descarga de comprobación fue de sólo lectura; no creó un trabajo ni activó una nueva base operativa.
+
+## Actualización del 28/10/2026: evaluación temporal y operación
+
+Lectura corta: informe v8, 4.2.8 (train/validación/test y reentrenamiento), 5.1.3 (datos y resultados nuevos), 5.5 (train/test del mismo ajuste) y conclusiones por objetivo. Los demás modelos y el diario conservan sus resultados históricos, identificados como tales.
+
+Reproducción de esta actualización:
+1. Conservar la copia versionada `plataforma_gaitana/storage/datasets/evaluacion_local_20261028` y su manifiesto; no cambiar originales para repetir resultados.
+2. Ejecutar `26_validacion_temporal_actualizada_y_operacion.ipynb` de arriba abajo con el entorno de `plataforma_gaitana/.venv`. Reutiliza las funciones del 19 y no requiere consultar SQL ni WebFlor para calcular los errores.
+3. Revisar `fuentes_validadas.csv`, `cortes_entrenamiento.csv`, `particiones_por_corte.csv`, `train_test_por_ajuste.csv`, `auditoria_semanas.csv` y `verificacion_final.json`.
+4. Para regenerar el informe: `actualizar_documento_v8.py`, `generar_documento_v8.py`, `verificar_revision_v8.py` y `exportar_revision_v8_pdf.py`, en ese orden. Los tres últimos usan `entorno_tesis` (Word se abre oculto para exportar PDF).
+
+En el visualizador, «Evaluación actualizada · cuaderno 26» conserva las predicciones y recalcula errores contra la última versión validada de real/ingeniero. «Prueba 2026 · cuadernillo 19» mantiene el archivo de referencia. «Entrenamiento» muestra H1 dentro de muestra y «Seguimiento» exige publicaciones anticipadas. Cargar más datos no inventa predicciones para orígenes no evaluados: para ampliarlos se vuelve a ejecutar la evaluación o se conservan nuevas publicaciones.
+
+El comparador identifica con color quién tuvo menor WAPE y permite regresar de variedad a color y producto. La revisión manual de una propuesta conserva por separado el error original y ajustado; no modifica el benchmark nominal del ingeniero.
+
+En «Generar y ajustar», producto → color → variedades permite comparar varias selecciones, cambiar semanas y ocultar curvas. El checklist se guarda en la propuesta: seleccionar no confirma revisión. Marcar revisada registra aceptación o ajuste de las cinco semanas; cambiar cantidades vuelve a dejar pendientes las variedades afectadas. El avance por producto/color sólo se completa al revisar todas sus variedades. La curva por edad utiliza el resultado normalizado existente; el suavizado de la proyección absoluta es únicamente visual.

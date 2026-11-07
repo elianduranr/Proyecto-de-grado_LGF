@@ -1,0 +1,18 @@
+{
+  "scope": "Un origen de la evaluaci\u00f3n archivada; no certifica todos los cortes",
+  "origin": "2026-08-03",
+  "cases": 584,
+  "horizons": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "max_absolute_difference": 0.0,
+  "mean_absolute_difference": 0.0,
+  "tolerance_stems": 1e-06,
+  "passed": true,
+  "data_hash": "4195beec114bd8d086e4d7c67e3fdcd02afc76b580b6f9c5187c3ec4320bed43",
+  "adapter_sha256": "7a6c1738b08a1073d9fbb96e306f42b0b6e642f94b25df40ddfa8060e078827e"
+}

@@ -1,0 +1,132 @@
+{
+  "tab_glosario": {
+    "number": 1,
+    "kind": "Tabla",
+    "caption": "Términos operativos utilizados en el estudio"
+  },
+  "tab_fuentes": {
+    "number": 2,
+    "kind": "Tabla",
+    "caption": "Dimensiones de las fuentes depuradas utilizadas"
+  },
+  "fig_curva": {
+    "number": 1,
+    "kind": "Figura",
+    "caption": "Curva empírica y soporte de Solomio–Ard blanco; referencia del plano del 12/10/2026. Fuente: rendimientos piloto depurados."
+  },
+  "fig_semanal": {
+    "number": 2,
+    "kind": "Figura",
+    "caption": "Lógica metodológica del pronóstico semanal seleccionado. Fuente: elaboración propia a partir del procedimiento implementado."
+  },
+  "fig_pretratamiento": {
+    "number": 3,
+    "kind": "Figura",
+    "caption": "Pretratamiento y universos de integración. Los bloques piloto y analítico tienen unidades distintas. Fuente: extracción verificada del estudio."
+  },
+  "tab_estados": {
+    "number": 3,
+    "kind": "Tabla",
+    "caption": "Correspondencia de estadísticas con cama y ciclo en la edición 2026"
+  },
+  "tab_variables": {
+    "number": 4,
+    "kind": "Tabla",
+    "caption": "Bloques de predictores y función en el modelo semanal"
+  },
+  "tab_modelos": {
+    "number": 5,
+    "kind": "Tabla",
+    "caption": "Familias y variantes implementadas para el pronóstico semanal"
+  },
+  "tab_parametros": {
+    "number": 6,
+    "kind": "Tabla",
+    "caption": "Configuraciones de los métodos de aprendizaje y pilotos"
+  },
+  "tab_particiones": {
+    "number": 7,
+    "kind": "Tabla",
+    "caption": "Funciones de los periodos y controles de disponibilidad"
+  },
+  "tab_diario_metodo": {
+    "number": 8,
+    "kind": "Tabla",
+    "caption": "Procedimientos diarios y diferencias de tarea"
+  },
+  "fig_soporte": {
+    "number": 4,
+    "kind": "Figura",
+    "caption": "Casos observados con referencia teórica total, por horizonte. Eje vertical truncado desde 15 %. Fuente: panel analítico actualizado."
+  },
+  "tab_iniciales": {
+    "number": 9,
+    "kind": "Tabla",
+    "caption": "Referencias, correcciones y ablaciones en el panel inicial común"
+  },
+  "tab_seleccion": {
+    "number": 10,
+    "kind": "Tabla",
+    "caption": "Selección previa a 2026: variantes de clima y procedencia"
+  },
+  "tab_horizontes": {
+    "number": 11,
+    "kind": "Tabla",
+    "caption": "Evaluación ampliada de 2026 por horizonte, configuración seleccionada"
+  },
+  "fig_comparacion": {
+    "number": 5,
+    "kind": "Figura",
+    "caption": "WAPE y sesgo por horizonte: modelo seleccionado y responsable de producción, evaluación ampliada de 2026. Fuente: mismos casos nominales por método."
+  },
+  "tab_global": {
+    "number": 12,
+    "kind": "Tabla",
+    "caption": "Métricas conjuntas de la evaluación ampliada de 2026"
+  },
+  "tab_train": {
+    "number": 13,
+    "kind": "Tabla",
+    "caption": "Entrenamiento y prueba del mismo ajuste de octubre"
+  },
+  "tab_extension": {
+    "number": 14,
+    "kind": "Tabla",
+    "caption": "Extensión desde la semana 37: mismo modelo y comparación nominal"
+  },
+  "tab_productos": {
+    "number": 15,
+    "kind": "Tabla",
+    "caption": "Productos con mayor aporte al WAPE en la evaluación ampliada"
+  },
+  "tab_diario": {
+    "number": 16,
+    "kind": "Tabla",
+    "caption": "Pronóstico diario: casos comunes de enero–septiembre de 2026"
+  },
+  "tab_sarima": {
+    "number": 17,
+    "kind": "Tabla",
+    "caption": "Piloto diario de series temporales: 135 días comunes"
+  },
+  "tab_lstm": {
+    "number": 18,
+    "kind": "Tabla",
+    "caption": "Ensayo de un día adelante: septiembre de 2026, soporte propio"
+  },
+  "tab_diccionario": {
+    "number": 19,
+    "kind": "Tabla",
+    "caption": "Diccionario agrupado de las 47 columnas de la base analítica"
+  },
+  "fig_clima": {
+    "number": 6,
+    "kind": "Figura",
+    "caption": "Asociaciones entre clima previo y error relativo de teoría: mediana de Spearman entre series, sin unidad. Blancos: asociación no estimable. Fuente: análisis climático exploratorio del estudio."
+  },
+  "tab_complementos": {
+    "number": 20,
+    "kind": "Tabla",
+    "caption": "Contrastes complementarios por bloque, con sus paneles originales"
+  }
+}

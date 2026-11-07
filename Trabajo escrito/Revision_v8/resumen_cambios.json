@@ -1,0 +1,101 @@
+{
+  "documento": "Documento_LaGaitana_v8_validacion_temporal_actualizada_20261028",
+  "fuentes": [
+    {
+      "fuente": "produccion_real_limpio",
+      "registros": 6550639,
+      "desde": "2021-01-04",
+      "hasta": "2026-10-27",
+      "sha256": "5735dd26abf55785cfaff870515e8e104d108395ae2641b62bdc4a678d5e0aa4"
+    },
+    {
+      "fuente": "clima_limpio",
+      "registros": 194558,
+      "desde": "2021-01-01",
+      "hasta": "2026-10-23",
+      "sha256": "577060b5161d49bea7a78cb3082e2b0a83e950db6f64416750b31e46141dfd5b"
+    },
+    {
+      "fuente": "planos_siembra_limpio",
+      "registros": 3356921,
+      "desde": "2021-01-04",
+      "hasta": "2026-10-12",
+      "sha256": "b25db1e2803fb8788b346a37ba8a47c99ee2a659b7a568661c58f558be7802e6"
+    },
+    {
+      "fuente": "curvas_variedad_limpio",
+      "registros": 562987,
+      "desde": "2012-12-31",
+      "hasta": "2026-09-21",
+      "sha256": "b72cf9fcef3c495e3c6a0bbbb84628b204f4e3928995c28f5005b4fb6ff93b18"
+    },
+    {
+      "fuente": "estimados_semanales_limpio",
+      "registros": 181301,
+      "desde": "2023-01-02",
+      "hasta": "2026-11-09",
+      "sha256": "6c5de54371ab285f68ad7086d9a99c1e7acb26a589f296a8ddfd3e682d2b3713"
+    }
+  ],
+  "evaluacion": {
+    "origenes_evaluados": 43,
+    "semanas_objetivo": 43,
+    "casos_evaluados": 23765,
+    "casos_pareados": 20283,
+    "objetivo_desde": "2025-12-29",
+    "objetivo_hasta": "2026-10-19",
+    "fecha_corrida": "2026-10-29",
+    "fecha_corte_evaluacion": "2026-10-28",
+    "snapshot": "evaluacion_local_20261028",
+    "parametros": {
+      "learning_rate": 0.08,
+      "max_iter": 80,
+      "max_leaf_nodes": 15,
+      "min_samples_leaf": 40,
+      "l2_regularization": 1.0,
+      "early_stopping": false,
+      "random_state": 42
+    },
+    "sin_tuneo": true,
+    "sin_sql_ni_vpn": true,
+    "evaluacion_prospectiva": false
+  },
+  "verificaciones": {
+    "passed": true,
+    "cortes_sin_objetivos_futuros": true,
+    "parametros_19_conservados": true,
+    "imputacion_solo_train": true,
+    "ingeniero_no_predictor": true,
+    "reales_ausentes_no_imputados": true,
+    "solo_semanas_cerradas_evaluadas": true,
+    "propuestas_no_publicadas": true,
+    "resumen": {
+      "origenes_evaluados": 43,
+      "semanas_objetivo": 43,
+      "casos_evaluados": 23765,
+      "casos_pareados": 20283,
+      "objetivo_desde": "2025-12-29",
+      "objetivo_hasta": "2026-10-19",
+      "fecha_corrida": "2026-10-29",
+      "fecha_corte_evaluacion": "2026-10-28",
+      "snapshot": "evaluacion_local_20261028",
+      "parametros": {
+        "learning_rate": 0.08,
+        "max_iter": 80,
+        "max_leaf_nodes": 15,
+        "min_samples_leaf": 40,
+        "l2_regularization": 1.0,
+        "early_stopping": false,
+        "random_state": 42
+      },
+      "sin_tuneo": true,
+      "sin_sql_ni_vpn": true,
+      "evaluacion_prospectiva": false
+    }
+  },
+  "modelo_mensual_nuevo_WAPE": 18.10417486334304,
+  "ingeniero_nuevo_WAPE": 17.658943523406656,
+  "modelo_mensual_nuevo_sesgo": -4.757346982085951,
+  "ingeniero_nuevo_sesgo": -11.049967297121633,
+  "version_anterior_conservada": true
+}

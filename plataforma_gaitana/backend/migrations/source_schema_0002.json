@@ -1,0 +1,572 @@
+{
+  "produccion_real_limpio": [
+    {
+      "name": "finca",
+      "type": "text"
+    },
+    {
+      "name": "invernadero",
+      "type": "text"
+    },
+    {
+      "name": "fecha_corte",
+      "type": "datetime"
+    },
+    {
+      "name": "anio_fuente",
+      "type": "integer"
+    },
+    {
+      "name": "semana_fuente",
+      "type": "integer"
+    },
+    {
+      "name": "tipo_corte",
+      "type": "text"
+    },
+    {
+      "name": "producto",
+      "type": "text"
+    },
+    {
+      "name": "grado",
+      "type": "text"
+    },
+    {
+      "name": "color",
+      "type": "text"
+    },
+    {
+      "name": "variedad",
+      "type": "text"
+    },
+    {
+      "name": "tallos",
+      "type": "integer"
+    },
+    {
+      "name": "lote",
+      "type": "integer"
+    },
+    {
+      "name": "estado_inventario",
+      "type": "text"
+    },
+    {
+      "name": "hora_corte",
+      "type": "text"
+    },
+    {
+      "name": "tipo_inventario",
+      "type": "text"
+    },
+    {
+      "name": "fila_excel",
+      "type": "integer"
+    },
+    {
+      "name": "semana_inicio",
+      "type": "datetime"
+    },
+    {
+      "name": "archivo_origen",
+      "type": "text"
+    },
+    {
+      "name": "hoja_origen",
+      "type": "text"
+    },
+    {
+      "name": "llave_completa",
+      "type": "boolean"
+    },
+    {
+      "name": "tipo_corte_original",
+      "type": "text"
+    },
+    {
+      "name": "tipo_corte_imputado",
+      "type": "boolean"
+    },
+    {
+      "name": "lote_original",
+      "type": "text"
+    },
+    {
+      "name": "hora_corte_original",
+      "type": "text"
+    }
+  ],
+  "clima_limpio": [
+    {
+      "name": "fecha",
+      "type": "datetime"
+    },
+    {
+      "name": "temperatura",
+      "type": "float"
+    },
+    {
+      "name": "temperatura_max",
+      "type": "float"
+    },
+    {
+      "name": "temperatura_min",
+      "type": "float"
+    },
+    {
+      "name": "humedad",
+      "type": "float"
+    },
+    {
+      "name": "lluvia",
+      "type": "float"
+    },
+    {
+      "name": "radiacion",
+      "type": "float"
+    },
+    {
+      "name": "evapotranspiracion",
+      "type": "float"
+    },
+    {
+      "name": "fila_excel",
+      "type": "integer"
+    },
+    {
+      "name": "finca",
+      "type": "text"
+    },
+    {
+      "name": "hora_original",
+      "type": "text"
+    },
+    {
+      "name": "hora_con_zona",
+      "type": "boolean"
+    },
+    {
+      "name": "instante",
+      "type": "datetime"
+    },
+    {
+      "name": "archivo_origen",
+      "type": "text"
+    },
+    {
+      "name": "hoja_origen",
+      "type": "text"
+    },
+    {
+      "name": "edicion_anio",
+      "type": "integer"
+    },
+    {
+      "name": "codigo_fuente",
+      "type": "text"
+    },
+    {
+      "name": "llave_medicion_valida",
+      "type": "boolean"
+    },
+    {
+      "name": "conflicto_entre_ediciones",
+      "type": "boolean"
+    },
+    {
+      "name": "registros_fuente",
+      "type": "integer"
+    },
+    {
+      "name": "medicion_valida",
+      "type": "boolean"
+    },
+    {
+      "name": "semana_inicio",
+      "type": "datetime"
+    }
+  ],
+  "planos_siembra_limpio": [
+    {
+      "name": "finca",
+      "type": "text"
+    },
+    {
+      "name": "invernadero",
+      "type": "text"
+    },
+    {
+      "name": "cama",
+      "type": "text"
+    },
+    {
+      "name": "producto",
+      "type": "text"
+    },
+    {
+      "name": "color",
+      "type": "text"
+    },
+    {
+      "name": "variedad",
+      "type": "text"
+    },
+    {
+      "name": "plantas",
+      "type": "float"
+    },
+    {
+      "name": "area",
+      "type": "float"
+    },
+    {
+      "name": "fecha_siembra",
+      "type": "datetime"
+    },
+    {
+      "name": "semana_siembra_fuente",
+      "type": "float"
+    },
+    {
+      "name": "anio_siembra_fuente",
+      "type": "float"
+    },
+    {
+      "name": "edad_reportada",
+      "type": "float"
+    },
+    {
+      "name": "curva_fuente",
+      "type": "text"
+    },
+    {
+      "name": "codigo_siembra",
+      "type": "text"
+    },
+    {
+      "name": "estado",
+      "type": "text"
+    },
+    {
+      "name": "sustrato",
+      "type": "text"
+    },
+    {
+      "name": "densidad",
+      "type": "float"
+    },
+    {
+      "name": "fila_excel",
+      "type": "integer"
+    },
+    {
+      "name": "semana_inicio",
+      "type": "datetime"
+    },
+    {
+      "name": "anio_plano_fuente",
+      "type": "integer"
+    },
+    {
+      "name": "semana_plano_fuente",
+      "type": "integer"
+    },
+    {
+      "name": "edicion_elegida",
+      "type": "boolean"
+    },
+    {
+      "name": "edad_calculada",
+      "type": "float"
+    },
+    {
+      "name": "edad_inconsistente",
+      "type": "boolean"
+    },
+    {
+      "name": "archivo_origen",
+      "type": "text"
+    },
+    {
+      "name": "hoja_origen",
+      "type": "text"
+    },
+    {
+      "name": "segmento_ambiguo",
+      "type": "boolean"
+    },
+    {
+      "name": "fila_utilizable",
+      "type": "boolean"
+    },
+    {
+      "name": "fecha_referencia_edad",
+      "type": "datetime"
+    },
+    {
+      "name": "formula_edad_reconocida",
+      "type": "boolean"
+    },
+    {
+      "name": "edad_diferente_al_lunes",
+      "type": "boolean"
+    },
+    {
+      "name": "edad_esperada_referencia",
+      "type": "float"
+    }
+  ],
+  "curvas_variedad_limpio": [
+    {
+      "name": "anio_corte_fuente",
+      "type": "float"
+    },
+    {
+      "name": "anio_siembra_fuente",
+      "type": "float"
+    },
+    {
+      "name": "bloque",
+      "type": "text"
+    },
+    {
+      "name": "cama",
+      "type": "text"
+    },
+    {
+      "name": "codigo_semana_corte",
+      "type": "float"
+    },
+    {
+      "name": "color_piloto",
+      "type": "text"
+    },
+    {
+      "name": "edad_semanas",
+      "type": "float"
+    },
+    {
+      "name": "fecha_siembra",
+      "type": "datetime"
+    },
+    {
+      "name": "flores_por_planta",
+      "type": "float"
+    },
+    {
+      "name": "producto",
+      "type": "text"
+    },
+    {
+      "name": "referencia",
+      "type": "text"
+    },
+    {
+      "name": "semana_siembra_fuente",
+      "type": "float"
+    },
+    {
+      "name": "tallos_piloto",
+      "type": "float"
+    },
+    {
+      "name": "variedad",
+      "type": "text"
+    },
+    {
+      "name": "fila_excel",
+      "type": "integer"
+    },
+    {
+      "name": "semana_corte_fuente",
+      "type": "float"
+    },
+    {
+      "name": "semana_inicio",
+      "type": "datetime"
+    },
+    {
+      "name": "precision_siembra",
+      "type": "text"
+    },
+    {
+      "name": "plantas_piloto",
+      "type": "float"
+    },
+    {
+      "name": "rendimiento_recalculado",
+      "type": "float"
+    },
+    {
+      "name": "familia_archivo",
+      "type": "text"
+    },
+    {
+      "name": "edicion_anio",
+      "type": "integer"
+    },
+    {
+      "name": "archivo_origen",
+      "type": "text"
+    },
+    {
+      "name": "hoja_origen",
+      "type": "text"
+    },
+    {
+      "name": "primera_edicion",
+      "type": "integer"
+    },
+    {
+      "name": "repeticiones_fuente",
+      "type": "integer"
+    },
+    {
+      "name": "conflicto_primera_edicion",
+      "type": "boolean"
+    },
+    {
+      "name": "observacion_valida",
+      "type": "boolean"
+    },
+    {
+      "name": "disponible_supuesto",
+      "type": "datetime"
+    },
+    {
+      "name": "disponibilidad_confirmada",
+      "type": "boolean"
+    }
+  ],
+  "estimados_semanales_limpio": [
+    {
+      "name": "finca",
+      "type": "text"
+    },
+    {
+      "name": "producto",
+      "type": "text"
+    },
+    {
+      "name": "color",
+      "type": "text"
+    },
+    {
+      "name": "variedad",
+      "type": "text"
+    },
+    {
+      "name": "semana_inicio",
+      "type": "datetime"
+    },
+    {
+      "name": "origen_nominal",
+      "type": "datetime"
+    },
+    {
+      "name": "horizonte_nominal",
+      "type": "integer"
+    },
+    {
+      "name": "estimado",
+      "type": "float"
+    },
+    {
+      "name": "anio_objetivo_fuente",
+      "type": "integer"
+    },
+    {
+      "name": "semana_objetivo_fuente",
+      "type": "integer"
+    },
+    {
+      "name": "archivo_origen",
+      "type": "text"
+    },
+    {
+      "name": "fila_cache",
+      "type": "integer"
+    },
+    {
+      "name": "es_ajustado",
+      "type": "boolean"
+    },
+    {
+      "name": "marca_envio",
+      "type": "boolean"
+    },
+    {
+      "name": "fecha_generacion_confirmada",
+      "type": "boolean"
+    },
+    {
+      "name": "unidad",
+      "type": "text"
+    },
+    {
+      "name": "cache_origen",
+      "type": "text"
+    },
+    {
+      "name": "refresco_cache_excel",
+      "type": "float"
+    },
+    {
+      "name": "SUPERVISOR",
+      "type": "text"
+    },
+    {
+      "name": "CODFINCA",
+      "type": "text"
+    },
+    {
+      "name": "llave_comercial_repetida",
+      "type": "boolean"
+    },
+    {
+      "name": "en_h1_h5",
+      "type": "boolean"
+    },
+    {
+      "name": "horizonte",
+      "type": "integer"
+    },
+    {
+      "name": "anio_solicitado",
+      "type": "integer"
+    },
+    {
+      "name": "semana_solicitada",
+      "type": "integer"
+    },
+    {
+      "name": "anio_archivo",
+      "type": "integer"
+    },
+    {
+      "name": "semana_archivo",
+      "type": "integer"
+    },
+    {
+      "name": "archivo_es_posterior",
+      "type": "boolean"
+    },
+    {
+      "name": "diferencia_semanas_archivo",
+      "type": "integer"
+    },
+    {
+      "name": "origen_solicitado",
+      "type": "datetime"
+    },
+    {
+      "name": "disponible_al_origen_confirmado",
+      "type": "boolean"
+    },
+    {
+      "name": "archivo_h1_exacto",
+      "type": "boolean"
+    }
+  ]
+}

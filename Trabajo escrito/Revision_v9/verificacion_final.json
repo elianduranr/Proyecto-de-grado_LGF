@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "paginas_pdf": 36,
+  "limite_paginas": 50,
+  "tablas": 20,
+  "figuras": 6,
+  "filas_metricas_recalculadas": 72,
+  "columnas_diccionario": 47,
+  "referencias_cruzadas_word": 22,
+  "separacion_temporal": true,
+  "version_v8_original_y_copia_conservadas": true,
+  "texto_fuera_de_pagina": 0,
+  "paginas_vacias": 0,
+  "sin_entrenar_ni_cambiar_modelos": true,
+  "tablas_word_coinciden_con_fuentes": true,
+  "entregables_sha256": {
+    "md": "e0616174acab01581389bdd02933b28204735101e4b6d68e7d718b6d785f5bad",
+    "docx": "ee307238c16b47562d5ca0e516f5a03ad29c262d1d1d07b47b621224caa7af90",
+    "pdf": "c70667bb296e4acdbf9b762079c8f887fde361b1193aa8f864fc397445725423"
+  }
+}

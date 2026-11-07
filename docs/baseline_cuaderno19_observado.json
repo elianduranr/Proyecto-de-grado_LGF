@@ -1,0 +1,722 @@
+{
+  "date": "2026-10-23",
+  "status": "observed_existing_outputs_not_retrained",
+  "selection": [
+    "Sin_clima"
+  ],
+  "rows_all_comparisons": 19174,
+  "rows_strict": 16325,
+  "farms": [
+    "GAITANA"
+  ],
+  "origin_range": [
+    "2026-01-05 00:00:00",
+    "2026-08-31 00:00:00"
+  ],
+  "target_range": [
+    "2026-01-05 00:00:00",
+    "2026-08-31 00:00:00"
+  ],
+  "metrics": {
+    "1.0": {
+      "Seleccion_pre2026": {
+        "cases": 3512,
+        "WAPE_pct": 15.526460498332472,
+        "bias_pct": -1.341095304520744,
+        "bias_stems": -597774.4432449053
+      },
+      "ingeniero": {
+        "cases": 3512,
+        "WAPE_pct": 16.933090819074312,
+        "bias_pct": -7.540741774071239,
+        "bias_stems": -3361180.0
+      }
+    },
+    "2.0": {
+      "Seleccion_pre2026": {
+        "cases": 3388,
+        "WAPE_pct": 17.49322864479885,
+        "bias_pct": -2.0099391988647723,
+        "bias_stems": -871296.0805878858
+      },
+      "ingeniero": {
+        "cases": 3388,
+        "WAPE_pct": 19.16333741835955,
+        "bias_pct": -7.965893395233495,
+        "bias_stems": -3453165.0
+      }
+    },
+    "3.0": {
+      "Seleccion_pre2026": {
+        "cases": 3264,
+        "WAPE_pct": 20.327629192953655,
+        "bias_pct": -2.458070347977901,
+        "bias_stems": -1028087.1118785423
+      },
+      "ingeniero": {
+        "cases": 3264,
+        "WAPE_pct": 20.255846226967734,
+        "bias_pct": -9.378147267874713,
+        "bias_stems": -3922407.0
+      }
+    },
+    "4.0": {
+      "Seleccion_pre2026": {
+        "cases": 3141,
+        "WAPE_pct": 21.78206611975942,
+        "bias_pct": -3.1811744684658136,
+        "bias_stems": -1295801.5389138837
+      },
+      "ingeniero": {
+        "cases": 3141,
+        "WAPE_pct": 20.972610410043522,
+        "bias_pct": -11.5215481965772,
+        "bias_stems": -4693122.0
+      }
+    },
+    "5.0": {
+      "Seleccion_pre2026": {
+        "cases": 3020,
+        "WAPE_pct": 22.20286636106749,
+        "bias_pct": -2.9683354643601505,
+        "bias_stems": -1167264.5275856552
+      },
+      "ingeniero": {
+        "cases": 3020,
+        "WAPE_pct": 21.597029794240775,
+        "bias_pct": -13.08722754306385,
+        "bias_stems": -5146405.0
+      }
+    },
+    "total": {
+      "Seleccion_pre2026": {
+        "cases": 16325,
+        "WAPE_pct": 19.355827664247506,
+        "bias_pct": -2.364203826879904,
+        "bias_stems": -4960223.702210873
+      },
+      "ingeniero": {
+        "cases": 16325,
+        "WAPE_pct": 19.714725629742112,
+        "bias_pct": -9.807323313475933,
+        "bias_stems": -20576279.0
+      }
+    }
+  },
+  "environment": {
+    "python": "3.14.5 (tags/v3.14.5:5607950, May 10 2026, 10:43:50) [MSC v.1944 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "packages": {
+      "numpy": "2.5.2",
+      "pandas": "3.0.5",
+      "scipy": "1.18.1",
+      "scikit-learn": "1.9.0",
+      "threadpoolctl": "3.6.0",
+      "pyarrow": "25.0.1",
+      "openpyxl": "3.1.5",
+      "matplotlib": "3.11.1",
+      "nbformat": "5.11.1",
+      "nbclient": "0.11.0",
+      "pyodbc": "5.3.0"
+    }
+  },
+  "files": {
+    "Notebooks/Analisis/19_modelos_clima_y_curvas_gaitana.ipynb": {
+      "exists": true,
+      "bytes": 259478,
+      "sha256": "ab1646d041c111656e75f67540c505700f24e42c56dec495b65a016aadac04dc"
+    },
+    "Notebooks/Analisis/10_base_analitica_proyecciones.ipynb": {
+      "exists": true,
+      "bytes": 67668,
+      "sha256": "15ceaaa54f59f1e3f2e10fca68852cb2e595169b67c18a306072a33d0f8ef700"
+    },
+    "Notebooks/Modelo_de_series_diario/01_base_diaria_EDA.ipynb": {
+      "exists": true,
+      "bytes": 345391,
+      "sha256": "4867d113e4ebf5a867e1d68f324e9a02be3b6bd9bec301ab04c8164f00163749"
+    },
+    "Notebooks/Limpieza data, Notebooks y Scripts/03_limpieza_estimados_semanales.ipynb": {
+      "exists": true,
+      "bytes": 79447,
+      "sha256": "4f947142054a4553c952aa7c08faf3ad06ee4736f2a0eb3c84a99d9c83388b26"
+    },
+    "Datos_analiticos_proyecto/produccion_real_limpio.parquet": {
+      "exists": true,
+      "bytes": 98600607,
+      "sha256": "9dc1444366464a47d3681c25f01a1fc75a67a591cc9228b7b56c6bff5b735a3b",
+      "rows": 6389201,
+      "columns": [
+        "finca",
+        "invernadero",
+        "fecha_corte",
+        "anio_fuente",
+        "semana_fuente",
+        "tipo_corte",
+        "producto",
+        "grado",
+        "color",
+        "variedad",
+        "tallos",
+        "lote",
+        "estado_inventario",
+        "hora_corte",
+        "tipo_inventario",
+        "fila_excel",
+        "semana_inicio",
+        "archivo_origen",
+        "hoja_origen",
+        "llave_completa",
+        "tipo_corte_original",
+        "tipo_corte_imputado",
+        "lote_original",
+        "hora_corte_original"
+      ]
+    },
+    "Datos_analiticos_proyecto/estimados_semanales_limpio.parquet": {
+      "exists": true,
+      "bytes": 633584,
+      "sha256": "731cdcd1a7ac5eb8d60e1ac70536dffee2df8a426817d496f302cf3c551822e0",
+      "rows": 176140,
+      "columns": [
+        "finca",
+        "producto",
+        "color",
+        "variedad",
+        "semana_inicio",
+        "origen_nominal",
+        "horizonte_nominal",
+        "estimado",
+        "anio_objetivo_fuente",
+        "semana_objetivo_fuente",
+        "archivo_origen",
+        "fila_cache",
+        "es_ajustado",
+        "marca_envio",
+        "fecha_generacion_confirmada",
+        "unidad",
+        "cache_origen",
+        "refresco_cache_excel",
+        "SUPERVISOR",
+        "CODFINCA",
+        "llave_comercial_repetida",
+        "en_h1_h5",
+        "horizonte",
+        "anio_solicitado",
+        "semana_solicitada",
+        "anio_archivo",
+        "semana_archivo",
+        "archivo_es_posterior",
+        "diferencia_semanas_archivo",
+        "origen_solicitado",
+        "disponible_al_origen_confirmado",
+        "archivo_h1_exacto"
+      ]
+    },
+    "Datos_analiticos_proyecto/clima_limpio.parquet": {
+      "exists": true,
+      "bytes": 3246576,
+      "sha256": "cf6b1435764ba324084508be03153b2920024026f489cf70e74fca0f9fa03e04",
+      "rows": 191572,
+      "columns": [
+        "fecha",
+        "temperatura",
+        "temperatura_max",
+        "temperatura_min",
+        "humedad",
+        "lluvia",
+        "radiacion",
+        "evapotranspiracion",
+        "fila_excel",
+        "finca",
+        "hora_original",
+        "hora_con_zona",
+        "instante",
+        "archivo_origen",
+        "hoja_origen",
+        "edicion_anio",
+        "codigo_fuente",
+        "llave_medicion_valida",
+        "conflicto_entre_ediciones",
+        "registros_fuente",
+        "medicion_valida",
+        "semana_inicio"
+      ]
+    },
+    "Datos_analiticos_proyecto/modelo_con_proyecciones_teoricas/base_analitica_proyecciones.parquet": {
+      "exists": true,
+      "bytes": 10934918,
+      "sha256": "a74b7b7a2efce30207d6a92f094b79da3927b0ee245e2d9c379dd863ad5dfafc",
+      "rows": 621195,
+      "columns": [
+        "finca",
+        "producto",
+        "color",
+        "variedad",
+        "origen",
+        "produccion_lag1",
+        "produccion_lag2",
+        "produccion_lag3",
+        "media_4",
+        "media_8",
+        "desv_4",
+        "tendencia_4_8",
+        "cambio_reciente",
+        "observaciones_previas",
+        "temperatura_semana_lag1",
+        "temperatura_semana_media4",
+        "humedad_semana_lag1",
+        "humedad_semana_media4",
+        "radiacion_semana_lag1",
+        "radiacion_semana_media4",
+        "horizonte",
+        "semana_objetivo",
+        "ultima_semana_utilizada",
+        "y",
+        "fecha_estacional",
+        "produccion_52",
+        "semana_seno",
+        "semana_coseno",
+        "union_finca",
+        "union_producto",
+        "union_color",
+        "union_variedad",
+        "plano",
+        "fecha_plano",
+        "disponible",
+        "teoria",
+        "sin_cobertura",
+        "cohortes",
+        "teoria_previa_1",
+        "teoria_previa_2",
+        "revision_teoria",
+        "curva_completa",
+        "antiguedad_curva",
+        "teoria_modelo",
+        "desviacion_reciente_teoria",
+        "admisible_modelo",
+        "motivo_cobertura"
+      ]
+    },
+    "Datos_analiticos_proyecto/modelo_con_proyecciones_teoricas/produccion_clima_semanal.parquet": {
+      "exists": true,
+      "bytes": 364466,
+      "sha256": "0d78d6b881de6df7c845fcf38dc6418d0efef037b301a0d5ea07111c3d36f578",
+      "rows": 44053,
+      "columns": [
+        "finca",
+        "producto",
+        "color",
+        "variedad",
+        "semana_inicio",
+        "tallos_reales",
+        "registros_corte",
+        "dias_con_reporte",
+        "unidad",
+        "produccion_observada",
+        "anio",
+        "semana",
+        "temperatura_semana",
+        "humedad_semana",
+        "radiacion_semana",
+        "temperatura_min_semana",
+        "temperatura_max_semana",
+        "dias_clima",
+        "mediciones_clima",
+        "horario_clima_por_validar"
+      ]
+    },
+    "Datos_analiticos_proyecto/modelo_con_proyecciones_teoricas/modelo_con_proyecciones_teoricas/comparacion_ingeniero_modelo_2026.parquet": {
+      "exists": false
+    },
+    "Datos_analiticos_proyecto/modelo_con_proyecciones_teoricas/comparacion_ingeniero_modelo_2026.parquet": {
+      "exists": true,
+      "bytes": 410827,
+      "sha256": "8005876ca1e81158f4429ab10e1f6573679a85df8ccf160d238851de09b585f2",
+      "rows": 19174,
+      "columns": [
+        "finca",
+        "producto",
+        "color",
+        "variedad",
+        "origen",
+        "semana_objetivo",
+        "horizonte",
+        "y",
+        "modelo",
+        "ruta",
+        "teoria_modelo",
+        "corte_entrenamiento",
+        "ingeniero",
+        "lineas",
+        "cantidades",
+        "archivo",
+        "posterior",
+        "origen_archivo",
+        "completo",
+        "id_estimado",
+        "metodo_union",
+        "color_ingeniero",
+        "grupo_comparacion"
+      ]
+    },
+    "Datos_analiticos_proyecto/modelo_diario/features_diarias.parquet": {
+      "exists": true,
+      "bytes": 30615424,
+      "sha256": "fad052e9640761958eb5b0228e4ef2527c2965fe44e05e23f2832ce1bf76d4fe",
+      "rows": 1374399,
+      "columns": [
+        "finca",
+        "producto",
+        "color",
+        "variedad",
+        "fecha",
+        "corte_media_3d",
+        "corte_suma_3d",
+        "corte_dias_3d",
+        "corte_media_5d",
+        "corte_suma_5d",
+        "corte_dias_5d",
+        "corte_media_7d",
+        "corte_suma_7d",
+        "corte_dias_7d",
+        "corte_media_14d",
+        "corte_suma_14d",
+        "corte_dias_14d",
+        "corte_std_7d",
+        "corte_lag1d",
+        "corte_lag7d",
+        "corte_ema_5d",
+        "corte_tendencia_3d",
+        "corte_tendencia_5d",
+        "dias_desde_corte",
+        "temperatura_media_3d",
+        "temperatura_media_5d",
+        "temperatura_media_7d",
+        "humedad_media_3d",
+        "humedad_media_5d",
+        "humedad_media_7d",
+        "radiacion_media_3d",
+        "radiacion_media_5d",
+        "radiacion_media_7d"
+      ]
+    },
+    "Datos_analiticos_proyecto/revision_clima_finca/features_clima_ampliado.parquet": {
+      "exists": true,
+      "bytes": 147396,
+      "sha256": "4dabc53056daa957477286bcd566f76a405f2cf034575fade607170ce821c553",
+      "rows": 2090,
+      "columns": [
+        "origen",
+        "temperatura_media14_clima",
+        "temperatura_cambio7_28_clima",
+        "humedad_media14_clima",
+        "humedad_cambio7_28_clima",
+        "radiacion_media14_clima",
+        "radiacion_cambio7_28_clima",
+        "lluvia_suma7_clima",
+        "lluvia_suma28_clima",
+        "lluvia_dias7_clima",
+        "cobertura_dias7_clima",
+        "cobertura_dias28_clima",
+        "finca"
+      ]
+    },
+    "Datos_analiticos_proyecto/revision_clima_finca/proyecciones_gaitana_inferida.parquet": {
+      "exists": true,
+      "bytes": 3217506,
+      "sha256": "8873d656199f59d965b42f7ba760cf1107a26b3173f770a6698252ee60fbc351",
+      "rows": 597260,
+      "columns": [
+        "plano",
+        "semana_proyeccion",
+        "union_finca",
+        "union_producto",
+        "union_color",
+        "union_variedad",
+        "teoria_local",
+        "sin_cobertura_local",
+        "cohortes_local"
+      ]
+    },
+    "Datos_analiticos_proyecto/revision_clima_finca/comparacion_clima_curvas_2026.parquet": {
+      "exists": true,
+      "bytes": 1196152,
+      "sha256": "8bff785198c1235530832d19f54c8b91a85131ecc1cfafe115600546597a887b",
+      "rows": 19174,
+      "columns": [
+        "finca",
+        "producto",
+        "color",
+        "variedad",
+        "origen",
+        "semana_objetivo",
+        "horizonte",
+        "y",
+        "curva_completa",
+        "curva_local_completa",
+        "teoria_modelo",
+        "teoria_local",
+        "Sin_clima",
+        "Clima_basico",
+        "Clima_ampliado",
+        "Curva_Gaitana_clima",
+        "Seleccion_pre2026",
+        "modelo_seleccionado",
+        "corte",
+        "Antes_actualizar_clima",
+        "grupo_comparacion",
+        "ingeniero"
+      ]
+    },
+    "Datos_analiticos_proyecto/revision_clima_finca/validacion_clima_pre2026.parquet": {
+      "exists": true,
+      "bytes": 119586,
+      "sha256": "c851a8b3c9c083be347feb1dbb66d078faa5f96bdb501787eb2f8d86162e3a9d",
+      "rows": 3548,
+      "columns": [
+        "finca",
+        "producto",
+        "color",
+        "variedad",
+        "origen",
+        "semana_objetivo",
+        "horizonte",
+        "y",
+        "Sin_clima",
+        "Clima_basico",
+        "Clima_ampliado",
+        "Curva_Gaitana_clima"
+      ]
+    },
+    "Datos_analiticos_proyecto/revision_clima_finca/train_test_clima_por_corte.parquet": {
+      "exists": true,
+      "bytes": 14759,
+      "sha256": "2b3145c56a033023ae24573053602820731bf07447a474da0f866a630bc082e2",
+      "rows": 112,
+      "columns": [
+        "fase",
+        "corte",
+        "modelo",
+        "split",
+        "origen_min",
+        "origen_max",
+        "objetivo_max",
+        "casos_teoria_completa",
+        "n",
+        "MAE",
+        "RMSE",
+        "WAPE",
+        "sesgo",
+        "sesgo_pct"
+      ]
+    },
+    "Datos_analiticos_proyecto/modelo_con_proyecciones_teoricas/experimentos_horizontes_2026.parquet": {
+      "exists": true,
+      "bytes": 1614054,
+      "sha256": "866a1f91a8cb1abe0b8d2809d0ceb57629c7cf7ec152cc81c69c931e96c2ce43",
+      "rows": 19174,
+      "columns": [
+        "finca",
+        "producto",
+        "color",
+        "variedad",
+        "origen",
+        "semana_objetivo",
+        "horizonte",
+        "y",
+        "Sistema_anterior",
+        "ruta",
+        "teoria_modelo",
+        "corte_entrenamiento",
+        "ingeniero",
+        "lineas",
+        "cantidades",
+        "archivo",
+        "posterior",
+        "origen_archivo",
+        "completo",
+        "id_estimado",
+        "metodo_union",
+        "color_ingeniero",
+        "grupo_comparacion",
+        "Sistema_diario",
+        "Ajuste_relativo_diario",
+        "ruta_diaria",
+        "corte_diario",
+        "Boosting_diario_MAE",
+        "grupo_h",
+        "curva_completa",
+        "Separado",
+        "Memoria_larga",
+        "Revisiones",
+        "Combinacion",
+        "corte_entrenamiento_nuevo",
+        "Antes_calidad"
+      ]
+    },
+    "Datos_analiticos_proyecto/revision_clima_finca/predicciones_antes_clima.parquet": {
+      "exists": true,
+      "bytes": 1612956,
+      "sha256": "791590a6378f77c867b73183babd2f80c1f231147db4e6fade4c51b28fe52034",
+      "rows": 19174,
+      "columns": [
+        "finca",
+        "producto",
+        "color",
+        "variedad",
+        "origen",
+        "semana_objetivo",
+        "horizonte",
+        "y",
+        "Sistema_anterior",
+        "ruta",
+        "teoria_modelo",
+        "corte_entrenamiento",
+        "ingeniero",
+        "lineas",
+        "cantidades",
+        "archivo",
+        "posterior",
+        "origen_archivo",
+        "completo",
+        "id_estimado",
+        "metodo_union",
+        "color_ingeniero",
+        "grupo_comparacion",
+        "Sistema_diario",
+        "Ajuste_relativo_diario",
+        "ruta_diaria",
+        "corte_diario",
+        "Boosting_diario_MAE",
+        "grupo_h",
+        "curva_completa",
+        "Separado",
+        "Memoria_larga",
+        "Revisiones",
+        "Combinacion",
+        "corte_entrenamiento_nuevo",
+        "Antes_calidad"
+      ]
+    },
+    "Notebooks/Limpieza data, Notebooks y Scripts/01_limpieza_curvas_variedad.ipynb": {
+      "exists": true,
+      "bytes": 72320,
+      "sha256": "70f90885791da443e5b72e79d7444004740cc66b0e966cb16a0577ac850a8abd"
+    },
+    "Notebooks/Limpieza data, Notebooks y Scripts/02_limpieza_clima.ipynb": {
+      "exists": true,
+      "bytes": 50007,
+      "sha256": "4222e0e32e6ec367efdc7db3dfc0fa4d9a0ae7f166a732f2a041fde880e593bd"
+    },
+    "Notebooks/Limpieza data, Notebooks y Scripts/04_limpieza_planos_siembra.ipynb": {
+      "exists": true,
+      "bytes": 66629,
+      "sha256": "f084f33831dcf9dab8d609f0590a07142dc8ee04df05c0e4e0c75adeb23976ab"
+    },
+    "Notebooks/Limpieza data, Notebooks y Scripts/05_limpieza_produccion_real.ipynb": {
+      "exists": true,
+      "bytes": 56962,
+      "sha256": "62a5e63bed97ae7338878c71e4fd77a74480751138bcd0d508a3552573da4011"
+    },
+    "Notebooks/Proyecciones Teoricas Propias/00_catalogo_variedades.ipynb": {
+      "exists": true,
+      "bytes": 24875,
+      "sha256": "b9ce022d379d6c231d42422ef8685db3f8170cc1a7b71966a21a5b49174e9d3c"
+    },
+    "Notebooks/Proyecciones Teoricas Propias/01_procedencia_pilotos_y_curvas_gaitana.ipynb": {
+      "exists": true,
+      "bytes": 20190,
+      "sha256": "0125645d3b93c1e634b5eaf6784996edaab9066515f10d6436fb76cfca9d4d9a"
+    },
+    "Notebooks/Proyecciones Teoricas Propias/02_EDA_edades_sin_cobertura.ipynb": {
+      "exists": true,
+      "bytes": 104974,
+      "sha256": "3b4b4bdc9904f0dac7d10057d56272ca6b1b3881b82bce8612e17e5ca9071e6f"
+    },
+    "Notebooks/Proyecciones Teoricas Propias/Auditoria_calidad_curvas.ipynb": {
+      "exists": true,
+      "bytes": 180961,
+      "sha256": "45d0c4d15e21e4f0dd8578f3d99962df420dcd4059adb9bc1fd94ee77d23ba86"
+    },
+    "Notebooks/Proyecciones Teoricas Propias/Proyecciones_teoricas.ipynb": {
+      "exists": true,
+      "bytes": 3368672,
+      "sha256": "1baf2a20a998e8edbb8b4a8f82aec0e8837d33e799d681b9e1cc8004856db14b"
+    },
+    "Notebooks/Proyecciones Teoricas Propias/Proyecciones_teoricas_todos_los_anios.ipynb": {
+      "exists": true,
+      "bytes": 865089,
+      "sha256": "6846f47565755ee0cb8c3342316c8f38d1d864a41a9bcbcb4c1123c46c7e2103"
+    },
+    "Notebooks/Analisis/13_comparacion_ingeniero_modelo_2026.ipynb": {
+      "exists": true,
+      "bytes": 254256,
+      "sha256": "036b646508fe940d9b0efa04e4c41d4b1ee9c18e1e6e8511e3fd59ff5fdc9dd4"
+    },
+    "Notebooks/Proyecciones Teoricas Propias/resultados_todos_los_anios/proyecciones_semanales_modelo.parquet": {
+      "exists": true,
+      "bytes": 4055844,
+      "sha256": "7de8196c1f00913bf715b19160f3180bfa1a7188605f7a1b68ebcabf9169ccb4"
+    },
+    "Notebooks/Extracción SQL/Datos/01_maestros_y_geografia/Catalogo_analitico/colores.parquet": {
+      "exists": true,
+      "bytes": 2531,
+      "sha256": "e78c23ffa317ba7d152a0b75b285d91f73e68686509afb6698bb307dfeddbabf"
+    },
+    "Notebooks/Extracción SQL/Datos/01_maestros_y_geografia/Catalogo_analitico/identidades_comerciales.parquet": {
+      "exists": true,
+      "bytes": 93683,
+      "sha256": "d35fe2eb1759676c9178f1adacaded2f1a0fa40f02d9649db3bfb01e58ae9d90"
+    },
+    "Notebooks/Extracción SQL/Datos/01_maestros_y_geografia/Catalogo_analitico/maestro_variedades_integrado.parquet": {
+      "exists": true,
+      "bytes": 92705,
+      "sha256": "a37ca16efd6c433908e99824f7c797e149a4ef84c237fe2594029d31b4b27a4c"
+    },
+    "Notebooks/Extracción SQL/Datos/01_maestros_y_geografia/Catalogo_analitico/productos.parquet": {
+      "exists": true,
+      "bytes": 4092,
+      "sha256": "3ee4c0367e5400d5f2707539de6ffefeb3f3a79f1b49c2d28848bb20978b9a64"
+    },
+    "Notebooks/Extracción SQL/Datos/01_maestros_y_geografia/Catalogo_analitico/equivalencias.json": {
+      "exists": true,
+      "bytes": 577,
+      "sha256": "a7e3df5c36974bce43ae691620e213e141f7db2872151186346803e2f073c4a1"
+    }
+  },
+  "status_description": "Inventario observado; entrenamiento no reproducido, modelo no exportado y conexión SQL no verificada.",
+  "model": {
+    "notebook": "Notebooks/Analisis/19_modelos_clima_y_curvas_gaitana.ipynb",
+    "variant": "Sin_clima",
+    "algorithm": "HistGradientBoostingRegressor",
+    "groups": [
+      "H1_H2",
+      "H3_H5"
+    ],
+    "residual_targets": [
+      "y-media_4",
+      "y-teoria_modelo"
+    ],
+    "hyperparameters": {
+      "learning_rate": 0.08,
+      "max_iter": 80,
+      "max_leaf_nodes": 15,
+      "min_samples_leaf": 40,
+      "l2_regularization": 1.0,
+      "early_stopping": false,
+      "random_state": 42
+    },
+    "theory_min_training_cases": 40,
+    "clipping_minimum": 0,
+    "engineer_is_predictor": false,
+    "scope": [
+      "GAITANA"
+    ]
+  },
+  "known_issues": [
+    "Ruta de actual en cuaderno 19 duplica modelo_con_proyecciones_teoricas; el destino duplicado no existe.",
+    "Entorno registrado es el observado actualmente; no prueba del entorno original de las salidas guardadas.",
+    "La plantilla Excel final, disponibilidad temporal operativa y conectividad a proyectos aún requieren validación."
+  ]
+}

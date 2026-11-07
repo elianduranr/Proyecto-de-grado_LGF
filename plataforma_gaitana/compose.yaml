@@ -1,0 +1,42 @@
+name: gaitana-produccion
+x-backend: &backend
+  build:
+    context: .
+    dockerfile: deploy/Dockerfile.backend
+  env_file: .env
+  environment:
+    LEGACY_ROOT: /legacy
+    STORAGE_PATH: /storage
+    DATABASE_URL: sqlite:////storage/prototipo.db
+  volumes:
+    - ../Datos_analiticos_proyecto:/legacy/Datos_analiticos_proyecto:ro
+    - ../Notebooks:/legacy/Notebooks:ro
+    - ../Datos:/legacy/Datos:ro
+    - gaitana_storage:/storage
+services:
+  api:
+    <<: *backend
+    ports:
+      - '127.0.0.1:8000:8000'
+    healthcheck:
+      test: ['CMD','python','-c','import urllib.request; urllib.request.urlopen("http://localhost:8000/api/health")']
+      interval: 10s
+      timeout: 5s
+      retries: 12
+  worker:
+    <<: *backend
+    command: ['python','-m','app.worker']
+    depends_on:
+      api:
+        condition: service_healthy
+  web:
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile.frontend
+    ports:
+      - '127.0.0.1:5173:80'
+    depends_on:
+      api:
+        condition: service_healthy
+volumes:
+  gaitana_storage:

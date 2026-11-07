@@ -1,0 +1,1342 @@
+{
+  "glosario": {
+    "caption": "Términos operativos utilizados en el estudio",
+    "headers": [
+      "Término",
+      "Significado en este trabajo"
+    ],
+    "rows": [
+      [
+        "Cama",
+        "Unidad física de cultivo identificada dentro de un invernadero."
+      ],
+      [
+        "Cama piloto",
+        "Cama o referencia seguida para registrar plantas, ciclo y cortes usados en estadísticas de rendimiento."
+      ],
+      [
+        "Ciclo de cultivo",
+        "Periodo de una siembra identificada, que permite distinguir usos sucesivos de una cama."
+      ],
+      [
+        "Plano de siembra",
+        "Registro de existencias, ubicación, plantas, variedad y siembra en una fecha de referencia."
+      ],
+      [
+        "Cohorte",
+        "Grupo de plantas con la misma identidad comercial y fecha de siembra dentro de un plano; puede reunir varias camas."
+      ],
+      [
+        "Corte y tallos cortados",
+        "Actividad de cosecha y cantidad de tallos que queda registrada; no identifica por sí sola su clasificación exportable."
+      ],
+      [
+        "Rendimiento",
+        "Cociente entre tallos de un corte piloto y plantas de la observación, expresado en tallos por planta."
+      ],
+      [
+        "Curva de rendimiento",
+        "Resumen empírico de rendimientos por variedad y edad semanal del cultivo."
+      ]
+    ],
+    "note": ""
+  },
+  "fuentes": {
+    "caption": "Dimensiones de las fuentes depuradas utilizadas",
+    "headers": [
+      "Fuente",
+      "Filas / variables",
+      "Periodo observado u objetivo",
+      "Nivel y características"
+    ],
+    "rows": [
+      [
+        "Producción reportada",
+        "6.550.639 / 24",
+        "2021-01-04 a 2026-10-27",
+        "Movimiento de corte. Finca, fecha, producto, color, variedad, grado, lote y tallos."
+      ],
+      [
+        "Planos de siembra",
+        "3.356.921 / 32",
+        "2021-01-04 a 2026-10-12",
+        "Fila de inventario por versión. Ubicación, identidad comercial, plantas, área, siembra y edad."
+      ],
+      [
+        "Estadísticas piloto consolidadas",
+        "562.987 / 30",
+        "2012-12-31 a 2026-09-21",
+        "Observación piloto–semana. Cama, ciclo, fechas, plantas, tallos y rendimiento; historia entre ediciones."
+      ],
+      [
+        "Clima",
+        "194.558 / 22",
+        "2021-01-01 a 2026-10-23",
+        "Medición de finca e instante. Temperatura, humedad, radiación y lluvia; frecuencia y validez auditadas."
+      ],
+      [
+        "Estimados del responsable",
+        "181.301 / 32",
+        "2023-01-02 a 2026-11-09",
+        "Serie–edición–semana objetivo. Cantidades estimadas, origen y horizonte nominal, procedencia y marcas de envío."
+      ]
+    ],
+    "note": "Los periodos son de contenido, no fechas de publicación. Las fuentes incluyen más de una finca; la inferencia principal se limita a GAITANA. Fuente: extracción verificada del 28/10/2026."
+  },
+  "estados": {
+    "caption": "Correspondencia de estadísticas con cama y ciclo en la edición 2026",
+    "headers": [
+      "Estado",
+      "Historia de la edición",
+      "Cortes fechados en 2026",
+      "Interpretación"
+    ],
+    "rows": [
+      [
+        "Única",
+        "523.336",
+        "46.085",
+        "Una sola cama y ciclo compatibles; su uso requiere superar los filtros restantes."
+      ],
+      [
+        "Ambigua",
+        "4.730",
+        "72",
+        "Más de una pareja compatible; no se elige una por conveniencia."
+      ],
+      [
+        "Conflicto_ciclo",
+        "3.383",
+        "0",
+        "Candidatos incompatibles con la siembra o ciclo informado."
+      ],
+      [
+        "Llave_incompleta",
+        "10.893",
+        "0",
+        "Faltan componentes para identificar la correspondencia."
+      ],
+      [
+        "Sin_pareja",
+        "1.026",
+        "0",
+        "No se encuentra una referencia compatible en el libro de pilotos."
+      ]
+    ],
+    "note": "Los denominadores son 543.368 y 46.157 filas, respectivamente. La edición incluye cortes de otros años. Fuente: auditoría de correspondencias de la extracción utilizada."
+  },
+  "variables": {
+    "caption": "Bloques de predictores y función en el modelo semanal",
+    "headers": [
+      "Bloque",
+      "Contenido y construcción",
+      "Configuración seleccionada"
+    ],
+    "rows": [
+      [
+        "Identidad y calendario",
+        "Producto, color y variedad; horizonte y seno/coseno de semana objetivo.",
+        "Ambas rutas; la finca principal está delimitada a GAITANA."
+      ],
+      [
+        "Memoria semanal (9)",
+        "Tres rezagos, Media4, media8, dispersión4, tendencia4−8, cambio reciente y producción a 364 días.",
+        "Ambas rutas."
+      ],
+      [
+        "Corte diario (19)",
+        "Media, suma y conteos en 3/5/7/14 días; dispersión7, rezagos1/7, media exponencial5, tendencias3/5 y días desde reporte.",
+        "Ambas rutas; excluye el día de origen."
+      ],
+      [
+        "Memoria larga (7)",
+        "Media12, dispersión8/12, conteos4/8/12 y tendencia4−12.",
+        "Ambas rutas."
+      ],
+      [
+        "Referencia teórica (3)",
+        "Teoría habilitada, antigüedad del plano y Media4 menos teoría.",
+        "Sólo ruta teórica."
+      ],
+      [
+        "Clima",
+        "Seis resúmenes semanales y nueve diarios; sensibilidad ampliada añade 14/28 días, lluvia y disponibilidad.",
+        "Contrastado; excluido del seleccionado."
+      ],
+      [
+        "Revisiones de teoría",
+        "Dos versiones anteriores para el mismo objetivo y su cambio.",
+        "Contrastadas; no entran al seleccionado."
+      ]
+    ],
+    "note": ""
+  },
+  "modelos": {
+    "caption": "Familias y variantes implementadas para el pronóstico semanal",
+    "headers": [
+      "Papel",
+      "Método",
+      "Decisión evaluada"
+    ],
+    "rows": [
+      [
+        "Referencias",
+        "Último valor, Media4, teoría sin ajuste",
+        "Medir el aporte frente a reglas simples."
+      ],
+      [
+        "Contraste lineal",
+        "Ridge sobre corrección teórica",
+        "Comparar una corrección lineal regularizada."
+      ],
+      [
+        "Modelo base de aprendizaje",
+        "Boosting sobre teoría o Media4",
+        "Aprender real menos referencia, en dos rutas."
+      ],
+      [
+        "Ablaciones",
+        "Boosting sin memoria o sin clima",
+        "Contrastar cada bloque sobre casos comunes."
+      ],
+      [
+        "Extensiones",
+        "Resúmenes diarios, memoria larga, revisiones teóricas",
+        "Examinar señales más recientes y distintas ventanas."
+      ],
+      [
+        "Sensibilidades",
+        "Corrección relativa, pérdida absoluta y combinación de referencias",
+        "Contrastar escala, pérdida y mezcla; no todos aíslan un único cambio."
+      ],
+      [
+        "Selección principal",
+        "Boosting sin clima, grupos H1–H2/H3–H5",
+        "Dos grupos con una ruta de teoría y otra de Media4 en cada uno."
+      ],
+      [
+        "Sensibilidad de fuentes",
+        "Clima básico, ampliado y curva atribuida a GAITANA",
+        "Mantener arquitectura para estudiar clima y procedencia."
+      ],
+      [
+        "Experimentos recientes",
+        "Un ajuste por horizonte; n−1; propios de producto–horizonte",
+        "Examinar especialización y combinación sin predictores del referente."
+      ]
+    ],
+    "note": ""
+  },
+  "parametros": {
+    "caption": "Configuraciones de los métodos de aprendizaje y pilotos",
+    "headers": [
+      "Método",
+      "Parámetros implementados",
+      "Alcance del ajuste"
+    ],
+    "rows": [
+      [
+        "Boosting semanal seleccionado",
+        "Tasa 0,08; 80 iteraciones; 15 hojas; mínimo 40 por hoja; L2 = 1; pérdida cuadrática; sin parada temprana; semilla 42.",
+        "Mismos valores en ambos grupos y rutas."
+      ],
+      [
+        "Ridge",
+        "Alpha = 100; mediana e indicador de faltante; estandarización numérica; categorías one-hot.",
+        "Contraste fijo; sin búsqueda exhaustiva de alpha."
+      ],
+      [
+        "Ajustes por horizonte",
+        "80 iteraciones en H1/H2/H5; 40 en H3/H4; 15 hojas; restantes parámetros del boosting principal.",
+        "Selección en noviembre de 2025."
+      ],
+      [
+        "Modelos de producto H3–H5",
+        "Miniclavel: 40 iteraciones; clavel: 80; 15 hojas y restantes valores principales.",
+        "Subconjuntos propios y pesos seleccionados en noviembre."
+      ],
+      [
+        "Combinación propia/general",
+        "Peso del modelo propio: 1 en H3 y H4; 0,75 en H5. Peso general: complemento a 1.",
+        "Sólo clavel/miniclavel. H1 conserva el agrupado y H2 el ajuste H2; otros productos usan el general de su horizonte."
+      ],
+      [
+        "Boosting diario autónomo",
+        "80 iteraciones; 15 hojas; tasa 0,08; mínimo 40; L2 = 1; semilla 42.",
+        "Corrección logarítmica; hasta 104 semanas previas; actualización mensual."
+      ],
+      [
+        "SARIMA / SARIMAX",
+        "(1,0,1)×(0,1,1,7); log(1+tallos); 365 días previos; SARIMAX con clima rezagado 7 días.",
+        "Órdenes fijos; tres series; sólo ajustes convergentes."
+      ],
+      [
+        "LSTM",
+        "Dos capas de 48 unidades; dropout 0,15; capa intermedia 24; Adam 0,001, regularización 0,00001; MSE; lote 512; gradiente máximo 1.",
+        "28 días de entrada; hasta 12 épocas, paciencia 3; máximo 25.000 ejemplos train muestreados con semilla 42."
+      ]
+    ],
+    "note": ""
+  },
+  "particiones": {
+    "caption": "Funciones de los periodos y controles de disponibilidad",
+    "headers": [
+      "Conjunto / protocolo",
+      "Periodo",
+      "Uso y restricción"
+    ],
+    "rows": [
+      [
+        "Desarrollo y entrenamiento",
+        "Historia desde 2021; entrenamiento anterior a cada corte.",
+        "Sólo semanas objetivo terminadas. Transformaciones ajustadas en train."
+      ],
+      [
+        "Validación de selección",
+        "Noviembre–diciembre de 2025; objetivos cerrados antes de 01/01/2026.",
+        "Elección de variante y pesos; no equivale al test de 2026."
+      ],
+      [
+        "Prueba retrospectiva ampliada",
+        "Año ISO 2026, semanas objetivo 1–43, lunes 29/12/2025 a 19/10/2026.",
+        "Configuración fija; ajuste al primer origen de cada mes con resultados ya cerrados."
+      ],
+      [
+        "Extensión reciente",
+        "Objetivos desde 07/09/2026 (S37) hasta 19/10/2026 (S43).",
+        "Mensual y congelado al 03/08 en casos nominales comunes. H1 llega a S42 comparable."
+      ],
+      [
+        "Pilotos diarios",
+        "Reparto/boosting: orígenes enero–agosto de 2026; LSTM: test septiembre.",
+        "Tareas y paneles separados; no son la evaluación semanal ampliada."
+      ]
+    ],
+    "note": ""
+  },
+  "diario_metodo": {
+    "caption": "Procedimientos diarios y diferencias de tarea",
+    "headers": [
+      "Procedimiento",
+      "Entradas y operación",
+      "Evaluación"
+    ],
+    "rows": [
+      [
+        "Autónomo",
+        "Boosting estima el día con producción y clima pasados, identidad y calendario. No recibe el total semanal actual.",
+        "Días reportados; cantidades diarias sin coherencia semanal impuesta."
+      ],
+      [
+        "Reconciliado",
+        "Total semanal pronosticado × siete pesos: uniforme, perfil histórico o perfil aprendido.",
+        "Mismos días; suma de siete pronósticos igual al total de partida."
+      ],
+      [
+        "SARIMA / SARIMAX",
+        "Dependencia temporal y ciclo semanal; exógenas rezagadas en SARIMAX.",
+        "Tres series, primer origen de cada mes; casos comunes y convergencia."
+      ],
+      [
+        "LSTM de un día adelante",
+        "Secuencia de 28 días, máscara, calendario e historia a 364 días; actualiza el pasado para cada día.",
+        "Septiembre; comparación propia y panel común, sin reconciliación."
+      ]
+    ],
+    "note": ""
+  },
+  "iniciales": {
+    "caption": "Referencias, correcciones y ablaciones en el panel inicial común",
+    "headers": [
+      "Método",
+      "Casos",
+      "MAE¹",
+      "RMSE¹",
+      "MAPE² (%)",
+      "WAPE (%)",
+      "±8 %² (%)",
+      "Sesgo (%)"
+    ],
+    "rows": [
+      [
+        "Boosting sobre Media4",
+        "2.107",
+        "2.037,95",
+        "3.495,22",
+        "40,13",
+        "20,69",
+        "19,79",
+        "-3,75"
+      ],
+      [
+        "Media4",
+        "2.107",
+        "2.316,39",
+        "4.190,48",
+        "36,90",
+        "23,52",
+        "18,27",
+        "-6,11"
+      ],
+      [
+        "Boosting teórico con memoria",
+        "2.107",
+        "1.901,74",
+        "3.341,20",
+        "26,60",
+        "19,31",
+        "23,30",
+        "-8,04"
+      ],
+      [
+        "Boosting teórico con revisiones",
+        "2.107",
+        "1.892,13",
+        "3.324,07",
+        "26,37",
+        "19,21",
+        "22,69",
+        "-8,34"
+      ],
+      [
+        "Ridge sobre teoría",
+        "2.107",
+        "1.966,51",
+        "3.522,77",
+        "39,23",
+        "19,97",
+        "21,55",
+        "-11,19"
+      ],
+      [
+        "Teoría sin ajuste",
+        "2.107",
+        "2.829,12",
+        "5.273,33",
+        "39,55",
+        "28,72",
+        "20,36",
+        "13,09"
+      ],
+      [
+        "Boosting teórico sin clima",
+        "2.107",
+        "1.867,06",
+        "3.289,43",
+        "26,46",
+        "18,96",
+        "22,83",
+        "-8,77"
+      ],
+      [
+        "Boosting teórico sin memoria",
+        "2.107",
+        "2.291,01",
+        "3.997,73",
+        "30,20",
+        "23,26",
+        "18,08",
+        "-12,02"
+      ],
+      [
+        "Último valor real",
+        "2.107",
+        "2.090,50",
+        "3.871,08",
+        "31,34",
+        "21,22",
+        "21,40",
+        "-4,15"
+      ]
+    ],
+    "note": "¹ Tallos por caso. ² Sólo reales positivos. Sesgo = pronóstico − real. Fuente: cálculos sobre predicciones archivadas del estudio."
+  },
+  "seleccion": {
+    "caption": "Selección previa a 2026: variantes de clima y procedencia",
+    "headers": [
+      "Método",
+      "Casos",
+      "MAE¹",
+      "RMSE¹",
+      "MAPE² (%)",
+      "WAPE (%)",
+      "±8 %² (%)",
+      "Sesgo (%)"
+    ],
+    "rows": [
+      [
+        "Boosting sin clima",
+        "3.548",
+        "2.045,72",
+        "3.466,31",
+        "47,04",
+        "21,70",
+        "19,02",
+        "1,28"
+      ],
+      [
+        "Clima básico",
+        "3.548",
+        "2.065,49",
+        "3.520,15",
+        "46,60",
+        "21,91",
+        "19,76",
+        "2,14"
+      ],
+      [
+        "Clima ampliado y lluvia",
+        "3.548",
+        "2.104,99",
+        "3.574,23",
+        "48,90",
+        "22,33",
+        "18,91",
+        "3,88"
+      ],
+      [
+        "Clima ampliado y curva atribuida a GAITANA",
+        "3.548",
+        "2.223,17",
+        "3.819,90",
+        "50,12",
+        "23,58",
+        "18,60",
+        "5,13"
+      ]
+    ],
+    "note": "¹ Tallos por caso. ² Sólo reales positivos. Sesgo = pronóstico − real. Fuente: cálculos sobre predicciones archivadas del estudio."
+  },
+  "horizontes": {
+    "caption": "Evaluación ampliada de 2026 por horizonte, configuración seleccionada",
+    "headers": [
+      "Horizonte",
+      "Casos comunes",
+      "WAPE modelo / referente (%)",
+      "Sesgo modelo / referente (%)"
+    ],
+    "rows": [
+      [
+        "H1",
+        "4.230",
+        "15,04 / 17,02",
+        "-0,94 / -7,97"
+      ],
+      [
+        "H2",
+        "4.201",
+        "17,50 / 19,02",
+        "-1,67 / -8,06"
+      ],
+      [
+        "H3",
+        "4.075",
+        "20,22 / 19,83",
+        "-3,15 / -9,27"
+      ],
+      [
+        "H4",
+        "3.950",
+        "21,76 / 20,36",
+        "-4,51 / -11,29"
+      ],
+      [
+        "H5",
+        "3.827",
+        "22,16 / 20,93",
+        "-4,03 / -12,17"
+      ],
+      [
+        "Conjunto",
+        "20.283",
+        "19,27 / 19,40",
+        "-2,83 / -9,70"
+      ]
+    ],
+    "note": "El referente es el responsable de producción. Sesgo = pronóstico − real; mismos casos por fila. Fuente: predicciones de la evaluación ampliada."
+  },
+  "global": {
+    "caption": "Métricas conjuntas de la evaluación ampliada de 2026",
+    "headers": [
+      "Método",
+      "Casos",
+      "MAE¹",
+      "RMSE¹",
+      "MAPE² (%)",
+      "WAPE (%)",
+      "±8 %² (%)",
+      "Sesgo (%)"
+    ],
+    "rows": [
+      [
+        "Modelo semanal seleccionado",
+        "20.283",
+        "2.497,83",
+        "4.382,25",
+        "42,83",
+        "19,27",
+        "23,07",
+        "-2,83"
+      ],
+      [
+        "Responsable de producción",
+        "20.283",
+        "2.514,33",
+        "4.306,34",
+        "28,53",
+        "19,40",
+        "21,86",
+        "-9,70"
+      ]
+    ],
+    "note": "¹ Tallos por caso. ² Sólo reales positivos. Sesgo = pronóstico − real. Fuente: cálculos sobre predicciones archivadas del estudio."
+  },
+  "train": {
+    "caption": "Entrenamiento y prueba del mismo ajuste de octubre",
+    "headers": [
+      "Método",
+      "Casos",
+      "MAE¹",
+      "RMSE¹",
+      "MAPE² (%)",
+      "WAPE (%)",
+      "±8 %² (%)",
+      "Sesgo (%)"
+    ],
+    "rows": [
+      [
+        "Entrenamiento · 05/10",
+        "146.191",
+        "2.228,79",
+        "3.976,44",
+        "57,48",
+        "22,24",
+        "19,69",
+        "-0,43"
+      ],
+      [
+        "Prueba · 05/10",
+        "685",
+        "2.036,66",
+        "3.548,44",
+        "29,10",
+        "15,87",
+        "29,20",
+        "3,88"
+      ]
+    ],
+    "note": "¹ Tallos por caso. ² Sólo reales positivos. Sesgo = pronóstico − real. Fuente: cálculos sobre predicciones archivadas del estudio."
+  },
+  "extension": {
+    "caption": "Extensión desde la semana 37: mismo modelo y comparación nominal",
+    "headers": [
+      "Horizonte",
+      "Casos comunes",
+      "WAPE modelo / referente (%)",
+      "Sesgo modelo / referente (%)"
+    ],
+    "rows": [
+      [
+        "H1",
+        "606",
+        "12,10 / 17,07",
+        "-0,21 / -11,18"
+      ],
+      [
+        "H2",
+        "701",
+        "16,83 / 17,40",
+        "-1,75 / -10,82"
+      ],
+      [
+        "H3",
+        "699",
+        "19,35 / 17,74",
+        "-5,64 / -10,94"
+      ],
+      [
+        "H4",
+        "697",
+        "19,93 / 17,99",
+        "-6,66 / -11,08"
+      ],
+      [
+        "H5",
+        "696",
+        "21,49 / 18,01",
+        "-8,91 / -11,25"
+      ],
+      [
+        "Conjunto",
+        "3.399",
+        "18,10 / 17,66",
+        "-4,76 / -11,05"
+      ]
+    ],
+    "note": "El referente es el responsable de producción. Sesgo = pronóstico − real; mismos casos por fila. Fuente: predicciones de la evaluación ampliada."
+  },
+  "productos": {
+    "caption": "Productos con mayor aporte al WAPE en la evaluación ampliada",
+    "headers": [
+      "Producto",
+      "Casos",
+      "WAPE modelo / referente (%)",
+      "Aporte modelo / referente (pp)"
+    ],
+    "rows": [
+      [
+        "MINICARNATION",
+        "5.894",
+        "17,26 / 17,23",
+        "10,43 / 10,41"
+      ],
+      [
+        "CARNATION",
+        "7.524",
+        "23,73 / 21,89",
+        "4,49 / 4,15"
+      ],
+      [
+        "SOLOMIO",
+        "2.330",
+        "17,96 / 19,14",
+        "2,02 / 2,15"
+      ],
+      [
+        "RAFFINE",
+        "1.180",
+        "22,71 / 29,59",
+        "1,34 / 1,75"
+      ]
+    ],
+    "note": "Aporte = error absoluto del producto dividido por real de todo el panel; se calcula antes de agregar. Fuente: reconstrucción sobre los 20.283 casos nominales."
+  },
+  "diario": {
+    "caption": "Pronóstico diario: casos comunes de enero–septiembre de 2026",
+    "headers": [
+      "Método",
+      "Casos",
+      "MAE¹",
+      "RMSE¹",
+      "MAPE² (%)",
+      "WAPE (%)",
+      "±8 %² (%)",
+      "Sesgo (%)"
+    ],
+    "rows": [
+      [
+        "Boosting reconciliado",
+        "22.973",
+        "553,80",
+        "990,63",
+        "44,77",
+        "27,26",
+        "15,61",
+        "-6,03"
+      ],
+      [
+        "Boosting autónomo",
+        "22.973",
+        "542,84",
+        "974,87",
+        "40,23",
+        "26,72",
+        "16,18",
+        "-7,11"
+      ],
+      [
+        "Perfil histórico reconciliado",
+        "22.973",
+        "562,31",
+        "1.000,48",
+        "45,65",
+        "27,68",
+        "15,44",
+        "-5,60"
+      ],
+      [
+        "Uniforme reconciliado",
+        "22.973",
+        "585,22",
+        "1.084,36",
+        "41,01",
+        "28,80",
+        "14,53",
+        "-16,92"
+      ]
+    ],
+    "note": "¹ Tallos por caso. ² Sólo reales positivos. Sesgo = pronóstico − real. Fuente: cálculos sobre predicciones archivadas del estudio."
+  },
+  "sarima": {
+    "caption": "Piloto diario de series temporales: 135 días comunes",
+    "headers": [
+      "Método",
+      "Casos",
+      "MAE¹",
+      "RMSE¹",
+      "MAPE² (%)",
+      "WAPE (%)",
+      "±8 %² (%)",
+      "Sesgo (%)"
+    ],
+    "rows": [
+      [
+        "Boosting reconciliado",
+        "135",
+        "2.457,22",
+        "3.337,65",
+        "26,77",
+        "27,18",
+        "18,52",
+        "-11,75"
+      ],
+      [
+        "Boosting autónomo",
+        "135",
+        "2.791,97",
+        "3.694,31",
+        "30,98",
+        "30,88",
+        "14,81",
+        "-12,53"
+      ],
+      [
+        "Perfil histórico",
+        "135",
+        "2.445,79",
+        "3.342,50",
+        "26,33",
+        "27,05",
+        "22,22",
+        "-11,96"
+      ],
+      [
+        "SARIMA",
+        "135",
+        "2.252,11",
+        "3.060,92",
+        "26,58",
+        "24,91",
+        "22,22",
+        "-2,61"
+      ],
+      [
+        "SARIMAX",
+        "135",
+        "2.217,70",
+        "3.048,75",
+        "26,00",
+        "24,53",
+        "20,74",
+        "-2,98"
+      ],
+      [
+        "SARIMAX reconciliado",
+        "135",
+        "2.704,76",
+        "3.719,85",
+        "27,46",
+        "29,92",
+        "14,81",
+        "-21,96"
+      ],
+      [
+        "SARIMA reconciliado",
+        "135",
+        "2.689,74",
+        "3.691,10",
+        "27,32",
+        "29,75",
+        "17,04",
+        "-21,85"
+      ],
+      [
+        "Semana anterior",
+        "135",
+        "2.839,95",
+        "3.912,71",
+        "32,89",
+        "31,41",
+        "13,33",
+        "-2,87"
+      ],
+      [
+        "Uniforme",
+        "135",
+        "2.680,33",
+        "3.738,56",
+        "27,10",
+        "29,65",
+        "16,30",
+        "-22,32"
+      ]
+    ],
+    "note": "¹ Tallos por caso. ² Sólo reales positivos. Sesgo = pronóstico − real. Fuente: cálculos sobre predicciones archivadas del estudio."
+  },
+  "lstm": {
+    "caption": "Ensayo de un día adelante: septiembre de 2026, soporte propio",
+    "headers": [
+      "Método",
+      "Casos",
+      "MAE¹",
+      "RMSE¹",
+      "MAPE² (%)",
+      "WAPE (%)",
+      "±8 %² (%)",
+      "Sesgo (%)"
+    ],
+    "rows": [
+      [
+        "LSTM sin clima / modo automático",
+        "2.409",
+        "567,49",
+        "978,38",
+        "41,81",
+        "27,17",
+        "15,77",
+        "-2,57"
+      ],
+      [
+        "Último valor disponible",
+        "2.067",
+        "824,15",
+        "1.418,18",
+        "53,10",
+        "38,27",
+        "15,48",
+        "-2,87"
+      ],
+      [
+        "Media de siete días observados",
+        "2.408",
+        "578,95",
+        "1.007,82",
+        "41,78",
+        "27,71",
+        "15,57",
+        "-1,32"
+      ]
+    ],
+    "note": "¹ Tallos por caso. ² Sólo reales positivos. Sesgo = pronóstico − real. Fuente: cálculos sobre predicciones archivadas del estudio."
+  },
+  "diccionario": {
+    "caption": "Diccionario agrupado de las 47 columnas de la base analítica",
+    "headers": [
+      "Columna o grupo",
+      "Interpretación"
+    ],
+    "rows": [
+      [
+        "finca, producto, color, variedad",
+        "Identidad de la serie comercial; no agrupa fincas con etiquetas distintas."
+      ],
+      [
+        "origen, horizonte, semana_objetivo",
+        "Lunes de H1; anticipación H1–H5; lunes de la semana a estimar."
+      ],
+      [
+        "ultima_semana_utilizada",
+        "Última semana histórica de producción usada, anterior al origen."
+      ],
+      [
+        "y",
+        "Tallos reportados de la semana objetivo; respuesta observada después, nunca predictor."
+      ],
+      [
+        "produccion_lag1, produccion_lag2, produccion_lag3",
+        "Tallos una, dos y tres semanas calendario antes del origen."
+      ],
+      [
+        "media_4, media_8, desv_4",
+        "Promedios semanales previos de cuatro/ocho observaciones completas y dispersión de cuatro."
+      ],
+      [
+        "tendencia_4_8, cambio_reciente",
+        "Media4 − media8 y último valor − penúltimo valor, en tallos."
+      ],
+      [
+        "observaciones_previas",
+        "Cantidad de semanas históricas reportadas; no exige continuidad de toda la historia."
+      ],
+      [
+        "temperatura_semana_lag1, humedad_semana_lag1, radiacion_semana_lag1",
+        "Medias de la semana previa a partir de días válidos; unidades conservadas de la fuente."
+      ],
+      [
+        "temperatura_semana_media4, humedad_semana_media4, radiacion_semana_media4",
+        "Promedio de cuatro semanas previas válidas; son variables de finca."
+      ],
+      [
+        "fecha_estacional, produccion_52",
+        "Fecha objetivo menos 364 días y tallos observados en esa misma serie y fecha semanal."
+      ],
+      [
+        "semana_seno, semana_coseno",
+        "Coordenadas circulares de la semana objetivo; sin unidad productiva."
+      ],
+      [
+        "union_finca, union_producto, union_color, union_variedad",
+        "Nombres homologados para integrar producción y proyecciones; conserva identidad comercial."
+      ],
+      [
+        "plano, fecha_plano, disponible",
+        "Versión del inventario, fecha nominal y fecha supuesta de disponibilidad; no certifica publicación real."
+      ],
+      [
+        "teoria",
+        "Aportes teóricos de las cohortes con edad representada para ese objetivo. Puede ser suma parcial."
+      ],
+      [
+        "cohortes, sin_cobertura",
+        "Número de grupos de siembra del plano y cuántos carecen de rendimiento para su edad objetivo; no cuentan camas perdidas."
+      ],
+      [
+        "curva_completa, teoria_modelo",
+        "Indicador de todas las edades representadas y referencia habilitada como total. Si no aplica, no se sustituye por cero."
+      ],
+      [
+        "teoria_previa_1, teoria_previa_2, revision_teoria",
+        "Referencias de dos versiones anteriores para el mismo objetivo; diferencia entre actual y anterior utilizable."
+      ],
+      [
+        "antiguedad_curva, desviacion_reciente_teoria",
+        "Semanas desde fecha del plano al origen y Media4 − teoría habilitada; no son edad de planta ni error del mismo periodo."
+      ],
+      [
+        "admisible_modelo",
+        "Media4 disponible y al menos 26 semanas reportadas; no identifica train/test ni exige objetivo conocido."
+      ],
+      [
+        "motivo_cobertura",
+        "Estado de aplicación: curva total, edades no representadas, sin plano elegible o sin pareja serie–objetivo. No significa producción perdida."
+      ]
+    ],
+    "note": "Las variables ampliadas se describen en la metodología; no se confunden con las 47 columnas de esta base. Los valores ausentes no significan cero."
+  },
+  "complementos": {
+    "caption": "Contrastes complementarios por bloque, con sus paneles originales",
+    "headers": [
+      "Bloque / método",
+      "Casos",
+      "MAE¹",
+      "RMSE¹",
+      "MAPE² (%)",
+      "WAPE (%)",
+      "±8 %² (%)",
+      "Sesgo (%)"
+    ],
+    "rows": [
+      [
+        "Diarias · histórico / Corrección relativa diaria",
+        "15.838",
+        "2.640,03",
+        "4.900,20",
+        "30,19",
+        "20,58",
+        "22,19",
+        "-8,76"
+      ],
+      [
+        "Diarias · histórico / Boosting con pérdida absoluta, exploratorio",
+        "15.838",
+        "2.548,00",
+        "4.742,39",
+        "31,41",
+        "19,86",
+        "22,81",
+        "-7,22"
+      ],
+      [
+        "Diarias · histórico / Sistema anterior a señales diarias",
+        "15.838",
+        "2.596,79",
+        "4.732,33",
+        "44,71",
+        "20,24",
+        "22,09",
+        "-5,30"
+      ],
+      [
+        "Diarias · histórico / Boosting con señales diarias",
+        "15.838",
+        "2.555,65",
+        "4.629,63",
+        "45,19",
+        "19,92",
+        "22,15",
+        "-4,24"
+      ],
+      [
+        "Diarias · histórico / Referente",
+        "15.838",
+        "2.531,72",
+        "4.403,88",
+        "29,08",
+        "19,74",
+        "21,73",
+        "-9,75"
+      ],
+      [
+        "Memoria · histórico / Combinación fijada antes de 2026",
+        "15.838",
+        "2.499,90",
+        "4.551,95",
+        "44,90",
+        "19,49",
+        "22,89",
+        "-4,72"
+      ],
+      [
+        "Memoria · histórico / Memoria larga",
+        "15.838",
+        "2.496,69",
+        "4.496,51",
+        "42,42",
+        "19,46",
+        "22,82",
+        "-3,80"
+      ],
+      [
+        "Memoria · histórico / Revisiones de teoría",
+        "15.838",
+        "2.499,90",
+        "4.551,95",
+        "44,90",
+        "19,49",
+        "22,89",
+        "-4,72"
+      ],
+      [
+        "Memoria · histórico / Agrupado H1–H2 / H3–H5",
+        "15.838",
+        "2.507,01",
+        "4.533,67",
+        "42,99",
+        "19,54",
+        "22,69",
+        "-3,91"
+      ],
+      [
+        "n−1: CARNATION / General (mismos casos)",
+        "765",
+        "2.621,04",
+        "4.200,45",
+        "31,89",
+        "16,30",
+        "26,41",
+        "-1,75"
+      ],
+      [
+        "n−1: CARNATION / N−1",
+        "765",
+        "2.431,07",
+        "3.862,88",
+        "30,38",
+        "15,12",
+        "27,19",
+        "-1,49"
+      ],
+      [
+        "n−1: CARNATION / Referente",
+        "765",
+        "2.399,89",
+        "3.714,38",
+        "25,76",
+        "14,92",
+        "24,84",
+        "-7,34"
+      ],
+      [
+        "n−1: MINICARNATION / General (mismos casos)",
+        "866",
+        "1.665,24",
+        "2.427,42",
+        "34,75",
+        "22,49",
+        "19,86",
+        "-11,26"
+      ],
+      [
+        "n−1: MINICARNATION / N−1",
+        "866",
+        "1.689,44",
+        "2.444,81",
+        "35,35",
+        "22,82",
+        "17,09",
+        "-14,52"
+      ],
+      [
+        "n−1: MINICARNATION / Referente",
+        "866",
+        "1.587,35",
+        "2.290,16",
+        "29,12",
+        "21,44",
+        "16,74",
+        "-11,64"
+      ],
+      [
+        "n−1: ambos / General (mismos casos)",
+        "405",
+        "1.505,10",
+        "2.351,08",
+        "46,27",
+        "19,22",
+        "21,23",
+        "-2,69"
+      ],
+      [
+        "n−1: ambos / N−1",
+        "405",
+        "1.560,63",
+        "2.512,26",
+        "42,60",
+        "19,93",
+        "19,75",
+        "-9,13"
+      ],
+      [
+        "n−1: ambos / Referente",
+        "405",
+        "1.654,81",
+        "2.582,56",
+        "36,63",
+        "21,13",
+        "13,83",
+        "-15,22"
+      ],
+      [
+        "Horizontes · reciente / Agrupado, tuning noviembre",
+        "1.226",
+        "2.314,54",
+        "3.653,15",
+        "29,16",
+        "18,26",
+        "23,49",
+        "-5,48"
+      ],
+      [
+        "Horizontes · reciente / Separados, tuning noviembre",
+        "1.226",
+        "2.263,99",
+        "3.488,69",
+        "28,93",
+        "17,86",
+        "23,33",
+        "-6,17"
+      ],
+      [
+        "Horizontes · reciente / Separados y calibración diciembre",
+        "1.226",
+        "2.396,22",
+        "3.700,08",
+        "29,54",
+        "18,90",
+        "21,13",
+        "-9,00"
+      ],
+      [
+        "Horizontes · reciente / H1 agrupado y H2–H5 separados",
+        "1.226",
+        "2.257,18",
+        "3.506,33",
+        "28,82",
+        "17,80",
+        "23,82",
+        "-6,26"
+      ],
+      [
+        "Horizontes · reciente / H1 agrupado y H2–H5 calibrados",
+        "1.226",
+        "2.399,32",
+        "3.727,98",
+        "29,45",
+        "18,93",
+        "21,04",
+        "-8,91"
+      ],
+      [
+        "Horizontes · reciente / Referente",
+        "1.226",
+        "2.072,07",
+        "3.179,67",
+        "24,54",
+        "16,34",
+        "22,76",
+        "-7,51"
+      ],
+      [
+        "Producto · reciente / Especializado sin mezcla",
+        "1.226",
+        "2.229,50",
+        "3.491,77",
+        "28,36",
+        "17,59",
+        "24,14",
+        "-4,12"
+      ],
+      [
+        "Producto · reciente / Ensamble de modelos propios",
+        "1.226",
+        "2.222,56",
+        "3.478,37",
+        "28,35",
+        "17,53",
+        "24,23",
+        "-4,22"
+      ],
+      [
+        "LSTM · común / LSTM sin clima / modo automático",
+        "1.888",
+        "596,14",
+        "999,19",
+        "41,61",
+        "25,88",
+        "16,47",
+        "-4,42"
+      ],
+      [
+        "LSTM · común / LSTM con clima, diagnóstico",
+        "1.888",
+        "680,37",
+        "1.226,75",
+        "39,49",
+        "29,54",
+        "15,41",
+        "-16,27"
+      ],
+      [
+        "LSTM · común / Último valor disponible",
+        "1.888",
+        "878,98",
+        "1.478,33",
+        "53,13",
+        "38,16",
+        "14,72",
+        "-3,11"
+      ],
+      [
+        "LSTM · común / Media de siete días observados",
+        "1.888",
+        "615,97",
+        "1.043,38",
+        "41,69",
+        "26,74",
+        "15,57",
+        "-3,12"
+      ],
+      [
+        "LSTM · común / Mismo día, 364 días atrás",
+        "1.888",
+        "972,33",
+        "1.518,41",
+        "66,93",
+        "42,22",
+        "8,85",
+        "-13,25"
+      ]
+    ],
+    "note": "¹ Tallos por caso. ² Reales positivos. Los contrastes recientes comprenden objetivos 07–21/09/2026; el panel LSTM común, 01–26/09. Fuente: predicciones archivadas, sin nuevo ajuste."
+  }
+}

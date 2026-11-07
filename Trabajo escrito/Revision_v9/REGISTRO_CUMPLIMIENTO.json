@@ -1,0 +1,920 @@
+[
+  {
+    "id": "1.01",
+    "apartado_prompt": "1. Forma de trabajo",
+    "indicacion": "Identificar versión vigente y generadores",
+    "cambio_realizado": "V8 identificada como base; se conservan fuentes y documentos. V9 se compone con plantilla, evidencia y renderizador propios.",
+    "ubicacion": "Fuentes y README de reproducción",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "1.02",
+    "apartado_prompt": "1. Forma de trabajo",
+    "indicacion": "Modificar fuentes y regenerar de manera reproducible",
+    "cambio_realizado": "Prosa editable, tablas desde resultados, figuras desde Parquet y Word con campos REF/TOC.",
+    "ubicacion": "contenido_academico.md; scripts v9",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "1.03",
+    "apartado_prompt": "1. Forma de trabajo",
+    "indicacion": "Conservar copia inicial y avances válidos",
+    "cambio_realizado": "Copia de MD/Word/PDF v8 y huellas; originales comprobados sin cambios.",
+    "ubicacion": "Version_inicial; version_inicial_sha256.json",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "1.04",
+    "apartado_prompt": "1. Forma de trabajo",
+    "indicacion": "Registro separado por indicación, cambio, ubicación y estado",
+    "cambio_realizado": "Este registro incluye cada indicación consolidada, con IDs propios del prompt.",
+    "ubicacion": "REGISTRO_CUMPLIMIENTO.md/.csv/.json",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "1.05",
+    "apartado_prompt": "1. Forma de trabajo",
+    "indicacion": "Resolver edición y explicitar faltantes sin inventar",
+    "cambio_realizado": "Se delimita alcance y se documentan faltantes concretos fuera del manuscrito.",
+    "ubicacion": "1.2; 3.5–3.7; 4.6; PENDIENTES_EQUIPO.md",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "2.01",
+    "apartado_prompt": "2. Portada, resumen y palabras clave",
+    "indicacion": "Cambiar título solicitado",
+    "cambio_realizado": "Se aplica literalmente el título indicado en portada y propiedades del Word.",
+    "ubicacion": "Portada",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "2.02",
+    "apartado_prompt": "2. Portada, resumen y palabras clave",
+    "indicacion": "Incluir asesor y conservar autores",
+    "cambio_realizado": "Rafael Amaya Gomez; Elián Durán, Julián Osorio y Anderson Gonzalez.",
+    "ubicacion": "Portada",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "2.03",
+    "apartado_prompt": "2. Portada, resumen y palabras clave",
+    "indicacion": "Reescribir resumen con contexto, problema, método, resultados y aporte",
+    "cambio_realizado": "Resumen nuevo, centrado en el apoyo al estimado y con resultados acotados.",
+    "ubicacion": "Resumen",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "2.04",
+    "apartado_prompt": "2. Portada, resumen y palabras clave",
+    "indicacion": "Explicar productos, tallos y corte antes de cifras",
+    "cambio_realizado": "Se presentan flores de corte, unidad reportada y actividad de cosecha.",
+    "ubicacion": "Resumen; 1.1",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "2.05",
+    "apartado_prompt": "2. Portada, resumen y palabras clave",
+    "indicacion": "Evitar siglas indefinidas y definir horizontes reales",
+    "cambio_realizado": "Resumen usa primera semana; H1–H5 se definen con calendario y edición 18–22.",
+    "ubicacion": "Resumen; 1.1–1.2",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "2.06",
+    "apartado_prompt": "2. Portada, resumen y palabras clave",
+    "indicacion": "Presentar propósito analítico sin centrar resumen en Gradient Boosting",
+    "cambio_realizado": "Se explica integración, corrección y utilidad; el algoritmo se desarrolla después.",
+    "ubicacion": "Resumen; 3.4",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "2.07",
+    "apartado_prompt": "2. Portada, resumen y palabras clave",
+    "indicacion": "Identificar función del profesional de referencia",
+    "cambio_realizado": "Se define responsable de producción y se usa esa denominación consistentemente.",
+    "ubicacion": "1.1; tablas de resultados",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "2.08",
+    "apartado_prompt": "2. Portada, resumen y palabras clave",
+    "indicacion": "Ajustar palabras clave a curvas y métodos reales",
+    "cambio_realizado": "Curvas empíricas de rendimiento, boosting, SARIMA/SARIMAX y reconciliación; se retiran calidad y validación temporal.",
+    "ubicacion": "Palabras clave",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "3.01",
+    "apartado_prompt": "3. Introducción, problema, objetivos y alcance",
+    "indicacion": "Comenzar explicando empresa, productos y proceso verificable",
+    "cambio_realizado": "Contexto basado en categorías de las fuentes y flujo del proyecto; no se inventan ubicación, área o historia empresarial.",
+    "ubicacion": "1.1",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "3.02",
+    "apartado_prompt": "3. Introducción, problema, objetivos y alcance",
+    "indicacion": "Ampliar contexto para lector no experto",
+    "cambio_realizado": "Se conecta cultivo, inventario, corte y decisiones de disponibilidad.",
+    "ubicacion": "1.1; 2.1",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "3.03",
+    "apartado_prompt": "3. Introducción, problema, objetivos y alcance",
+    "indicacion": "Explicar pronóstico actual, responsable, información y decisiones",
+    "cambio_realizado": "Se describe revisión de cultivo, curvas, trayectoria y criterio experto; envío jueves.",
+    "ubicacion": "1.1",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "3.04",
+    "apartado_prompt": "3. Introducción, problema, objetivos y alcance",
+    "indicacion": "Reconocer componente empírico y complementar conocimiento experto",
+    "cambio_realizado": "La propuesta es una sugerencia cuantitativa revisable; no reemplazo probado.",
+    "ubicacion": "1.1; 4.6",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "3.05",
+    "apartado_prompt": "3. Introducción, problema, objetivos y alcance",
+    "indicacion": "Pregunta de negocio después del contexto y problema",
+    "cambio_realizado": "Se formula tras explicar el flujo y su necesidad.",
+    "ubicacion": "1.1",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "3.06",
+    "apartado_prompt": "3. Introducción, problema, objetivos y alcance",
+    "indicacion": "Convertir preguntas específicas en narrativa",
+    "cambio_realizado": "Se reemplaza listado de preguntas por motivación conectada y objetivos explícitos.",
+    "ubicacion": "1.1–1.2",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "3.07",
+    "apartado_prompt": "3. Introducción, problema, objetivos y alcance",
+    "indicacion": "Motivar curvas y contraste con SARIMA/SARIMAX reales",
+    "cambio_realizado": "Se distingue piloto diario de modelos semanales para no inventar comparaciones.",
+    "ubicacion": "1.1; 3.6",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "3.08",
+    "apartado_prompt": "3. Introducción, problema, objetivos y alcance",
+    "indicacion": "Revisar objetivo general y explicitar objetivos coherentes",
+    "cambio_realizado": "Se precisa corte reportado y alcance exploratorio; se formulan cuatro objetivos y conclusiones correspondientes.",
+    "ubicacion": "1.2; 5",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "3.09",
+    "apartado_prompt": "3. Introducción, problema, objetivos y alcance",
+    "indicacion": "Mencionar familias y propósito desde introducción",
+    "cambio_realizado": "Referencias sencillas, corrección lineal/no lineal, perfiles, SARIMA/SARIMAX y recurrente.",
+    "ubicacion": "1.1",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "3.10",
+    "apartado_prompt": "3. Introducción, problema, objetivos y alcance",
+    "indicacion": "Distinguir exportable, no exportable, objetivo y referente",
+    "cambio_realizado": "Se separan clasificación comercial, corte registrado y formato exportable del referente.",
+    "ubicacion": "1.2",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "3.11",
+    "apartado_prompt": "3. Introducción, problema, objetivos y alcance",
+    "indicacion": "No equiparar tallos reportados con exportable",
+    "cambio_realizado": "Equivalencia explícitamente no confirmada; no se presenta certificación exportable.",
+    "ubicacion": "Resumen; 1.2; 4.6; 5",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "3.12",
+    "apartado_prompt": "3. Introducción, problema, objetivos y alcance",
+    "indicacion": "Mantener delimitación GAITANA / GAITANA PPTO",
+    "cambio_realizado": "Etiquetas no acumuladas ni reasignadas; otras fincas fuera de la inferencia principal.",
+    "ubicacion": "1.2",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "3.13",
+    "apartado_prompt": "3. Introducción, problema, objetivos y alcance",
+    "indicacion": "Aclarar disponibilidad/publicación y efectos retrospectivos",
+    "cambio_realizado": "Se distingue fecha observada/versión archivada de publicación; se explicita asimetría jueves/lunes.",
+    "ubicacion": "1.2; 3.5",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "4.01",
+    "apartado_prompt": "4. Contexto operativo y fuentes de información",
+    "indicacion": "Títulos académicos y radiografía de datos",
+    "cambio_realizado": "Capítulo 2 adopta el título propuesto; se evitan preguntas en encabezados.",
+    "ubicacion": "2",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "4.02",
+    "apartado_prompt": "4. Contexto operativo y fuentes de información",
+    "indicacion": "Definir cama, piloto, ciclo, plano, cohorte, corte y rendimiento",
+    "cambio_realizado": "Glosario breve previo a su uso técnico detallado.",
+    "ubicacion": "2.1, tabla 1",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "4.03",
+    "apartado_prompt": "4. Contexto operativo y fuentes de información",
+    "indicacion": "Glosario breve sin duplicaciones extensas",
+    "cambio_realizado": "Ocho términos con definición operativa; las decisiones quedan en método.",
+    "ubicacion": "2.1",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "4.04",
+    "apartado_prompt": "4. Contexto operativo y fuentes de información",
+    "indicacion": "Explicar inventarios con ejemplo de cama en dos planos",
+    "cambio_realizado": "Ejemplo de 1.000 plantas conservadas, no 2.000 siembras nuevas.",
+    "ubicacion": "2.1",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "4.05",
+    "apartado_prompt": "4. Contexto operativo y fuentes de información",
+    "indicacion": "Dimensiones, periodos, variables y detalle verificados en fuentes",
+    "cambio_realizado": "Cinco fuentes con filas, cantidad de columnas, contenido y rango; consulta al snapshot evaluado.",
+    "ubicacion": "2.2, tabla 2; datos_verificados.json",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "4.06",
+    "apartado_prompt": "4. Contexto operativo y fuentes de información",
+    "indicacion": "Explicar integración y llaves",
+    "cambio_realizado": "Se enumeran llaves por tipo de fuente, ciclo, serie, fecha y origen.",
+    "ubicacion": "2.2",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "4.07",
+    "apartado_prompt": "4. Contexto operativo y fuentes de información",
+    "indicacion": "Eliminar Precaución principal y pasar cautelas al texto",
+    "cambio_realizado": "Nueva tabla sin esa columna; precauciones integradas en prosa.",
+    "ubicacion": "2.2",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "4.08",
+    "apartado_prompt": "4. Contexto operativo y fuentes de información",
+    "indicacion": "Identificar fuentes en vez de el archivo ambiguo",
+    "cambio_realizado": "Se usa nombre de fuente/edición y su función; se retiran rutas internas académicas.",
+    "ubicacion": "2.2; revisión global",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "4.09",
+    "apartado_prompt": "4. Contexto operativo y fuentes de información",
+    "indicacion": "Explicar curvas, traslado a otras camas y ejemplo sustentado",
+    "cambio_realizado": "Ejemplo real Ard edad 50, 0,2542 tallos/planta y 43 observaciones; curva redibujada.",
+    "ubicacion": "2.3; 3.3, figura 1",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "5.01",
+    "apartado_prompt": "5. Pretratamiento y análisis exploratorio",
+    "indicacion": "Simplificar sustancialmente EDA a decisiones y resultados pertinentes",
+    "cambio_realizado": "Se conserva composición, memoria, alcance de curva y contraste climático conectado con método.",
+    "ubicacion": "4.1–4.2",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "5.02",
+    "apartado_prompt": "5. Pretratamiento y análisis exploratorio",
+    "indicacion": "Anexar complementos necesarios y eliminar redundancias",
+    "cambio_realizado": "Un gráfico climático y comparaciones seleccionadas; se elimina repetición de rankings y extensos segmentos.",
+    "ubicacion": "Anexos B–C",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "5.03",
+    "apartado_prompt": "5. Pretratamiento y análisis exploratorio",
+    "indicacion": "Esquema con cantidades entrantes/utilizables/pendientes",
+    "cambio_realizado": "Figura de pretratamiento reconstruida con 543.368, 523.336, 490.116 y controles.",
+    "ubicacion": "3.2, figura 3",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "5.04",
+    "apartado_prompt": "5. Pretratamiento y análisis exploratorio",
+    "indicacion": "Distinguir universos y denominadores",
+    "cambio_realizado": "Se separan historia de edición, cortes 2026, series–semana y casos origen–horizonte.",
+    "ubicacion": "2.1–2.2; 3.2; 4.1",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "5.05",
+    "apartado_prompt": "5. Pretratamiento y análisis exploratorio",
+    "indicacion": "Interpretar Ambigua, Conflicto_ciclo, Llave_incompleta, Sin_pareja, Única",
+    "cambio_realizado": "Tabla de estados, conteos y significado; texto explicativo.",
+    "ubicacion": "3.2, tabla 3",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "5.06",
+    "apartado_prompt": "5. Pretratamiento y análisis exploratorio",
+    "indicacion": "Separar uniones correctas de representación de todas las edades",
+    "cambio_realizado": "99,84 % sobre cortes 2026 frente a 46.528/216.127 casos con referencia total.",
+    "ubicacion": "4.1",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "5.07",
+    "apartado_prompt": "5. Pretratamiento y análisis exploratorio",
+    "indicacion": "Eliminar fechas internas irrelevantes como revisión 19 octubre",
+    "cambio_realizado": "Se retiran fechas de revisiones editoriales; sólo quedan cortes de datos y evaluaciones relevantes.",
+    "ubicacion": "Revisión global",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "5.08",
+    "apartado_prompt": "5. Pretratamiento y análisis exploratorio",
+    "indicacion": "Distinguir edición 2026 de año de cortes",
+    "cambio_realizado": "Se explica historia anterior repetida dentro de libros anuales.",
+    "ubicacion": "2.2; tabla 3",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "5.09",
+    "apartado_prompt": "5. Pretratamiento y análisis exploratorio",
+    "indicacion": "Conectar ceros, edades sin observaciones y desconocidos",
+    "cambio_realizado": "Se definen estados de evidencia y no se rellenan desconocidos con cero.",
+    "ubicacion": "2.3",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "5.10",
+    "apartado_prompt": "5. Pretratamiento y análisis exploratorio",
+    "indicacion": "Integrar frase aislada de rendimiento cero",
+    "cambio_realizado": "Se sustituye por párrafo conectado sobre registros válidos y ausencia de evidencia.",
+    "ubicacion": "2.3",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "5.11",
+    "apartado_prompt": "5. Pretratamiento y análisis exploratorio",
+    "indicacion": "Mover decisión de curvas compartidas/GAITANA al método",
+    "cambio_realizado": "Se explican atribución y sensibilidad sin asignar finca por descarte.",
+    "ubicacion": "3.3",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "5.12",
+    "apartado_prompt": "5. Pretratamiento y análisis exploratorio",
+    "indicacion": "Mover concepto de aplicación por edad a fuentes/curvas",
+    "cambio_realizado": "Alcance de referencia, cohortes y sumas parciales se introduce antes del método.",
+    "ubicacion": "2.3",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "5.13",
+    "apartado_prompt": "5. Pretratamiento y análisis exploratorio",
+    "indicacion": "Adelantar esquema de teoría/ruta de producción reciente y simplificar",
+    "cambio_realizado": "Figura metodológica temprana con dos referencias, grupos e inferencia; sin explicaciones inferiores duplicadas.",
+    "ubicacion": "3.1, figura 2",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "5.14",
+    "apartado_prompt": "5. Pretratamiento y análisis exploratorio",
+    "indicacion": "Límite inferior 15 en figura de representación por edad",
+    "cambio_realizado": "Figura redibujada desde panel actualizado, eje en porcentaje y advertencia de truncamiento.",
+    "ubicacion": "4.1, figura 4; soporte_edades_por_horizonte.csv",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "5.15",
+    "apartado_prompt": "5. Pretratamiento y análisis exploratorio",
+    "indicacion": "Trasladar figura original 6b climática a anexos",
+    "cambio_realizado": "Se conserva su análisis, redibujado desde asociaciones con etiquetas legibles, en anexo B.",
+    "ubicacion": "Anexo B, figura 6",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "5.16",
+    "apartado_prompt": "5. Pretratamiento y análisis exploratorio",
+    "indicacion": "Integrar frases y evitar repeticiones",
+    "cambio_realizado": "Narrativa continua; eliminación de referencias a revisiones y recorridos de archivos.",
+    "ubicacion": "Todo el manuscrito",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "6.01",
+    "apartado_prompt": "6. Metodología",
+    "indicacion": "Describir fases primero y desarrollar subsecciones",
+    "cambio_realizado": "Cinco fases y diagrama antes de los detalles algorítmicos.",
+    "ubicacion": "3.1–3.7",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "6.02",
+    "apartado_prompt": "6. Metodología",
+    "indicacion": "Explicar proceso completo antes de boosting",
+    "cambio_realizado": "Referencias, integración y variables preceden a la explicación de corrección aprendida.",
+    "ubicacion": "3.1–3.4",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "6.03",
+    "apartado_prompt": "6. Metodología",
+    "indicacion": "Diferenciar modelos, referencias, sensibilidades y pilotos",
+    "cambio_realizado": "Inventario por papel; diarios separados de semanales.",
+    "ubicacion": "3.4, tabla 5; 3.6",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "6.04",
+    "apartado_prompt": "6. Metodología",
+    "indicacion": "Incluir sólo métodos implementados",
+    "cambio_realizado": "No se agregan modelos ni búsquedas; resultados conservan fuentes existentes.",
+    "ubicacion": "3.4–3.6; verificacion_final.json",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "6.05",
+    "apartado_prompt": "6. Metodología",
+    "indicacion": "Introducir boosting antes de explicar decisiones/resultados",
+    "cambio_realizado": "Fundamento, corrección y fórmula antes de variantes y selección.",
+    "ubicacion": "3.4",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "6.06",
+    "apartado_prompt": "6. Metodología",
+    "indicacion": "Explicar alternativa sin confundir teoría y producción real",
+    "cambio_realizado": "Media4 corregida mantiene casos admisibles; suma parcial no se usa como total.",
+    "ubicacion": "3.1; 4.1",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "6.07",
+    "apartado_prompt": "6. Metodología",
+    "indicacion": "Diferenciar semanal, diario autónomo y reconciliado/evaluaciones",
+    "cambio_realizado": "Tareas, entradas, origen y paneles explícitos; LSTM de un día aparte.",
+    "ubicacion": "3.6; 4.5",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "6.08",
+    "apartado_prompt": "6. Metodología",
+    "indicacion": "Organizar por decisiones/fases, no por cuadernos",
+    "cambio_realizado": "Se retiran números de notebooks y cronología de ejecución.",
+    "ubicacion": "Capítulos 3–4",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "6.09",
+    "apartado_prompt": "6. Metodología",
+    "indicacion": "Diagrama A como figura metodológica sin preguntas",
+    "cambio_realizado": "Figura 2 con títulos descriptivos, algoritmo, entradas y grupos identificados.",
+    "ubicacion": "3.1",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "6.10",
+    "apartado_prompt": "6. Metodología",
+    "indicacion": "Diagrama B diario como tabla",
+    "cambio_realizado": "Tabla de procedimientos diarios sustituye el diagrama.",
+    "ubicacion": "3.6, tabla 8",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "6.11",
+    "apartado_prompt": "6. Metodología",
+    "indicacion": "Diccionario y lectura consolidada en anexos",
+    "cambio_realizado": "47 columnas verificadas, ejemplo calendario y lectura de vacíos.",
+    "ubicacion": "Anexo A, tabla 19",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "6.12",
+    "apartado_prompt": "6. Metodología",
+    "indicacion": "Unificar hiperparámetros y su presentación",
+    "cambio_realizado": "Tabla única incluye seleccionado, Ridge, horizontes, propios, pesos, diario y LSTM.",
+    "ubicacion": "3.4, tabla 6",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "6.13",
+    "apartado_prompt": "6. Metodología",
+    "indicacion": "Explicar orden SARIMA/SARIMAX y periodo 7",
+    "cambio_realizado": "p,d,q,P,D,Q y periodicidad semanal explicados en su contexto diario.",
+    "ubicacion": "3.6",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "6.14",
+    "apartado_prompt": "6. Metodología",
+    "indicacion": "Retirar sesgo elemental repetido y unificar signo",
+    "cambio_realizado": "Convención pronóstico − real en método y notas de tablas.",
+    "ubicacion": "3.5; resultados",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "6.15",
+    "apartado_prompt": "6. Metodología",
+    "indicacion": "Explicar periodos, selección y disponibilidad al emitir",
+    "cambio_realizado": "Validación 2025, prueba ISO2026, mensual/congelado; lunes frente a jueves y publicación no acreditada.",
+    "ubicacion": "3.5; tabla 7",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "7.01",
+    "apartado_prompt": "7. Resultados y discusión",
+    "indicacion": "Integrar resultados y discusión",
+    "cambio_realizado": "Capítulo único, interpretaciones junto a resultados.",
+    "ubicacion": "4",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "7.02",
+    "apartado_prompt": "7. Resultados y discusión",
+    "indicacion": "Subsecciones correspondientes a fases metodológicas",
+    "cambio_realizado": "Integración, EDA, métodos, extensión, diario e implicaciones.",
+    "ubicacion": "4.1–4.6",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "7.03",
+    "apartado_prompt": "7. Resultados y discusión",
+    "indicacion": "Interpretación, negocio y límites junto a resultado",
+    "cambio_realizado": "Cada comparación incorpora alcance y restricción, no sólo ranking.",
+    "ubicacion": "4.1–4.6",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "7.04",
+    "apartado_prompt": "7. Resultados y discusión",
+    "indicacion": "Priorizar objetivos y aporte al procedimiento actual",
+    "cambio_realizado": "Resultado central por horizonte y límites de uso empresarial.",
+    "ubicacion": "4.3–4.6; 5",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "7.05",
+    "apartado_prompt": "7. Resultados y discusión",
+    "indicacion": "Reducir tablas repetidas y párrafos que recitan cifras",
+    "cambio_realizado": "Una tabla por función; resultados históricos complementarios resumidos.",
+    "ubicacion": "4; Anexo C",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "7.06",
+    "apartado_prompt": "7. Resultados y discusión",
+    "indicacion": "Complementos necesarios a anexos",
+    "cambio_realizado": "Diccionario, análisis climático y contrastes seleccionados.",
+    "ubicacion": "Anexos A–C",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "7.07",
+    "apartado_prompt": "7. Resultados y discusión",
+    "indicacion": "Conservar diferencias relevantes de H/producto/método",
+    "cambio_realizado": "Tabla anual, extensión, productos y tareas diarias distintas.",
+    "ubicacion": "4.3–4.5",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "7.08",
+    "apartado_prompt": "7. Resultados y discusión",
+    "indicacion": "No generalizar mejoras parciales",
+    "cambio_realizado": "H1/H2 favorables; H3–H5 y extensión global favorables al referente.",
+    "ubicacion": "Resumen; 4.3–4.4; 5",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "7.09",
+    "apartado_prompt": "7. Resultados y discusión",
+    "indicacion": "Carácter retrospectivo/exploratorio explícito",
+    "cambio_realizado": "Disponibilidad histórica, revisión previa de periodos y pilotos diarios delimitados.",
+    "ubicacion": "1.2; 3.5; 4.5",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "7.10",
+    "apartado_prompt": "7. Resultados y discusión",
+    "indicacion": "No afirmar causalidad, validación empresarial o beneficios no probados",
+    "cambio_realizado": "Asociaciones no causales; prototipo no equivale a adopción ni ahorro.",
+    "ubicacion": "4.2; 4.6",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "7.11",
+    "apartado_prompt": "7. Resultados y discusión",
+    "indicacion": "Conclusiones por objetivos sin repetir toda discusión",
+    "cambio_realizado": "Cinco conclusiones compactas alineadas con formulación revisada.",
+    "ubicacion": "5",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "8.01",
+    "apartado_prompt": "8. Redacción, tablas, figuras y referencias",
+    "indicacion": "Redacción académica natural y conectada",
+    "cambio_realizado": "Reescritura integral centrada en decisiones y evidencia.",
+    "ubicacion": "Todo el documento",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "8.02",
+    "apartado_prompt": "8. Redacción, tablas, figuras y referencias",
+    "indicacion": "Eliminar títulos pregunta, De X a Y y Del hallazgo a decisión",
+    "cambio_realizado": "Encabezados descriptivos verificados por script.",
+    "ubicacion": "Índice y secciones",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "8.03",
+    "apartado_prompt": "8. Redacción, tablas, figuras y referencias",
+    "indicacion": "Eliminar fórmulas grandilocuentes y resúmenes mecánicos",
+    "cambio_realizado": "Se reemplazan por conclusiones acotadas y límites concretos.",
+    "ubicacion": "Resumen; resultados; conclusiones",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "8.04",
+    "apartado_prompt": "8. Redacción, tablas, figuras y referencias",
+    "indicacion": "Evitar recitar cuadros o explicar distribución editorial",
+    "cambio_realizado": "Texto orientado a método e implicación; sin guía extensa de dónde se movió cada fragmento.",
+    "ubicacion": "Capítulos 3–4",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "8.05",
+    "apartado_prompt": "8. Redacción, tablas, figuras y referencias",
+    "indicacion": "Numerar/titular todas las tablas y figuras",
+    "cambio_realizado": "20 tablas y 6 figuras con captions y marcadores.",
+    "ubicacion": "objetos_y_referencias.json; Word",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "8.06",
+    "apartado_prompt": "8. Redacción, tablas, figuras y referencias",
+    "indicacion": "Referencias cruzadas reproducibles en Word",
+    "cambio_realizado": "22 campos REF enlazados a marcadores; TOC actualizado al exportar.",
+    "ubicacion": "Word; verificacion_word.json",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "8.07",
+    "apartado_prompt": "8. Redacción, tablas, figuras y referencias",
+    "indicacion": "Actualizar numeración, menciones e índices",
+    "cambio_realizado": "Numeración automática desde orden de objetos; referencias regeneradas y comprobadas.",
+    "ubicacion": "Word/PDF; índice",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "8.08",
+    "apartado_prompt": "8. Redacción, tablas, figuras y referencias",
+    "indicacion": "Retirar E1/E3/Fuente E15/cuadernos 10–25",
+    "cambio_realizado": "No quedan códigos de evidencia ni secuencias de notebooks en el texto académico.",
+    "ubicacion": "Verificación de texto",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "8.09",
+    "apartado_prompt": "8. Redacción, tablas, figuras y referencias",
+    "indicacion": "Describir procedimientos sin orden interno de notebooks",
+    "cambio_realizado": "Modelos nombrados por función, familia y entradas.",
+    "ubicacion": "3.4–3.6",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "8.10",
+    "apartado_prompt": "8. Redacción, tablas, figuras y referencias",
+    "indicacion": "Retirar Referencias de evidencia y pendientes editoriales",
+    "cambio_realizado": "Trazabilidad y pendientes se trasladan exclusivamente a archivos separados.",
+    "ubicacion": "REGISTRO_CUMPLIMIENTO; PENDIENTES_EQUIPO",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "8.11",
+    "apartado_prompt": "8. Redacción, tablas, figuras y referencias",
+    "indicacion": "Referencias académicas reales en IEEE",
+    "cambio_realizado": "Seis referencias verificadas, numeradas según primera aparición; se preservan fuentes reales previas.",
+    "ubicacion": "Referencias; 3.4–3.7",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "8.12",
+    "apartado_prompt": "8. Redacción, tablas, figuras y referencias",
+    "indicacion": "Eliminar saltos innecesarios, incluido antes del EDA",
+    "cambio_realizado": "Sin saltos forzados entre capítulos; sólo separaciones de portada e índice.",
+    "ubicacion": "Generador Word; revisión PDF",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "9.01",
+    "apartado_prompt": "9. Extensión y comprobación final",
+    "indicacion": "Máximo 50 páginas incluyendo todo",
+    "cambio_realizado": "PDF renderizado con Word y conteo independiente; número final en verificacion_final.json.",
+    "ubicacion": "Word/PDF completos",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "9.02",
+    "apartado_prompt": "9. Extensión y comprobación final",
+    "indicacion": "Sintetizar manteniendo formato y legibilidad",
+    "cambio_realizado": "Times New Roman 12, interlineado 1,5 y márgenes 2,54 cm; tablas 9–10 pt, no compresión del cuerpo.",
+    "ubicacion": "verificacion_word.json",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "9.03",
+    "apartado_prompt": "9. Extensión y comprobación final",
+    "indicacion": "No volcar todo lo retirado en anexos",
+    "cambio_realizado": "Selección de tres anexos; no se incluye la totalidad del material retirado.",
+    "ubicacion": "Anexos A–C",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "9.04",
+    "apartado_prompt": "9. Extensión y comprobación final",
+    "indicacion": "Verificar cifras con datos y código",
+    "cambio_realizado": "Recuentos recalculados y métricas contrastadas con predicciones; no se entrenan modelos.",
+    "ubicacion": "evidencia_revision_v9.py; verificar_revision_v9.py",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "9.05",
+    "apartado_prompt": "9. Extensión y comprobación final",
+    "indicacion": "Consistencia de resumen, objetivos, método y conclusiones",
+    "cambio_realizado": "Mismo seleccionado y panel ampliado; comparación reciente separada.",
+    "ubicacion": "Resumen; 1.2; 3.4–3.5; 4–5",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "9.06",
+    "apartado_prompt": "9. Extensión y comprobación final",
+    "indicacion": "Regenerar figuras modificadas desde fuentes",
+    "cambio_realizado": "Las seis figuras se reconstruyen desde datos o lógica implementada, sin editar píxeles.",
+    "ubicacion": "Revision_v9/Figuras; evidencia_revision_v9.py",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "9.07",
+    "apartado_prompt": "9. Extensión y comprobación final",
+    "indicacion": "Conservar resultados válidos y justificar cambios",
+    "cambio_realizado": "Modelo y predicciones intactos; se actualizan sólo dimensiones/gráficos descriptivos con la misma extracción de la evaluación.",
+    "ubicacion": "NOTAS_DE_CAMBIOS.md; fuentes_sha256.json",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "9.08",
+    "apartado_prompt": "9. Extensión y comprobación final",
+    "indicacion": "No inventar contexto, cifras ni metodologías",
+    "cambio_realizado": "Datos internos verificables y referencias primarias; limitaciones expresas.",
+    "ubicacion": "Verificaciones y pendientes externos",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "9.09",
+    "apartado_prompt": "9. Extensión y comprobación final",
+    "indicacion": "Renderizar PDF y revisar tablas, figuras, referencias y saltos",
+    "cambio_realizado": "Render Word, conteo PDF, controles de desbordamiento y mosaicos de todas las páginas.",
+    "ubicacion": "Comprobacion_visual; verificacion_final.json",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "10.01",
+    "apartado_prompt": "10. Entrega",
+    "indicacion": "Word corregido",
+    "cambio_realizado": "Documento nuevo final, sin sobrescribir v8.",
+    "ubicacion": "Word final",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "10.02",
+    "apartado_prompt": "10. Entrega",
+    "indicacion": "Registro separado de cumplimiento",
+    "cambio_realizado": "Registro con indicación, cambio, ubicación y estado; disponible en MD, CSV y JSON.",
+    "ubicacion": "REGISTRO_CUMPLIMIENTO",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "10.03",
+    "apartado_prompt": "10. Entrega",
+    "indicacion": "Revisar cada indicación antes de terminar",
+    "cambio_realizado": "Matriz y verificaciones finales cruzadas con documento renderizado.",
+    "ubicacion": "Este registro; verificacion_final.json",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  },
+  {
+    "id": "10.04",
+    "apartado_prompt": "10. Entrega",
+    "indicacion": "Informar ubicación, páginas y pendientes concretos",
+    "cambio_realizado": "README de entrega y pendientes separados; resumen al usuario.",
+    "ubicacion": "LEEME; PENDIENTES_EQUIPO.md",
+    "estado": "Implementada",
+    "verificacion": "Documento y fuentes; verificacion_final.json"
+  }
+]

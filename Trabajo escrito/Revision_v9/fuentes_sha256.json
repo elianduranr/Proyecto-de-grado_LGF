@@ -1,0 +1,10 @@
+{
+  "plataforma_gaitana\\storage\\datasets\\evaluacion_local_20261028\\Datos_analiticos_proyecto\\modelo_con_proyecciones_teoricas\\base_analitica_proyecciones.parquet": "ad6cabcf7dae10eec19d56a6a79af36c162fe7fd7f025129ec85c1947f6fc05e",
+  "plataforma_gaitana\\storage\\datasets\\evaluacion_local_20261028\\Datos_analiticos_proyecto\\modelo_con_proyecciones_teoricas\\produccion_clima_semanal.parquet": "1262dc6ec5e2b7f758a1dc789c2b5687bab9c162aae2788c2f53be37219f6819",
+  "plataforma_gaitana\\storage\\datasets\\evaluacion_local_20261028\\Notebooks\\Proyecciones Teoricas Propias\\resultados_todos_los_anios\\2026\\estadisticas_auditoria.parquet": "aa0d45788490d06378aa49a2156e9db0f89d259c85a94c438475a4e8d290ad12",
+  "plataforma_gaitana\\storage\\datasets\\evaluacion_local_20261028\\Notebooks\\Proyecciones Teoricas Propias\\resultados_todos_los_anios\\2026\\estadisticas.parquet": "b578a338f898a335c429cc5eac52435d8cf5e78e89713bcd933f3e7d33899a78",
+  "plataforma_gaitana\\storage\\datasets\\evaluacion_local_20261028\\Notebooks\\Proyecciones Teoricas Propias\\resultados_todos_los_anios\\seleccion_planos.parquet": "00acc01e5455f84910f5f09134113d622c3196307c4dbf27811eed27f1607361",
+  "plataforma_gaitana\\storage\\datasets\\evaluacion_local_20261028\\Notebooks\\Proyecciones Teoricas Propias\\resultados_todos_los_anios\\2026\\curvas.parquet": "a13376896f47bdae8b3fd7bb739aa260551be962de4ad9532521c8237c5ed120",
+  "Datos_analiticos_proyecto\\validacion_temporal_20261028\\predicciones_actualizadas.parquet": "b5539bdd4583a83637b25fcd7c1292013edbfc9deb5f00631dc04e61cd4112d9",
+  "Datos_analiticos_proyecto\\revision_clima_finca\\asociaciones_clima_modelos.parquet": "caf6edb1c324981d43dedb1c363ffd2500e40f128fa4d1a4f059d76022ddffdd"
+}

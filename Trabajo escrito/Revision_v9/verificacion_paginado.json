@@ -1,0 +1,20 @@
+{
+  "paginas_word": 36,
+  "maximo": 50,
+  "cumple_limite": true,
+  "tablas": 20,
+  "figuras": 6,
+  "indice_actualizado": true,
+  "paginas_secciones": {
+    "Resumen": 2,
+    "1. Introducción": 4,
+    "2. Radiografía": 7,
+    "3. Metodología": 11,
+    "4. Resultados y discusión": 22,
+    "5. Conclusiones": 31,
+    "Referencias": 32,
+    "Anexo A.": 32,
+    "Anexo B.": 34,
+    "Anexo C.": 35
+  }
+}

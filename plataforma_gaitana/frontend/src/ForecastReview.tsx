@@ -1,0 +1,69 @@
+import {useEffect,useState} from 'react';
+import {Check,ChevronLeft,ChevronRight,SlidersHorizontal} from 'lucide-react';
+import {api,isoWeek,num,weekMonday} from './api';
+import {Card,Chart,ErrorBox,Select,Tag,useResource} from './components';
+import {human} from './ComparisonFilters';
+import {forecastChart,type WeeklyObservation} from './forecastChart';
+import type {Curve,Run} from './types';
+
+type Filter={product:string;color:string;variety:string};
+interface VarietyReview extends Filter {status:'pendiente'|'aceptada'|'ajustada';modified:boolean;reviewed_at:string|null}
+interface ReviewProgress {revision:number;total:number;reviewed:number;pending:number;percent:number;varieties:VarietyReview[];groups:{product:string;color:string;total:number;reviewed:number;pending:number;complete:boolean}[]}
+interface Observation extends WeeklyObservation {producto:string;color:string;variedad:string}
+const seriesNames=['Producción real','Sugerencia del modelo','Revisión actual del ingeniero','Proyección teórica'];
+const seriesColors=['#64806d','#800020','#b88b52','#315f82'];
+const byName=(a:string,b:string)=>a.localeCompare(b,'es');
+
+export function ForecastReview({run,filter,onFilter,onAdjust,editable,onChange,notify}:{run:Run;filter:Filter;onFilter:(f:Filter)=>void;onAdjust:()=>void;editable:boolean;onChange:()=>void;notify:(s:string)=>void}){
+ const reviews=useResource<ReviewProgress>(`/forecasts/${run.id}/reviews?revision=${run.revision}`);
+ const [selected,setSelected]=useState<string[]>([]);
+ const [start,setStart]=useState('');const [end,setEnd]=useState('');
+ const [visible,setVisible]=useState<Record<string,boolean>>(Object.fromEntries(seriesNames.map(n=>[n,true])));
+ const [busy,setBusy]=useState(false);const [error,setError]=useState('');
+ useEffect(()=>{setStart(new Date(Date.parse(run.origin+'T12:00:00Z')-26*7*864e5).toISOString().slice(0,10));setEnd([...run.lines.map(r=>r.target)].sort().at(-1)||run.origin);setSelected([])},[run.id]);
+ useEffect(()=>{setSelected([])},[filter.product,filter.color,run.id]);
+ const validRange=!!start&&!!end&&start<=end;
+ const history=useResource<Observation[]>(validRange?`/series?${new URLSearchParams({forecast_id:run.id,product:filter.product,color:filter.color,start,end,detail:'true'})}`:'');
+ const products=Object.entries(run.lines.filter(r=>r.horizon===1).reduce<Record<string,number>>((a,r)=>({...a,[r.product]:(a[r.product]||0)+r.final}),{})).sort((a,b)=>b[1]-a[1]);
+ const colors=[...new Set(run.lines.filter(r=>r.product===filter.product).map(r=>r.color))].sort(byName);
+ const varieties=[...new Set(run.lines.filter(r=>r.product===filter.product&&r.color===filter.color).map(r=>r.variety))].sort(byName);
+ const currentReviews=(reviews.data?.varieties||[]).filter(r=>r.product===filter.product&&r.color===filter.color);
+ const scopedProgress=reviews.data?.groups.find(r=>r.product===filter.product&&r.color===filter.color);
+ const focus=filter.variety||selected[0]||'';
+ const curve=useResource<Curve>(focus&&filter.product&&filter.color?`/curve?${new URLSearchParams({product:filter.product,color:filter.color,variety:focus,origin:run.origin})}`:'');
+ const activeVarieties=selected.filter(v=>varieties.includes(v));
+ const scoped=run.lines.filter(r=>(!filter.product||r.product===filter.product)&&(!filter.color||r.color===filter.color));
+ const panels=activeVarieties.length?activeVarieties.map(variety=>({title:human(variety),lines:scoped.filter(r=>r.variety===variety),observations:(history.data||[]).filter(r=>r.variedad===variety)})):
+    [{title:filter.color?human(filter.color):filter.product?human(filter.product):'Producción consolidada',lines:scoped,observations:history.data||[]}];
+ function aggregate(rows:Observation[]):WeeklyObservation[]{const sums=new Map<string,number>();for(const r of rows)sums.set(r.semana_inicio,(sums.get(r.semana_inicio)||0)+r.tallos_reales);return [...sums].map(([semana_inicio,tallos_reales])=>({semana_inicio,tallos_reales}))}
+ function selectVariety(variety:string){setSelected(old=>old.includes(variety)?old.filter(v=>v!==variety):[...old,variety]);onFilter({...filter,variety})}
+ function move(offset:number){const index=varieties.indexOf(focus);const variety=varieties[Math.max(0,Math.min(varieties.length-1,index+offset))];if(variety){setSelected(old=>old.length>1?[...new Set([...old,variety])]:[variety]);onFilter({...filter,variety})}}
+ async function mark(items:VarietyReview[],action:'reviewed'|'pending'){
+  if(!items.length||!reviews.data)return;setBusy(true);setError('');
+  try{await api(`/forecasts/${run.id}/reviews`,{method:'POST',body:JSON.stringify({expected_revision:reviews.data.revision,action,identities:items.map(({product,color,variety})=>({product,color,variety}))})});reviews.reload();onChange();notify(action==='reviewed'?'Revisión guardada para las cinco semanas.':'Variedad marcada como pendiente.')}catch(e){setError((e as Error).message);reviews.reload();onChange()}finally{setBusy(false)}
+ }
+ const canReview=editable&&run.state==='borrador'&&!busy&&!reviews.loading;
+ return <>
+  <Card className="review-progress"><div className="section-heading"><div><span className="eyebrow">REVISIÓN DE LA PROPUESTA</span><h2>Que ninguna variedad se quede sin revisar.</h2><p>Seleccionar una variedad permite compararla; marcarla como revisada confirma la revisión de sus cinco semanas.</p></div><Tag tone={reviews.data?.pending===0?'green':'neutral'}>{reviews.data?.percent??0} % revisado</Tag></div>
+   <div className="review-counts"><span><strong>{num(reviews.data?.total)}</strong>Total de variedades</span><span><strong>{num(reviews.data?.reviewed)}</strong>Revisadas</span><span><strong>{num(reviews.data?.pending)}</strong>Pendientes</span></div>
+   <progress aria-label="Avance de revisión de variedades" max={100} value={reviews.data?.percent||0}/>
+   <details><summary>Avance por producto y color</summary><div className="review-groups">{reviews.data?.groups.map(g=><button key={JSON.stringify([g.product,g.color])} className="review-group" onClick={()=>onFilter({product:g.product,color:g.color,variety:''})}><span>{human(g.product)} · {human(g.color)}</span><strong>{g.reviewed}/{g.total} {g.complete&&<Check size={16} aria-label="Completado"/>}</strong></button>)}</div></details>
+   <ErrorBox message={reviews.error}/>
+  </Card>
+  <Card><div className="section-heading"><div><span className="eyebrow">PRODUCTO → COLOR → VARIEDAD</span><h2>Recorre el cultivo y compara antes de decidir.</h2></div></div>
+   <div className="filters"><Select label="Producto · mayor volumen primero" value={filter.product} onChange={product=>onFilter({product,color:'',variety:''})} options={[{value:'',label:'Todos los productos'},...products.map(([value])=>({value,label:human(value)}))]}/><Select label="Color" value={filter.color} onChange={color=>onFilter({...filter,color,variety:''})} options={[{value:'',label:filter.product?'Todos los colores':'Selecciona primero un producto'},...colors.map(value=>({value,label:human(value)}))]}/></div>
+   {filter.product&&filter.color?<><div className="section-heading"><p><strong>{scopedProgress?.reviewed||0} de {varieties.length}</strong> variedades revisadas en {human(filter.color)}.</p>{scopedProgress?.complete&&<Tag tone="green"><Check size={15}/>Producto y color completos</Tag>}</div>
+   <p className="caption">Marca las casillas para comparar una o varias variedades. Sin selección se muestra el total del color. La revisión se guarda en esta propuesta y se conserva al navegar.</p>
+   <div className="review-varieties">{varieties.map(variety=>{const item=currentReviews.find(r=>r.variety===variety);const reviewed=item&&item.status!=='pendiente';return <div key={variety} className={`review-variety ${focus===variety?'focused':''}`}><label><input type="checkbox" checked={activeVarieties.includes(variety)} onChange={()=>selectVariety(variety)}/><span>{human(variety)}<small>{reviewed?(item.status==='ajustada'?'Revisada con ajustes':'Sugerencia aceptada'):'Pendiente de revisión'}</small></span></label><button className={`button ${reviewed?'reviewed':'secondary'}`} disabled={!canReview||!item} aria-label={`${reviewed?'Volver a pendiente':'Marcar revisada'} ${human(variety)}`} onClick={()=>item&&mark([item],reviewed?'pending':'reviewed')}>{reviewed?<><Check size={15}/>Revisada</>:'Marcar revisada'}</button></div>})}</div>
+   <div className="actions review-actions"><button className="button secondary" disabled={!varieties.length||varieties.indexOf(focus)<=0} onClick={()=>move(-1)}><ChevronLeft size={15}/>Anterior</button><Select label="Variedad en revisión" value={focus} onChange={variety=>{onFilter({...filter,variety});setSelected(old=>old.length>1?[...new Set([...old,variety])]:[variety])}} options={[{value:'',label:'Selecciona una variedad'},...varieties.map(value=>({value,label:human(value)}))]}/><button className="button secondary" disabled={!varieties.length||varieties.indexOf(focus)>=varieties.length-1} onClick={()=>move(1)}>Siguiente<ChevronRight size={15}/></button><button className="button secondary" disabled={!activeVarieties.length} onClick={()=>{setSelected([]);onFilter({...filter,variety:''})}}>Ver total del color</button><button className="button primary" disabled={!canReview||!activeVarieties.length} onClick={()=>mark(currentReviews.filter(r=>activeVarieties.includes(r.variety)),'reviewed')}>Confirmar revisión de seleccionadas ({activeVarieties.length})</button></div></>:<p className="note">Selecciona producto y color para revisar sus variedades. Mientras tanto puedes explorar su producción consolidada.</p>}
+  </Card>
+  <Card><div className="section-heading"><div><span className="eyebrow">VENTANA DE ANÁLISIS</span><h2>Historia y próximas semanas en la misma vista.</h2></div></div>
+   <div className="filters"><label className="field"><span>Desde la semana</span><input type="week" aria-label="Desde la semana del gráfico" value={start?isoWeek(start):''} onChange={e=>{const v=weekMonday(e.target.value);if(v)setStart(v)}}/></label><label className="field"><span>Hasta la semana</span><input type="week" aria-label="Hasta la semana del gráfico" value={end?isoWeek(end):''} onChange={e=>{const v=weekMonday(e.target.value);if(v)setEnd(v)}}/></label></div>
+   <div className="curve-switches" role="group" aria-label="Curvas visibles">{seriesNames.map((name,i)=><label key={name}><input type="checkbox" checked={visible[name]} onChange={e=>setVisible({...visible,[name]:e.target.checked})}/><span style={{borderColor:seriesColors[i]}}>{name}</span></label>)}</div>
+   <p className="caption">La revisión actual comienza con los valores del modelo y cambia al guardar ajustes. Por eso ambas líneas pueden coincidir. La teoría se suaviza sólo al dibujar: sus valores y los demás cálculos se conservan. Las otras líneas unen observaciones con segmentos rectos. El rango amplía la vista histórica, no los cinco horizontes del modelo. Si el origen es pasado, el real posterior se muestra sólo para comparación y puede incluir la semana en curso aún parcial.</p>
+   <ErrorBox message={!validRange?'La semana inicial debe ser anterior o igual a la final.':history.error||error}/>
+  </Card>
+  {validRange&&<div className={panels.length>1?'review-chart-grid':''}>{panels.map(panel=><Card key={panel.title}><div className="section-heading"><h2>{panel.title}</h2>{activeVarieties.length>0&&<button className="link-button" onClick={()=>onFilter({...filter,variety:panel.lines[0]?.variety||''})}>Revisar esta variedad</button>}</div>{history.loading?<p role="status">Actualizando el histórico de la selección…</p>:<Chart label={`Historia, modelo, revisión y teoría de ${panel.title}`} height={340} option={forecastChart(panel.lines,aggregate(panel.observations),run.origin,{start,end,visible,observedAfterOrigin:true})}/>} {panel.lines.some(r=>r.theory===null)&&<p className="caption">La propuesta no tiene una referencia teórica para todas las filas de algunas semanas de esta selección; esas semanas no se dibujan como un total teórico completo. La curva por edad se consulta por separado.</p>}</Card>)}</div>}
+  <Card className="review-footer"><div><span className="eyebrow">VARIEDAD EN REVISIÓN</span><h2>{focus?human(focus):'Curva teórica por edad'}</h2>{focus?<><ErrorBox message={curve.error}/>{curve.data?.series.length?<><Chart label={`Curva normalizada de ${human(focus)}`} height={220} option={{grid:{left:60,right:20,top:25,bottom:40},tooltip:{trigger:'axis'},xAxis:{type:'value',name:'Edad (semanas)',nameLocation:'middle',nameGap:26},yAxis:{type:'value',name:'Tallos/planta'},series:[{type:'line',smooth:false,data:curve.data.series.map(p=>[p.age,p.yield]),itemStyle:{color:'#315f82'},symbolSize:4}]}}/><p className="caption">{curve.data.note} Se utiliza la curva final del proceso existente; no se aplica otra normalización ni otro suavizado numérico.</p></>:<p>{curve.data?.note||'Consultando la curva utilizada en las proyecciones…'}</p>}</>:<p>Elige una variedad para ver su rendimiento por planta y semana de edad. Este recuadro tiene una escala distinta al pronóstico absoluto.</p>}</div><div className="review-adjust"><h2>El criterio del ingeniero</h2><p>El ajuste afecta {focus?`a ${human(focus)}`:filter.color?`al total de ${human(filter.color)}`:filter.product?`al total de ${human(filter.product)}`:'a la selección que elijas'}. Si comparas varias variedades, selecciona aquí cuál vas a ajustar.</p><button className="button secondary" disabled={!filter.product||run.state!=='borrador'||!editable} onClick={onAdjust}><SlidersHorizontal size={17}/>Ajustar {focus?'esta variedad':filter.color?'total del color':'total del producto'}</button><p className="caption">Un cambio en cantidades vuelve a dejar pendiente la revisión de las variedades afectadas. Guardar un ajuste no confirma por sí solo que ya revisaste las cinco semanas.</p></div></Card>
+ </>
+}

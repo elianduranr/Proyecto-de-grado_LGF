@@ -12,3 +12,5 @@ Consultar la [guía única](../../GUIA_PASO_A_PASO_DATOS_Y_MODELOS.md) para las 
 (Pronóstico diario en revisión: desarrollo preliminar y siguientes pasos.) El reparto diario está en Modelo_de_series_diario/05. Cada notebook contiene su código y lee archivos explícitos, sin depender de variables de otro kernel.
 
 20_EDA_origen_error_modelo_ingeniero.ipynb cierra el recorrido: descomposición del error por producto, color y variedad, H1 separado y cada horizonte, semanas críticas y foco en tres variedades. Requiere salidas vigentes de 10 y 19; no reentrena.
+
+26_validacion_temporal_actualizada_y_operacion.ipynb amplía la evaluación del 19 con fuentes versionadas hasta octubre: fechas y porcentajes por corte, train/validación/test, contraste mensual/congelado, WAPE y sesgo por horizonte y limitaciones. Es el último paso de comprobación semanal; los análisis 20–25 conservan su carácter histórico. No reentrena los modelos diarios.

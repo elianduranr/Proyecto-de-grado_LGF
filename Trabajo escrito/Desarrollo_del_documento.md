@@ -8,11 +8,7 @@ Universidad de los Andes · Facultad de Ingeniería Industrial · Maestría en I
 
 ## Resumen
 
-El proyecto pronostica semanalmente tallos reportados en GAITANA con curvas de rendimiento por edad, producción reciente y clima. La integración corregida recuperó registros piloto con diferencias de escritura y reconstruyó proyecciones y modelos. La producción real permanece en la base; la curva sirve como referencia directa cuando representa las edades de todas las cohortes del plano, y el modelo puede apoyarse en producción reciente cuando no aplica esa referencia. En 15.838 casos emparejados, el WAPE semanal es 19,33 % frente a 19,74 % del ingeniero. El detalle por horizonte y sesgo aparece en resultados.
-
-La actualización incorpora clima válido hasta el 21 de septiembre de 2026 y evalúa lluvia, temperatura, humedad y radiación, distinguiendo error de volumen y desplazamiento relativo del corte. Las asociaciones históricas de desplazamiento son débiles y sus intervalos incluyen cero. La atribución exacta de pilotos identifica evidencia de GAITANA, no demuestra que el resto provenga de ARABELLA.
-
-La selección previa a 2026 se mantiene fija: Boosting sin clima. En 2026 obtiene 19,33 % WAPE frente a 19,74 % del ingeniero. En H1 obtiene 15,66 % frente a 17,09 %. El reparto diario reconciliado obtiene 27,26 %; el modelo autónomo, 26,72 %. Son resultados retrospectivos; la sección diaria permanece en revisión.
+Este trabajo desarrolla un pronóstico semanal de tallos reportados para GAITANA y, como tarea aparte aún en revisión, explora la distribución diaria de H1. El modelo semanal seleccionado antes de evaluar 2026 es HistGradientBoosting sin clima: usa un ajuste para H1–H2 y otro para H3–H5, con los mismos parámetros, y corrige la teoría o la media de cuatro semanas según corresponda. En 16.325 comparaciones, obtiene 19,36 % de WAPE frente a 19,71 % del ingeniero; gana en H1–H2 y en el total, mientras el ingeniero gana en H3–H5. Los resultados son retrospectivos. El pronóstico diario tiene evaluaciones exploratorias y aún no cuenta con una comparación equivalente contra el ingeniero.
 
 Palabras clave: producción florícola, curvas, calidad, clima, pronóstico semanal, distribución diaria, validación temporal.
 
@@ -193,9 +189,9 @@ La asociación mayor de la semana previa en H1 motivó probar memoria reciente. 
 
 ### 3.7. Clima, error de volumen y desplazamiento del corte
 
-La revisión previa utilizaba clima hasta el 28 de julio de 2026 mientras interpretaba un ajuste de agosto; por ello una importancia nula no acreditaba ausencia de influencia. La nueva limpieza conserva mediciones válidas de GAITANA hasta el 21 de septiembre. Se auditan conflictos entre ediciones, valores imposibles, huecos y frecuencia. Las observaciones son predominantemente de treinta minutos. El campo RAIN muestra cantidades que vuelven a cero entre eventos, no un contador creciente; se suman registros en las unidades originales, pendientes de confirmación con la estación. Se exige cobertura diaria suficiente antes de construir acumulados. [E15]
+La fuente climática contiene lecturas de GAITANA durante febrero–mayo de 2026; en esos meses predominan registros horarios (aproximadamente 24 al día), mientras que en otros periodos se observan cerca de 48 lecturas diarias. La auditoría adapta el umbral a la frecuencia observada: acepta el día con al menos 80 % de las lecturas esperadas y un rango de al menos 22 horas. Así se usan también los días con medición horaria completa. Temperatura, humedad y radiación quedan disponibles en esos meses; algunas ventanas de lluvia no se calculan cuando faltan registros o hay conflictos, y no se rellenan como lluvia cero. En la figura, rojo significa que una señal/ventana no cumple su regla de cálculo, no que falten datos climáticos de origen, variedades o producción. [E15]
 
-![Figura 5. Disponibilidad del clima ampliado al lunes de emisión. Verde indica valor disponible; rojo, faltante conservado. Fuente: E15.](Figuras_resultados/clima_cobertura_origen.png)
+![Figura 5. Señales climáticas disponibles al lunes de emisión con cobertura adaptada a la frecuencia registrada. Las lecturas horarias de febrero–mayo se aprovechan cuando cumplen el umbral; algunas ventanas de lluvia siguen parcialmente disponibles. Rojo indica una señal no calculable bajo su regla, no ausencia de datos fuente. Fuente: E15.](Figuras_resultados/clima_cobertura_origen.png)
 
 El EDA usa objetivos cerrados antes del 7 de julio de 2025. Para error de volumen estudia (real − teoría)/media4 dentro de cada serie y horizonte, con al menos veinte pares donde la curva representa todas las edades de las cohortes. Las medianas de Spearman son pequeñas y hay diferencias entre series. Las variables meteorológicas son comunes a la finca; repetirlas en varias variedades no crea observaciones meteorológicas independientes. El clima de estación no equivale necesariamente al microclima de cada invernadero.
 
@@ -251,19 +247,32 @@ El total semanal también puede ocultar cambios recientes. Dos series con un tot
 
 La unidad semanal es finca, producto, color, variedad y semana. La base de pronóstico agrega origen y horizonte: una semana objetivo puede aparecer varias veces porque fue anticipada en fechas distintas. Por eso sus cantidades no se suman como inventario producido. Las proyecciones ya calculadas se incorporan como insumo; los modelos de ajuste no vuelven a consultar plantas ni curvas para reconstruirlas. [E3]
 
-H1 corresponde a la semana que comienza el lunes de emisión y H5 a la que comienza cuatro semanas después. Sólo se usan semanas cerradas al entrenar. Las variables diarias se desplazan un día y las predicciones de los siete días de H1 se congelan al lunes, sin actualizarse con lo ocurrido dentro de esa semana. Se supone que los reportes pasados ya están disponibles; su latencia real debe confirmarse. AL1 aporta una referencia de disponibilidad supuesta para los planos, no una prueba de publicación.
+H1 corresponde a la semana siguiente a la semana en curso cuando se emite el archivo; por ejemplo, el archivo 18–22 se envía el jueves de la semana 17 y H1 es la semana 18 y H5 a la que comienza cuatro semanas después. Sólo se usan semanas cerradas al entrenar. Las variables diarias se desplazan un día y las predicciones de los siete días de H1 se congelan al lunes, sin actualizarse con lo ocurrido dentro de esa semana. Se supone que los reportes pasados ya están disponibles; su latencia real debe confirmarse. AL1 aporta una referencia de disponibilidad supuesta para los planos, no una prueba de publicación.
 
 Las homologaciones conservan la identidad comercial y no fuerzan coincidencias ambiguas. Los movimientos legítimos de producción se mantienen, los objetivos ausentes no se imputan y los parámetros de imputación de predictores se estiman con entrenamiento. Una prueba que modifica producción futura verifica que las variables anteriores al origen permanezcan iguales. Estos controles hacen revisable el significado de cada caso.
 
 ### 4.1.1. Cómo leer la base analítica consolidada
 
-La base común tiene 621.195 filas y 47 columnas; incluye también casos sin objetivo observado o sin historia suficiente. No equivale al conjunto de entrenamiento ni a los 15.838 casos del benchmark. Cada fila pregunta cuántos tallos producirá una finca/producto/color/variedad en una semana objetivo, con información disponible desde un origen. El anexo de diccionario agrupa las 47 columnas; las etapas posteriores añaden entradas explícitas.
+La base común tiene 621.195 filas y 47 columnas; incluye también casos sin objetivo observado o sin historia suficiente. No equivale al conjunto de entrenamiento ni al benchmark estricto vigente, actualizado a 16.325 comparaciones. Cada fila representa una combinación comercial y una semana objetivo vista desde un origen. El diccionario completo, con las 47 columnas agrupadas, está en el cuaderno `lectura.ipynb`; aquí resumimos sólo lo necesario para interpretar el ejemplo.
 
-En DINO amarillo de GAITANA, origen 3 de agosto de 2026 y H5 significan pronosticar del 31 de agosto al 6 de septiembre. La última semana histórica empieza el 27 de julio y reporta 19.202 tallos; Media4 es 22.250,75. El plano suma 27.916,61 tallos teóricos de las cohortes cuya edad está representada, pero dos de las 25 edades no tienen tasa en esa curva. Esa suma parcial no se usa como total del plano; no significa que se hayan perdido camas o producción. Los 18.970 tallos de `y` siguen en la base como resultado observado. La fila tiene Media4 y 213 semanas reportadas, por lo que el modelo usa la ruta de producción reciente. Admisible no significa pertenencia a test ni resultado ya conocido.
+| Campo | Cómo leerlo en una fila |
+| --- | --- |
+| `finca`, `producto`, `color`, `variedad` | Identifican a quién corresponde el pronóstico; aquí, DINO amarillo de GAITANA. |
+| `origen` | Fecha de corte desde la que se pronostica y hasta la cual llega la información disponible. |
+| `semana_objetivo`, `horizonte` | Semana que se quiere estimar y qué tan adelante queda. En la comparación con archivos del ingeniero, la primera semana del nombre del archivo determina H1: el archivo 18–22 tiene H1 en semana 18; el renglón de semana 17 que se repite allí es de la semana en curso. |
+| `teoria_modelo` | Referencia teórica utilizable si la curva representa las edades de todas las cohortes del plano. Vacío significa que esta ruta no aplica; no significa cero producción. |
+| `media_4`, `observaciones_previas` | Resumen de producción real anterior al origen: media de cuatro semanas e historial reportado disponible. |
+| `y` | Producción real de la semana objetivo. Se conoce al cerrar esa semana y se usa para evaluar; no está disponible al emitir el pronóstico. |
 
-La teoría previa no es el horizonte anterior: es lo que un plano anterior calculaba para la misma semana objetivo. En este caso, el plano seleccionado del 13 de julio llega al objetivo en su horizonte teórico 7; los dos anteriores, en 8 y 9. El generador produce diez semanas, mientras el modelo evalúa H1–H5 desde otro origen. Las versiones anteriores sí existían, pero estaban incompletas y no se habilitaron como teorías previas. Los vacíos no representan cero tallos.
+En el ejemplo, origen 3 de agosto de 2026 y H5 corresponden a la semana objetivo del 31 de agosto al 6 de septiembre. La última semana histórica empieza el 27 de julio y reporta 19.202 tallos; `media_4` es 22.250,75 y hay 213 semanas reportadas. El plano calcula 27.916,61 tallos para las edades representadas, pero dos de las 25 cohortes no tienen tasa en esa curva: por eso `teoria_modelo` queda vacío y el modelo usa su respaldo de producción reciente. La suma parcial no se toma como total teórico del plano ni señala pérdida de camas o producción. Al cerrar la semana, `y` registra 18.970 tallos reales. La fila es admisible para pronosticar, pero eso no implica que pertenezca a test.
 
-### 4.2. Modelo semanal y señales recientes
+La teoría previa tampoco es el horizonte anterior: es lo que un plano anterior calculaba para esa misma semana objetivo. En este ejemplo, el plano seleccionado del 13 de julio llega al objetivo en su horizonte teórico 7; los dos anteriores, en 8 y 9. Cada plano genera diez semanas teóricas, mientras el modelo evalúa H1–H5 desde su propio origen. Las versiones anteriores existían, pero sus curvas no representaban todas las cohortes; por eso sus teorías no se habilitaron como referencia. Un campo vacío no representa cero tallos.
+
+### 4.2. Metodología del pronóstico semanal
+
+El flujo siguiente ordena las decisiones en el orden en que se hicieron. Cada bloque identifica el modelo o referencia, qué información se agregó y qué decisión metodológica habilitó el paso siguiente. La variante que queda como selección general y las pruebas posteriores por horizonte se mantienen diferenciadas.
+
+![Diagrama A. Secuencia de construcción del modelo semanal: modelos probados, información añadida y decisiones entre etapas. Fuente: cuadernos 10–25.](Figuras_resultados/metodologia_modelo_semanal.png)
 
 Cuando la curva representa todas las cohortes, el sistema aprende la diferencia entre producción real y esa referencia teórica. Cuando no, utiliza una corrección de la media de producción reciente de cuatro semanas. Así, la base conserva la observación real y el modelo tiene una ruta para producir un pronóstico admisible sin inventar un valor teórico para edades no representadas. Los modelos de boosting comparten información entre series e incorporan identificación comercial, horizonte, memoria semanal y los bloques de clima y teoría definidos en los notebooks. [E5]
 
@@ -275,35 +284,29 @@ El algoritmo principal es HistGradientBoostingRegressor, implementado en scikit-
 
 El objetivo aprendido es una corrección en tallos: real menos teoría, o real menos Media4 en el respaldo. La predicción final suma referencia y corrección estimada, con mínimo cero. Como ejemplo ilustrativo, una teoría de 28.000 y una corrección estimada de −3.500 producen un pronóstico de 24.500 tallos. El modelo aprende la corrección con resultados históricos, pero no conoce la producción objetivo futura al emitirla. Ridge estima esa corrección con una combinación lineal regularizada; boosting suma aportes de árboles. Ambos se evalúan fuera del entrenamiento.
 
-### 4.2.1. Referencias y experimentos iniciales: qué significa cada nombre
+### 4.2.1. Modelos semanales probados y por qué se compararon
 
-| Nombre de resultados (12) | Algoritmo y referencia | Información y pregunta |
-| --- | --- | --- |
-| Ultimo_valor | Regla: última semana real | ¿Superamos repetir el nivel más reciente? |
-| Media4 | Regla: promedio de cuatro semanas | ¿Superamos una referencia suavizada? |
-| Teoria_sin_ajuste | Proyección ya calculada | ¿Cuánto error existe antes de corregirla? |
-| Ajuste_media4_sin_planos | Boosting sobre Media4 | Producción histórica, calendario, identidad y clima; no recibe teoría. |
-| Modelo_teorico | Boosting sobre teoría | Añade teoría y su desvío frente a Media4; usa memoria real y clima. |
-| Teorico_sin_memoria | Boosting sobre teoría | Retira producción histórica y desvío: prueba el aporte del bloque de memoria. |
-| Teorico_sin_clima | Boosting sobre teoría | Retira las seis variables climáticas originales. |
-| Ridge_ajuste_teoria | Regresión Ridge sobre teoría | Mismas entradas del teórico; contrasta una corrección lineal regularizada. |
-| Modelo_teorico_historia | Boosting sobre teoría | Añade las dos versiones previas y revisión para la misma semana objetivo. |
-| Sistema_teoria_con_respaldo | Selección entre dos ajustes boosting | Ajuste de teoría cuando la curva representa todas las cohortes; si no, ajuste de Media4. No promedia ambas rutas. |
+La teoría de la curva es una referencia productiva, no el pronóstico final por sí sola. Se estima como punto de partida cuando representa las edades de todas las cohortes del plano. El modelo aprende la diferencia entre producción real y teoría; cuando la curva no representa todas las edades, aprende una corrección sobre Media4. Así se conservan dos rutas interpretables y cada caso usa la referencia que sí aplica.
 
-Memoria significa producción real histórica, no versiones anteriores de proyecciones. Sin memoria sigue entrenándose con ejemplos históricos; simplemente no recibe ese bloque como entrada. Identidad comercial son producto, color y variedad. Finca identifica la serie y las uniones, pero no es una categoría entregada al algoritmo del 12.
+HistGradientBoosting se probó porque sus árboles pueden aprender relaciones no lineales entre memoria, producto y horizonte. Ridge sirve de contraste lineal regularizado. Las referencias simples y las ablaciones muestran si el aprendizaje y cada bloque de variables aportan algo frente a reglas más sencillas. La secuencia completa es:
 
-| Bloque de entradas de Modelo_teorico | Columnas | Cantidad |
-| --- | --- | ---: |
-| Identidad y calendario | producto, color, variedad; horizonte, semana_seno, semana_coseno | 6 |
-| Memoria real | produccion_lag1/2/3, media_4/8, desv_4, tendencia_4_8, cambio_reciente, produccion_52 | 9 |
-| Clima original | Temperatura, humedad y radiación: semana anterior y media4 | 6 |
-| Teoría | teoria_modelo, antiguedad_curva, desviacion_reciente_teoria | 3 |
+| Cuaderno / modelo | Qué hace | Entradas principales | Decisión o conclusión |
+| --- | --- | --- | --- |
+| 12 · `Ultimo_valor`, `Media4`, `Teoria_sin_ajuste` | Repite el último dato, promedia cuatro semanas o usa la curva sin corregir. | Una referencia cada vez. | Puntos de comparación sencillos para todos los H1–H5. |
+| 12 · `Ajuste_media4_sin_planos` | Boosting estima real−Media4 y suma la corrección a Media4. | Identidad comercial, calendario, memoria real y clima disponible; no recibe teoría. | Respaldo para casos sin curva aplicable. |
+| 12–13 · `Modelo_teorico` / `Sistema_teoria_con_respaldo` | Boosting estima real−teoría; si la curva no aplica, el sistema usa el ajuste de Media4. | Identidad, horizonte/calendario, rezagos y tendencias reales, clima y variables de curva en la ruta teórica. | Arquitectura de dos rutas; no promedia ambas referencias. |
+| 12 · `Ridge_ajuste_teoria`, `Teorico_sin_memoria`, `Teorico_sin_clima` | Ridge prueba una corrección lineal; las otras dos variantes quitan memoria o clima. | Mismo problema con una diferencia controlada por variante. | Contrastes para medir no linealidad y aporte de cada bloque. |
+| 12 · `Modelo_teorico_historia` | Añade revisiones de teorías anteriores para la misma semana objetivo. | Teoría actual, variables semanales y versiones previas. | Prueba si los cambios entre planos agregan señal. |
+| 14 · Boosting semanal con señales de corte diario | Mantiene el objetivo semanal y añade 28 resúmenes de corte/clima recientes. | Ventanas 3/5/7/14 días, rezagos, conteos, dispersión, EMA y tendencias. | Prueba si una trayectoria diaria creciente o decreciente anticipa el total semanal. No es el modelo diario. |
+| 15 · Boosting con memoria larga y grupos | Añade memoria de hasta 12 semanas, dispersión/conteos y prueba H1–H2 separado de H3–H5. | Producción histórica y, en una variante, teorías previas. | Motiva el uso de dos grupos de horizontes; pesos fijados con validación de 2025. |
+| 19 · **Boosting sin clima, selección anual** | Dos grupos de HistGradientBoosting corrigen teoría o Media4: H1–H2 y H3–H5. | Memoria semanal/diaria y de 12 semanas, identidad/calendario y teoría cuando aplica; sin clima. | Ganador anual entre variantes propias, elegido antes de evaluar 2026. Detalle de variables y parámetros en 4.2.5. |
+| 22–24 · Modelos separados por horizonte | Entrena un modelo por cada H1, H2, H3, H4 y H5; ajusta `max_iter` con validación temporal. | Variables semanales, memoria y teoría; clima sólo si hay cobertura suficiente. | Experimento distinto del ganador anual. La validación eligió 80 iteraciones en H1, H2 y H5, y 40 en H3 y H4. |
+| 25 · Ensayo de modelos propios por producto | Conserva el grupo H1–H2 para H1 y el modelo H2 separado. En H3–H5, para Minicarnation y Carnation prueba un modelo propio de cada producto y horizonte junto con el modelo general de ese horizonte. Otros productos conservan el general. | Producción previa, calendario, teoría y proyecciones anteriores si aplican; el clima no estaba disponible en esta corrida. | Experimento reciente de 1.226 casos; no reemplaza la selección anual. La mezcla y sus parámetros se explican en 5.1.1. |
 
-El teórico recibe 24 columnas originales; sin memoria recibe 14, sin clima 18 y con historia 27. Ridge recibe las mismas 24; el ajuste de Media4 recibe 21. La codificación convierte categorías en indicadores y la imputación puede añadir indicadores de ausencia, por lo que estos conteos no equivalen a la dimensión final del algoritmo. Todo se aprende dentro de train; Ridge además estandariza las variables numéricas. No se entregan y, nombres de archivos, llaves de unión ni banderas de cobertura como predictores en estos ajustes. Las fechas definen cortes y calendario; la cobertura determina la ruta. Recibir una variable no prueba que sea útil.
+En el cuaderno 25, “especializado” es sólo una forma abreviada de decir “entrenado para un producto y horizonte específicos”. El ejemplo H3 de Minicarnation usa únicamente su historial de H3; no es otro tipo de algoritmo, sino HistGradientBoosting entrenado con un subconjunto más acotado. Después se combina —con un peso definido en validación anterior— con la predicción del modelo general de H3. El ingeniero y las semanas recientes no determinan ese peso.
 
-Los nueve métodos iniciales se puntúan en casos comunes donde la curva representa todas las edades de las cohortes. Las ablaciones mantienen la misma población y parámetros, cambiando un bloque. En cambio, el ajuste Media4 aprende con todos sus casos admisibles; compararlo con el ajuste basado en curva cambia la población de entrenamiento. El sistema completo se evalúa aparte sobre los casos admisibles, con una ruta para cada situación.
 
-### 4.2.2. De información semanal a tendencias diarias para pronosticar semanas
+### 4.2.2. Variables diarias que alimentan el pronóstico semanal
 
 El experimento 13 enfrenta el sistema inicial al ingeniero; el 14 conserva boosting y añade 28 entradas, sin convertir todavía la tarea en pronóstico diario. Para un mismo total semanal, una trayectoria de corte creciente puede contener información distinta de una decreciente. Se prueba esa hipótesis, no se impone una corrección automática por tendencia.
 
@@ -343,7 +346,27 @@ La validación anterior a 2026 produce esta comparación; no es el test frente a
 
 Una diferencia pequeña entre candidatos en estos dos meses no acredita superioridad estable. Se conserva la elección para evitar escoger de nuevo mirando el resultado de 2026.
 
-### 4.2.5. Secuencia temporal de entrenamiento, validación y evaluación
+### 4.2.5. Modelo semanal seleccionado: arquitectura, variables y parámetros
+
+El ganador anual es el **Boosting sin clima del cuaderno 19**. No se entrenó un parámetro distinto para cada H. Se ajusta un modelo para H1–H2 y otro para H3–H5; dentro de cada grupo se crean dos regresiones complementarias: una corrige la teoría en los casos donde la curva cubre todas las edades y otra corrige Media4 como respaldo. Cada fila toma sólo la ruta que le corresponde; no se promedian teoría y Media4.
+
+La ruta de Media4 recibe producto, color, variedad, horizonte y calendario, nueve variables de memoria semanal, 28 resúmenes diarios de producción/clima ya observados y siete señales de memoria larga. La ruta teórica recibe ese mismo bloque más `teoria_modelo`, `antiguedad_curva` y `desviacion_reciente_teoria`. Como se eligió la variante sin clima, no entran columnas meteorológicas al modelo final. La imputación numérica usa medianas calculadas en train y las categorías se codifican con indicadores; la cobertura decide la ruta, pero no se entrega al algoritmo como predictor.
+
+Los dos grupos y las dos rutas comparten la misma configuración de HistGradientBoostingRegressor:
+
+| Parámetro | Valor | Interpretación sencilla |
+| --- | ---: | --- |
+| Tasa de aprendizaje (`learning_rate`) | 0,08 | Cuánto aporta cada árbol nuevo. |
+| Iteraciones máximas (`max_iter`) | 80 | Número de etapas de árboles. |
+| Hojas máximas por árbol (`max_leaf_nodes`) | 15 | Complejidad permitida a cada árbol. |
+| Mínimo por hoja (`min_samples_leaf`) | 40 | Evita reglas basadas en muy pocos casos. |
+| Regularización L2 | 1,0 | Penaliza ajustes excesivamente grandes. |
+| Parada temprana | No | Usa las 80 iteraciones definidas. |
+| Semilla (`random_state`) | 42 | Hace reproducible la ejecución. |
+
+Por tanto, aunque el sistema tenga varios ajustes por grupo y por ruta, **no tiene hiperparámetros distintos entre H1–H2 y H3–H5**. Los parámetros diferentes aparecen en el experimento posterior de modelos separados por horizonte (cuadernos 22–24), no en el ganador anual. Allí se eligieron 80 iteraciones para H1, H2 y H5 y 40 para H3 y H4; se mantuvieron 15 hojas y el resto de la configuración. Esa variante no sustituyó al ganador anual.
+
+### 4.2.6. Secuencia temporal de entrenamiento, validación y evaluación
 
 En 12 se fijan cortes el 7 de julio de 2025, 5 de enero y 4 de mayo de 2026, con ocho semanas de orígenes de evaluación por corte. Cada entrenamiento exige semana_objetivo + siete días menor o igual al corte: no basta con que el origen sea antiguo si su resultado aún no había cerrado. No hay división aleatoria. En 13–19 se reentrena al primer origen de cada mes, conservando los mismos parámetros y el pasado disponible.
 
@@ -355,9 +378,13 @@ La evaluación principal exige misma finca, producto, color, variedad, origen, o
 
 Se informa MAE en tallos, RMSE, WAPE y sesgo, con cortes por horizonte y segmento. El WAPE es la suma de errores absolutos dividida por la suma de producción real: un 20 % no significa 80 % de casos acertados. En las tablas vigentes de 19 y diario 05, sesgo = predicción menos real: positivo indica sobreestimar y negativo subestimar. Su versión porcentual divide la suma de errores firmados por la suma real y multiplica por cien. Los diagnósticos históricos de teoría y algunos notebooks anteriores usan real menos predicción; sus signos no se comparan sin invertirlos. El remuestreo por semana objetivo aporta intervalos exploratorios, sin convertir retrospectivamente estos periodos en una prueba independiente intacta.
 
-### 4.4. Pronóstico diario autónomo y distribución del total semanal
+### 4.4. Metodología independiente del pronóstico diario
 
-(En revisión: desarrollo preliminar y siguientes pasos.)
+(En revisión: este bloque es un piloto independiente del modelo semanal.)
+
+El objetivo diario es estimar los tallos reportados en cada día de H1. No se vuelve a pronosticar la semana completa en esta sección. Hay dos tareas: el modelo autónomo predice cada día sin recibir el total semanal actual; el reconciliado parte del total semanal ya pronosticado y aprende cómo distribuirlo en siete días. Sus WAPE responden preguntas distintas. El piloto SARIMA/SARIMAX es un contraste exploratorio de series temporales.
+
+![Diagrama B. Secuencia de trabajo del pronóstico diario, con modelos y decisiones; desarrollo todavía en revisión. Fuente: cuadernos diarios 01–05.](Figuras_resultados/metodologia_modelo_diario.png)
 
 El modelo diario autónomo aprende el corte de cada día con historia de producción, clima pasado y calendario, sin recibir el pronóstico semanal actual. Las variantes reconciliadas calculan pesos no negativos para los siete días, los normalizan para que sumen uno y los multiplican por el pronóstico semanal. Se comparan reparto uniforme, perfil de volumen registrado en las ocho semanas previas y perfil de boosting ponderado por frecuencia histórica de reporte. Este último representa el volumen registrado esperado, no una afirmación de producción física cero en días ausentes. [E7]
 
@@ -368,6 +395,8 @@ Como contraste de series de tiempo se prueban SARIMA (1,0,1)×(0,1,1,7) y SARIMA
 ## 5. Resultados: qué mejoró y dónde persisten las dificultades
 
 ### Recorrido de resultados antes de la selección vigente
+
+Los resultados de experimentos iniciales que se muestran a continuación conservan el panel común utilizado en esas corridas (15.838 casos). Sirven para documentar cómo se compararon arquitecturas y qué decisiones motivaron; no son el benchmark anual vigente. La comparación actualizada con el ingeniero, que aplica la regla nominal del archivo semanal, utiliza 16.325 casos y aparece en 5.1.
 
 Los resultados de 12 preguntan si puede corregirse una referencia con información pasada. En los mismos casos donde la curva representa las edades de todas las cohortes se comparan reglas sencillas, boosting y Ridge. Los nombres describen qué referencia y qué bloque recibe cada ajuste. [E5]
 
@@ -414,55 +443,50 @@ En 15 se agruparon horizontes, se añadió historia productiva larga y se probar
 
 «Sin memoria» significa que el modelo no recibe rezagos productivos, aunque sí aprende de casos históricos. Las proyecciones previas son versiones anteriores del plano para la misma semana objetivo. La referencia “Antes” conserva otra configuración y clima, por lo que no aísla el efecto de esta revisión. La selección final por validación temporal se informa aparte en 5.1.
 
-### 5.1. Precisión semanal: efecto del clima y comparación con el ingeniero
+### 5.1. Resultado del modelo semanal seleccionado frente al ingeniero
 
-La revisión mantiene algoritmos, variables, cortes temporales y reglas de selección. Cambian la historia de pilotos recuperada y las curvas derivadas; se reconstruyen las referencias y se reentrenan los modelos. La selección con validación anterior a 2026 es **Boosting sin clima**. Se conserva al evaluar 2026; no se escoge el menor error mirando al ingeniero. [E16]
+Esta es la comparación principal del **Boosting sin clima seleccionado en el cuaderno 19**: dos ajustes con la misma configuración, uno para H1–H2 y otro para H3–H5. La elección se fijó por validación temporal de noviembre–diciembre de 2025, antes de observar esta evaluación de 2026. Se comparan 16.325 pronósticos emparejados con la regla nominal de archivos: la primera semana del nombre determina H1. Por ejemplo, el archivo 18–22 se envía en la semana 17 y su H1 es la 18; la fila repetida de la semana 17 corresponde a la semana aún en curso.
 
-| Método | Casos | MAE (tallos) | WAPE | Sesgo (%) |
-| --- | --- | --- | --- | --- |
-| Referencia histórica anterior al clima actualizado | 15.838 | 2.512,65 | 19,59 % | -3,54 % |
-| Boosting con clima ampliado y lluvia | 15.838 | 2.477,56 | 19,31 % | -3,19 % |
-| Boosting con clima básico | 15.838 | 2.496,69 | 19,46 % | -3,80 % |
-| Boosting con clima ampliado y curva atribuida a GAITANA | 15.838 | 2.493,94 | 19,44 % | -2,94 % |
-| Boosting sin clima | 15.838 | 2.479,61 | 19,33 % | -2,59 % |
-| Ingeniero | 15.838 | 2.531,72 | 19,74 % | -9,75 % |
+La gráfica separa magnitud del error (WAPE) y dirección del error (sesgo). Los valores negativos de sesgo indican subestimación. Cada punto/segmento se calcula sobre el volumen agregado de su horizonte; no representa un error promedio por planta.
 
-La tabla siguiente compara la ejecución guardada antes del 19 de octubre con la recalculada sobre los mismos 15.838 casos. Esa fecha identifica una revisión del proyecto, no un nuevo período de test. La referencia histórica anterior al clima de la tabla anterior corresponde a otro experimento y no se confunde con este antes/después.
+![Figura 1. WAPE y sesgo por horizonte del Boosting sin clima seleccionado y del estimado del ingeniero. El panel izquierdo muestra magnitud del error; el derecho, dirección y tamaño del sesgo. Fuente: evaluación anual estricta actualizada, cuadernos 13 y 19.](Figuras_resultados/comparacion_modelo_semanal_ganador.png)
 
-| Horizonte | Casos | WAPE antes del 19/10 | WAPE actual | WAPE ingeniero | Sesgo actual | Sesgo ingeniero |
-| --- | --- | --- | --- | --- | --- | --- |
-| H1 | 3.413 | 15,66 % | 15,66 % | 17,09 % | -1,34 % | -7,56 % |
-| H2 | 3.289 | 17,37 % | 17,36 % | 19,28 % | -2,48 % | -8,17 % |
-| H3 | 3.166 | 20,39 % | 20,23 % | 20,32 % | -2,84 % | -9,46 % |
-| H4 | 3.045 | 21,96 % | 21,73 % | 20,91 % | -3,49 % | -11,32 % |
-| H5 | 2.925 | 22,50 % | 22,22 % | 21,40 % | -2,92 % | -12,63 % |
-| Conjunto | 15.838 | 19,46 % | 19,33 % | 19,74 % | -2,59 % | -9,75 % |
+| Horizonte | Ajuste del sistema seleccionado | Casos | WAPE: modelo / ingeniero | Sesgo: modelo / ingeniero | Menor WAPE |
+| --- | --- | ---: | ---: | ---: | --- |
+| H1 | Grupo H1–H2 | 3.512 | 15,53 % / 16,93 % | -1,34 % / -7,54 % | Modelo |
+| H2 | Grupo H1–H2 | 3.388 | 17,49 % / 19,16 % | -2,01 % / -7,97 % | Modelo |
+| H3 | Grupo H3–H5 | 3.264 | 20,33 % / 20,26 % | -2,46 % / -9,38 % | Ingeniero |
+| H4 | Grupo H3–H5 | 3.141 | 21,78 % / 20,97 % | -3,18 % / -11,52 % | Ingeniero |
+| H5 | Grupo H3–H5 | 3.020 | 22,20 % / 21,60 % | -2,97 % / -13,09 % | Ingeniero |
+| Total H1–H5 | Ambos grupos | 16.325 | 19,36 % / 19,71 % | -2,36 % / -9,81 % | Modelo |
 
-Sesgo = 100 × suma(predicción − real) / suma(real). Positivo indica sobreestimación; negativo, subestimación. Errores opuestos se compensan en el sesgo, pero se suman en el WAPE. Se informan ambos sobre los mismos casos.
+El modelo gana en H1, H2 y el total; el ingeniero gana en H3–H5 por WAPE. El sesgo del modelo es menos negativo en todos los horizontes: subestima menos el volumen agregado, aunque eso no basta para ganar WAPE en H3–H5. Sesgo = 100 × suma(predicción − real) / suma(real). Los resultados son retrospectivos, no una prueba prospectiva independiente.
 
-**H1 por separado:** 3.413 casos, WAPE del modelo 15,66 % frente a 17,09 % del ingeniero. Sesgo -1,34 % frente a -7,56 %. La diferencia de WAPE es 1,43 puntos a favor del modelo cuando es positiva.
+### 5.1.1. Ensayo reciente: modelos propios por producto y horizonte
 
-En conjunto, el modelo obtiene 19,33 %, frente a 19,74 % del ingeniero. La ventaja es 0,41 puntos, con intervalo exploratorio de 95 % [-1,10; 1,79]. El desglose permite reconocer dónde gana cada método. No se interpreta una diferencia retrospectiva pequeña como superioridad estable.
+Este experimento no es el ganador anual. Compara 1.226 pronósticos de GAITANA en tres semanas objetivo recientes. El ingeniero se usa sólo para medir. En esta sección, “modelo propio por producto y horizonte” significa un modelo entrenado con el historial de un solo producto y un solo horizonte. Por ejemplo, el modelo propio de Minicarnation para H3 aprende de Minicarnation en H3; el modelo general de H3 aprende de los productos disponibles en ese horizonte. Ambos siguen siendo HistGradientBoosting. Se probaron modelos propios para Minicarnation y Carnation; los demás productos usan el modelo general.
 
-El conjunto agrega casos de pronóstico: una misma semana objetivo puede aparecer desde distintos orígenes y horizontes. El denominador no representa producción física única. El ingeniero se utiliza sólo como referencia de evaluación.
+| Horizonte/producto | Qué predice el candidato | Cómo se obtiene el valor final |
+| --- | --- | --- |
+| H1, todos los productos | Modelo general agrupado H1–H2 | Se conserva directamente. |
+| H2, todos los productos | Modelo general separado H2 | Se conserva directamente. |
+| H3–H5, productos distintos de Minicarnation y Carnation | Modelo general separado para cada horizonte | Se conserva directamente. |
+| H3–H5, Minicarnation y Carnation | Un HistGradientBoosting por producto y horizonte, entrenado sólo con ese producto, más el modelo general separado del horizonte | `predicción final = (1 − peso) × general + peso × especializado`. El peso se eligió con validación previa de noviembre. |
 
-![Figura 9. Comparación semanal de clima y curva atribuida a GAITANA, sobre mismos casos. Fuente: E16.](Figuras_resultados/clima_modelos_horizonte.png)
+Para Minicarnation y Carnation se eligieron pesos de 1,00 en H3, 1,00 en H4 y 0,75 en H5. Así, en H3 y H4 se usa por completo la predicción del modelo propio; en H5 se combinan 75 % de la predicción propia y 25 % de la general. Los pesos son iguales para ambos productos. No se utiliza la predicción del ingeniero para entrenar ni para determinar los pesos.
 
-![Figura 10. Sesgo por horizonte de las alternativas y del ingeniero. Fuente: E16.](Figuras_resultados/clima_sesgo_horizonte.png)
+Los modelos especializados usan HistGradientBoostingRegressor. En la validación previa se eligieron 40 iteraciones para Minicarnation en H3–H5 y 80 iteraciones para Carnation en H3–H5; todos usan 15 hojas. Se mantienen tasa de aprendizaje 0,08, mínimo de 40 casos por hoja, regularización L2 de 1, sin parada temprana y semilla 42. El modelo general por horizonte usa 80 iteraciones en H1/H2/H5 y 40 en H3/H4, con 15 hojas y los mismos valores restantes. La selección de parámetros y pesos ocurrió en noviembre, separada de las tres semanas recientes de evaluación. En esa corrida el clima no estaba disponible en las entradas, así que estos modelos funcionaron sin clima.
 
-![Figura 11. Cambio de la predicción al incorporar clima; cambiar y mejorar no son lo mismo. Fuente: E16.](Figuras_resultados/clima_movimiento_estimado.png)
+| Horizonte | Candidato reciente | WAPE candidato / ingeniero | Sesgo candidato / ingeniero | Lectura |
+| --- | --- | ---: | ---: | --- |
+| H1 | General agrupado H1–H2 | 12,28 % / 15,23 % | +2,75 % / -7,79 % | Candidato gana WAPE; sobreestima ligeramente. |
+| H2 | General separado H2 | 14,96 % / 14,98 % | -0,02 % / -5,80 % | Empate práctico en WAPE; sesgo del candidato casi neutro. |
+| H3 | General + mezcla especializada para dos productos | 17,27 % / 16,51 % | -5,85 % / -7,99 % | Ingeniero gana WAPE. |
+| H4 | General + mezcla especializada para dos productos | 18,89 % / 16,79 % | -3,96 % / -7,67 % | Ingeniero gana WAPE. |
+| H5 | General + mezcla 75/25 para dos productos | 19,76 % / 16,95 % | -7,76 % / -7,86 % | Ingeniero gana WAPE. |
+| Total | Ensamble por horizonte/producto | 17,53 % / 16,34 % | -4,22 % / -7,51 % | Ingeniero gana el total. |
 
-Las hojas Rutas_curvas y Teorias_mismos_casos distinguen cambio de referencia y cambio de ruta. Restringir pilotos puede cambiar el soporte por edad; una diferencia de WAPE no certifica un mecanismo fisiológico ni identifica la finca de los pilotos desconocidos.
-
-### 5.1.1. Experimento reciente: proteger H1 y H2 y mejorar H3–H5
-
-Los cuadernos 21–25 comparan modelos en una ventana reciente distinta de la evaluación anual de 15.838 casos. Se usan 1.226 pronósticos emparejados de GAITANA, correspondientes a tres semanas objetivo. El ingeniero es sólo el benchmark; no es una variable de entrada. La separación temporal evita usar semanas futuras para entrenar, aunque la ventana ya fue examinada durante el desarrollo y no es una prueba prospectiva intacta.
-
-La combinación elegida conserva para H1 el boosting agrupado de H1–H2 y usa modelos separados/especializados para horizontes posteriores. En **H1, el WAPE es 12,28 % frente a 15,23 % del ingeniero**, una mejora de 2,95 puntos. En **H2, 14,96 % frente a 14,98 %**, la diferencia es sólo 0,02 puntos: prácticamente un empate, que debe confirmarse con más semanas. Para H3, H4 y H5 el candidato obtiene 17,27 %, 18,89 % y 19,76 %, respectivamente; el ingeniero obtiene 16,51 %, 16,79 % y 16,95 %, por lo que aún gana en esos horizontes.
-
-El cuaderno 25 prueba especialistas por producto y horizonte y combina sus predicciones con el modelo general, sin usar la proyección del ingeniero como entrada. El WAPE total del candidato baja de 17,80 % a 17,53 %, una mejora modesta entre versiones propias; el ingeniero conserva mejor WAPE conjunto: 16,34 %. Por tanto, la evidencia reciente es prometedora y clara para H1, casi neutra para H2 y todavía insuficiente para afirmar que el modelo propio reemplaza al ingeniero en general. Las diferencias entre esta ventana reciente y la evaluación anual no son contradictorias: corresponden a periodos y diseños distintos. [E19]
-
-El sesgo firmado del candidato y del ingeniero, calculado como predicción menos producción real sobre el volumen real, es respectivamente +2,75 % y −7,79 % en H1; en H2 es −0,02 % y −5,80 %. Así se ve que H2 queda casi sin sesgo agregado para el modelo, aunque la diferencia de WAPE frente al ingeniero es mínima.
+El ensamble reduce el WAPE del candidato previo de 17,80 % a 17,53 %, pero todavía no supera al ingeniero en el total ni en H3–H5. La mejora reciente de H1 es clara; H2 es un empate práctico. Esta evaluación breve no desplaza al Boosting sin clima anual.
 
 ### 5.2. Precisión diaria y coherencia semanal con el clima actualizado
 
@@ -640,7 +664,8 @@ Los gráficos detallados se mantienen junto al Excel diagnóstico: productos, co
 
 ![Figura 16. Diferencia de WAPE por producto y horizonte. Fuente: E18.](Figuras_resultados/error_producto_horizonte.png)
 
-![Figura 17. Trayectorias de variedades foco en H1. Fuente: E18.](Figuras_resultados/error_variedades_foco_h1.png)
+![Figura 17. Trayectorias semanales de variedades foco en H1 con el emparejamiento nominal corregido; los casos del origen 20 de abril se muestran cuando el archivo 17–21 ofrece comparación estricta. Fuente: E18 y cruce actualizado del cuaderno 13.](Figuras_resultados/error_variedades_foco_h1.png)
+El espacio que todavía aparezca en una trayectoria corresponde a una serie-variedad sin pareja válida dentro del subconjunto gráfico, no a un hueco general de producción. Para el origen del 20 de abril se usa el archivo 17–21 como H1 nominal; el dato de semana 17 repetido en 18–22 es una estimación de la semana en curso.
 
 ## 6. Discusión: calidad, clima y distribución del error
 
@@ -648,7 +673,7 @@ La corrección de nombres recuperó observaciones reales de camas piloto sin cre
 
 La base analítica conserva las semanas de producción real y añade la referencia derivada de los planos. La curva empírica representa las edades observadas en los pilotos utilizados. Si una cohorte pide otra edad, el sistema conserva el caso y usa la ruta basada en producción reciente. Es una condición metodológica de aplicación de la curva; no significa que se haya perdido producción ni que las camas no se hayan cruzado.
 
-En el modelo semanal, WAPE actual es 19,33 % y el ingeniero 19,74 %; H1 es 15,66 % y 17,09 %, respectivamente. El error firmado agregado del modelo es -2,59 % del volumen real. Se informa junto con WAPE porque errores positivos y negativos se compensan en el sesgo. La diferencia observada procede de una evaluación retrospectiva y no asegura el mismo resultado en periodos nuevos.
+En el panel estricto actualizado de 16.325 casos, el modelo semanal obtiene 19,36 % WAPE y el ingeniero 19,71 %; H1 es 15,53 % y 16,93 %, respectivamente. El error firmado agregado del modelo es -2,36 % del volumen real. Se informa junto con WAPE porque errores positivos y negativos se compensan en el sesgo. La diferencia observada procede de una evaluación retrospectiva y no asegura el mismo resultado en periodos nuevos.
 
 El EDA climático y los experimentos temporales no establecen por sí solos una relación causal. El clima de estación no representa necesariamente cada invernadero y la curva compartida no certifica igualdad agronómica entre fincas. La atribución a GAITANA sólo se hace cuando hay coincidencia verificable con plano.
 
@@ -658,7 +683,7 @@ La distribución diaria sigue en revisión. El modelo autónomo obtiene 26,72 %;
 
 La cadena se recalculó desde las correspondencias de camas piloto hasta curvas, proyecciones, base analítica y modelos. La producción observada se conserva en la base. La curva se usa como referencia directa cuando representa todas las edades de las cohortes de un plano; cuando no aplica directamente, el modelo puede usar la historia reciente si el caso tiene información suficiente. Esto describe dos rutas del pronóstico y no una pérdida de producción ni una falla general de los cruces.
 
-En la evaluación anual de 15.838 casos comunes, el modelo semanal seleccionado tiene 19,33 % WAPE y el ingeniero 19,74 %; en H1, 15,66 % y 17,09 %, respectivamente. En un experimento reciente separado, de 1.226 casos de GAITANA en tres semanas objetivo, la combinación de modelos por horizonte logra una ventaja clara en **H1: 12,28 % frente a 15,23 % del ingeniero**. En **H2: 14,96 % frente a 14,98 %**, la diferencia es de apenas 0,02 puntos y debe describirse como empate práctico. El resultado conjunto reciente sigue favoreciendo al ingeniero (17,53 % del modelo frente a 16,34 %). En H3–H5 también gana el ingeniero. Son evaluaciones retrospectivas y sus ventanas no se deben mezclar: la evidencia respalda especialmente la mejora de H1, mientras H2 requiere más semanas para confirmar una ventaja.
+En la evaluación anual actualizada de 16.325 casos comunes, el modelo semanal seleccionado tiene 19,36 % WAPE y el ingeniero 19,71 %; en H1, 15,53 % y 16,93 %, respectivamente. En un experimento reciente separado, de 1.226 casos de GAITANA en tres semanas objetivo, la combinación de modelos por horizonte logra una ventaja clara en **H1: 12,28 % frente a 15,23 % del ingeniero**. En **H2: 14,96 % frente a 14,98 %**, la diferencia es de apenas 0,02 puntos y debe describirse como empate práctico. El resultado conjunto reciente sigue favoreciendo al ingeniero (17,53 % del modelo frente a 16,34 %). En H3–H5 también gana el ingeniero. Son evaluaciones retrospectivas y sus ventanas no se deben mezclar: la evidencia respalda especialmente la mejora de H1, mientras H2 requiere más semanas para confirmar una ventaja.
 
 El experimento del cuaderno 25 probó modelos especialistas por producto y horizonte, y una combinación de modelos propios sin usar el pronóstico del ingeniero como entrada. Mejoró el WAPE total del candidato reciente previo de 17,80 % a 17,53 %, pero no desplazó al ingeniero en el total ni en H3–H5. El reparto diario reconciliado obtiene 27,26 % y continúa en revisión. Todos estos resultados son retrospectivos.
 
@@ -709,64 +734,6 @@ Referencia técnica utilizada en la implementación: documentación oficial de S
 La introducción conserva problema, objetivos y alcance. Los capítulos 2 y 3 desarrollan el entendimiento de fuentes y el EDA que antes figuraban como contenido previsto. El capítulo 4 concentra el método y el 5 sus resultados; el 6 integra la discusión que faltaba entre cifras y conclusiones. El capítulo 7 reúne conclusiones y límites. Se abandona la correspondencia rígida de todos los subtítulos entre metodología y resultados para dar continuidad a la explicación. Esta reorganización es una propuesta editorial para revisar con el asesor, no un cambio de resultados.
 
 La literatura verificada, la revisión agronómica, la decisión sobre PCA/MCA/PDN y la validación empresarial siguen pendientes. Sus títulos no se mantienen como capítulos extensos vacíos. La documentación detallada de llaves, parámetros y tablas por segmento permanece en los notebooks y puede constituir anexos según las exigencias de entrega. Este documento es un borrador desarrollado del trabajo empírico, no una tesis lista para radicar.
-
-### Inventario adicional de algoritmos y referencias
-
-Se mantiene el diagnóstico de los ajustes de referencia de 17; no sustituye la selección climática de 19 ni sus tablas anteriores.
-
-### Semanal agosto
-
-| Modelo | WAPE train | WAPE test |
-| --- | ---: | ---: |
-| Ajuste_relativo_diario | 25,29 % | 16,12 % |
-| Boosting_diario_MAE | 24,69 % | 14,95 % |
-| Combinacion | 22,08 % | 15,02 % |
-| Media4 | 32,21 % | 16,02 % |
-| Memoria_larga | 22,00 % | 15,10 % |
-| Revisiones | 22,08 % | 15,02 % |
-| Separado | 22,16 % | 15,17 % |
-| Sistema_anterior | 23,30 % | 15,82 % |
-| Sistema_diario | 23,13 % | 15,39 % |
-| Ultimo_valor | 28,86 % | 15,28 % |
-| Ingeniero | No aplica | 14,89 % |
-
-### Teoria completa mayo
-
-| Modelo | WAPE train | WAPE test |
-| --- | ---: | ---: |
-| Ajuste_media4_sin_planos | 26,88 % | 16,21 % |
-| Media4 | 34,34 % | 18,25 % |
-| Modelo_teorico | 21,11 % | 23,75 % |
-| Modelo_teorico_historia | 21,06 % | 23,14 % |
-| Ridge_ajuste_teoria | 25,56 % | 19,80 % |
-| Teoria_sin_ajuste | 42,44 % | 23,85 % |
-| Teorico_sin_clima | 21,62 % | 22,77 % |
-| Teorico_sin_memoria | 23,12 % | 30,42 % |
-| Ultimo_valor | 30,98 % | 17,35 % |
-
-### Diario agosto
-
-(En revisión: desarrollo preliminar y siguientes pasos.)
-
-| Modelo | WAPE train | WAPE test |
-| --- | ---: | ---: |
-| Boosting diario autónomo | 25,90 % | 26,65 % |
-| Boosting reconciliado · memoria actualizada | 26,40 % | 27,02 % |
-| Boosting_reconciliado | 27,34 % | 27,65 % |
-| Perfil_8semanas | 28,20 % | 27,73 % |
-| Perfil histórico · memoria actualizada | 27,24 % | 27,14 % |
-| Uniforme · memoria actualizada | 28,52 % | 30,69 % |
-| Uniforme_semanal | 29,27 % | 31,85 % |
-
-### Piloto SARIMA agosto
-
-(En revisión: desarrollo preliminar y siguientes pasos.)
-
-| Modelo | WAPE train | WAPE test |
-| --- | ---: | ---: |
-| SARIMA | 19,48 % | 29,83 % |
-| SARIMAX | 19,47 % | 29,54 % |
-
 
 
 ## Anexo. Diccionario de la base analítica común

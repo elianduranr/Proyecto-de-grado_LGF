@@ -1,23 +1,35 @@
 # Guía vigente: clima, proyecciones y pronóstico de GAITANA
 
+## Revisar el primer prototipo web
+
+La carpeta [plataforma_gaitana](plataforma_gaitana/README.md) contiene frontend, backend, trabajador, migraciones y configuración Docker. Desde esa carpeta: `instalar.cmd` una vez y `iniciar.cmd` para levantarlo; abrir `http://localhost:5173`. `detener.cmd` conserva datos y versiones al detener los servicios.
+
+Para actualizar la aplicación, abre **Generar y ajustar**, revisa los pendientes y pulsa **Procesar archivos**. El trabajador ejecuta la cadena de notebooks de referencia sobre los originales congelados, valida los resultados, guarda las fuentes limpias en SQL Server `Proyectos`, esquema `EP`, y activa la nueva base completa. No hay que volver a subir archivos que ya estén disponibles en las carpetas. Las cargas nuevas no alteran los datos vigentes hasta terminar correctamente. Ver [ETL y SQL](plataforma_gaitana/ETL_Y_SQL.md) y el [estado del prototipo](plataforma_gaitana/ESTADO_PROTOTIPO.md) para distinguir resultados validados, carga inicial y comprobación operativa.
+
+Para nuevos cortes, **Actualizar desde WebFlor** descarga días cerrados, comprueba el empalme con el histórico y ejecuta la actualización analítica. Para las otras fuentes, la tabla indica el último período cargado y qué subir después respecto a H1. Clima y estadísticas históricas pueden seguir utilizándose sin una actualización semanal; si el clima no alcanza el corte se conserva la variante Sin clima. Véanse [las reglas de WebFlor](plataforma_gaitana/WEBFLOR.md). La aplicación mantiene sus versiones operativas en `plataforma_gaitana/storage`; la evaluación archivada de los notebooks se conserva separada.
+
+## Evaluación más reciente
+
+El cuaderno 26 amplía la comprobación temporal hasta 2026-10-19. Ver la sección final de esta guía para resultados, train/test y orden de reproducción. Las cifras de la sección de referencia siguiente pertenecen al panel original.
+
 ## Qué leer primero
 
-El [trabajo escrito](Trabajo%20escrito/Estructura_documento_v4_oct192026.docx) y su [Markdown editable](Trabajo%20escrito/Desarrollo_del_documento.md) conservan resultados y desarrollan ahora el recorrido metodológico. Para entender, leer en este orden:
+El [trabajo escrito](Trabajo%20escrito/Documento_LaGaitana_v8_validacion_temporal_actualizada_20261028.docx) y su [Markdown editable](Trabajo%20escrito/Documento_LaGaitana_v8_validacion_temporal_actualizada_20261028.md) conservan el recorrido metodológico y sus diagramas. Para entender, leer en este orden:
 
 1. **Antes del modelo:** capítulos 2–3, fuentes, homologación comercial, tallos por planta, curvas y cobertura. Distinguir cero de dato ausente.
 2. **Qué es una fila:** 4.1, anexo de 47 columnas y [lectura.ipynb](lectura.ipynb). Separar origen, objetivo y versiones previas.
 3. **Por qué esas variables:** 3.6.1 y 3.7; asociaciones de 11, tendencias de diario 01 y puente climático de 18. Una asociación propone una hipótesis; no demuestra mejora predictiva.
-4. **Qué hace cada modelo:** 4.2 y diccionario del notebook 12; referencias → correcciones Ridge/boosting → dos rutas → información diaria para semanas → grupos de horizonte y memoria larga → comparación climática de 19.
+4. **Qué hace cada modelo:** 4.2 y Diagrama A; referencias → Ridge/HistGradientBoosting → ruta teórica o respaldo Media4 → señales diarias y memoria → selección pre-2026 → pruebas por horizonte/producto.
 5. **Qué evidencia respalda las decisiones:** recorrido de resultados del capítulo 5, selección temporal, benchmark, WAPE y sesgo, y errores por producto/color/variedad en 5.6 y notebook 20.
 6. **Pasos siguientes:** capítulo 7. Pronóstico diario y SARIMA/SARIMAX se conservan como desarrollo preliminar en revisión; no son un requisito para entender primero el sistema semanal.
 
 La [bitácora](BITACORA_REVISION_CONVERSADA.md) registra decisiones, límites y el esquema de presentación en cuatro bloques. El orden de lectura anterior explica la metodología; el orden de corrida de abajo respeta dependencias de archivos.
 
-## Resultado actual
+## Resultado de referencia conservado · hasta S36
 
-La evaluación anual de 15.838 casos da 19,33 % de WAPE al boosting seleccionado y 19,74 % al ingeniero. En una evaluación reciente separada, **H1 mejora con claridad: 12,28 % frente a 15,23 %**; **H2 queda prácticamente empatado: 14,96 % frente a 14,98 %**. El ingeniero aún gana en H3–H5 y en el total reciente. No se deben mezclar las ventanas: resultados completos, sesgo y límites en [resumen de modelos](resumen_modelos_pronostico.md).
+La evaluación anual actualizada reúne 16.325 comparaciones estrictas: 19,36 % WAPE para el boosting seleccionado y 19,71 % para el ingeniero. El modelo queda mejor en H1 (15,53 % frente a 16,93 %) y H2 (17,49 % frente a 19,16 %); el ingeniero conserva menor WAPE en H3–H5. La ventana reciente de los cuadernos 21–25 es otra evaluación y no se mezcla con la anual. El detalle y sesgo están en el [resumen de modelos](resumen_modelos_pronostico.md).
 
-(Pronóstico diario en revisión: desarrollo preliminar y siguientes pasos.) El diario reconciliado obtiene 27,26 %; el autónomo, 26,72 %, sobre 22.973 días reportados. El primero conserva el total semanal; el autónomo estima cada día.
+(Pronóstico diario en revisión: desarrollo preliminar y siguientes pasos.) El Diagrama B distingue los objetivos: el diario reconciliado obtiene 27,26 % y conserva el total semanal; el autónomo obtiene 26,72 % y estima cada día, sobre 22.973 días reportados.
 
 ## Qué verifican los cruces y cuándo aplica la curva
 
@@ -31,6 +43,8 @@ En la base analítica se conserva la producción real observada. La curva teóri
 
 Usar el intérprete `entorno_tesis`. Abrir cada notebook, reiniciar su kernel y ejecutar todas sus celdas de arriba abajo; esperar a que termine sin errores antes del siguiente. Las dependencias son archivos explícitos, no variables de otro kernel. Las bases limpias locales de producción y estimados deben existir; no hace falta consultar SQL de nuevo para esta actualización climática.
 
+Para reproducir la corrección de los estimados y sus resultados: ejecutar primero [limpieza de estimados semanales 03](Notebooks/Limpieza%20data,%20Notebooks%20y%20Scripts/03_limpieza_estimados_semanales.ipynb), que aplica la regla nominal de H1; después actualizar la base semanal 10 y correr 13 → 19 → 20. El 13 fija la comparación contra el ingeniero, el 19 mide las alternativas climáticas en los mismos casos y el 20 desglosa el origen del error. El cuaderno 20 no vuelve a entrenar. Para cambios de curvas, planos o producción hay que reconstruir desde los pasos anteriores de la lista.
+
 1. [Limpieza clima](Notebooks/Limpieza%20data,%20Notebooks%20y%20Scripts/02_limpieza_clima.ipynb): Actualizar fuente climática y verificar fechas/conflictos.
 2. [Catálogo](Notebooks/Proyecciones%20Teoricas%20Propias/00_catalogo_variedades.ipynb): Reglas comunes de variedad.
 3. [Auditoría](Notebooks/Proyecciones%20Teoricas%20Propias/Auditoria_calidad_curvas.ipynb): Recuperación y conservación.
@@ -40,14 +54,14 @@ Usar el intérprete `entorno_tesis`. Abrir cada notebook, reiniciar su kernel y 
 7. [EDA de edades](Notebooks/Proyecciones%20Teoricas%20Propias/02_EDA_edades_sin_cobertura.ipynb): Revisar edades tempranas, huecos y ceros registrados. Es diagnóstico, no modifica curvas.
 8. [EDA general](Notebooks/Analisis/11_EDA_proyecciones.ipynb): Composición y señales históricas.
 9. [Modelos iniciales](Notebooks/Analisis/12_modelo_ajuste_proyecciones.ipynb): Referencias, Ridge y boosting.
-10. [Benchmark](Notebooks/Analisis/13_comparacion_ingeniero_modelo_2026.ipynb): Mismos casos del ingeniero.
+10. [Benchmark](Notebooks/Analisis/13_comparacion_ingeniero_modelo_2026.ipynb): Mismos casos del ingeniero; prioriza el archivo semanal cuyo nombre define H1.
 11. [Base diaria](Notebooks/Modelo_de_series_diario/01_base_diaria_EDA.ipynb): Calendario y señales conocidas al origen. Este paso construye entradas del SEMANAL; no exige entrenar pronósticos diarios.
 12. [Tendencias](Notebooks/Analisis/14_tendencias_diarias_modelo_semanal.ipynb): Señales diarias en el pronóstico semanal.
 13. [Memoria](Notebooks/Analisis/15_calidad_y_mejora_por_horizonte.ipynb): Arquitectura de referencia con memoria larga.
 14. [EDA climático](Notebooks/Analisis/18_EDA_clima_y_desfase.ipynb): Relacionar las 26 variables climáticas originales/diarias/ampliadas con los modelos; cobertura, error y desplazamiento. Requiere base semanal y señales de diario 01.
 15. [Comparación climática](Notebooks/Analisis/19_modelos_clima_y_curvas_gaitana.ipynb): Ablaciones y selección pre2026.
 16. [Interpretación](Notebooks/Analisis/16_interpretacion_modelo_semanal.ipynb): Importancia del candidato seleccionado.
-17. [EDA del origen del error](Notebooks/Analisis/20_EDA_origen_error_modelo_ingeniero.ipynb): Producto → color → variedad; H1 y H1–H5, aportes al WAPE, sesgo y semanas críticas. Usa salidas de 10 y 19; no reentrena.
+17. [EDA del origen del error](Notebooks/Analisis/20_EDA_origen_error_modelo_ingeniero.ipynb): Producto → color → variedad; H1 y H1–H5, aportes al WAPE, sesgo y semanas críticas. Usa el emparejamiento estricto actualizado; no reentrena.
 18. [Distribución diaria](Notebooks/Modelo_de_series_diario/02_distribucion_semanal_a_diaria.ipynb): Autónomo y pesos de reparto. **(En revisión: desarrollo preliminar y siguientes pasos.)**
 19. [Piloto temporal](Notebooks/Modelo_de_series_diario/03_SARIMA_SARIMAX_y_boosting.ipynb): Tres series, convergencia y clima lag7. **(En revisión: desarrollo preliminar y siguientes pasos.)**
 20. [Reparto con memoria](Notebooks/Modelo_de_series_diario/04_diario_con_memoria_semanal.ipynb): Referencia actualizada. **(En revisión: desarrollo preliminar y siguientes pasos.)**
@@ -111,3 +125,49 @@ Comparar cinco ajustes H1–H5 frente a los dos grupos actuales; especializació
 ## Diagnóstico puntual del alcance de las curvas por edad
 
 [02_EDA_edades_sin_cobertura](Notebooks/Proyecciones%20Teoricas%20Propias/02_EDA_edades_sin_cobertura.ipynb) muestra qué edades están representadas por las curvas de pilotos: tempranas, intermedias y posteriores. Lee las curvas/proyecciones existentes de 2021–2026 y la base de 10, sin reconstruir modelos. Incluye DINO y exporta una tabla de diagnóstico. El nombre del archivo se conserva por trazabilidad; su lectura es de alcance empírico de las curvas, no de pérdida de producción. Una edad previa al primer corte observado no demuestra que el rendimiento sea cero; cualquier regla productiva requiere confirmación agronómica. Es un diagnóstico opcional, no una nueva dependencia de entrenamiento.
+
+
+### Plataforma: cierre de carga e histórico separado (26/10/2026)
+
+Se activó en SQL Server `Proyectos`, esquema `EP`, la carga consolidada con WebFlor: 6.543.848 registros reales y último corte 24/10/2026. Se generó un borrador Sin_clima para S44, con 565 líneas y 113 series, sin publicarlo. La comprobación de las cinco fuentes, conservación de tallos y versiones quedó aprobada en `plataforma_gaitana/storage/verification_operational.json`.
+
+Para estudiar errores, abrir **Histórico y desempeño → Qué resultados revisar**: entrenamiento (sólo diagnóstico H1), validación 2025, prueba 2026 o seguimiento de nuevas semanas. Cada opción muestra semanas, WAPE y sesgo comparables del modelo y del ingeniero. Entrenamiento no demuestra anticipación. El seguimiento se amplía al llegar producción real de semanas terminadas y publicaciones previas al origen; no incorpora borradores ni simulaciones retrospectivas como si fueran nuevas pruebas. Consultar [estado y límites](plataforma_gaitana/ESTADO_PROTOTIPO.md).
+
+
+### Comparador de errores separado del panorama general (26/10/2026)
+
+La plataforma ahora tiene cuatro secciones: Histórico y desempeño, Comparador de errores, Generar y ajustar, Metodología y guía. Para revisar un problema: abrir **Comparador de errores**, escoger evaluación y horizonte, elegir una semana o un grupo, filtrar producto/color/variedad y revisar los mayores aportes al error del modelo o del ingeniero. Pulsar un grupo lleva al siguiente detalle; por variedad se puede bajar a sus semanas. El botón **Explorar errores** del histórico conserva la evaluación y el horizonte elegidos.
+
+El comparador muestra WAPE, sesgo, tallos reales/estimados, error absoluto y aporte de cada grupo; mantiene los mismos casos para ambos métodos. Los errores se calculan por caso antes de agrupar, sin cancelar diferencias opuestas ni promediar porcentajes. Se verificó que el desglose reproduce el panel original. La búsqueda afecta sólo la tabla; los filtros superiores sí actualizan toda la vista. La primera sección queda como resumen. Comprobación: 27 pruebas aprobadas y revisión de filtros/navegación en escritorio y móvil; evidencia local `plataforma_gaitana/storage/verification_comparison.json`.
+
+
+### Recepción ágil y selección múltiple de planos (26/10/2026)
+
+Se corrigió un bloqueo al abrir Excel grandes durante la recepción: la inspección inicial ahora lee sólo el índice XML y se ejecuta fuera del bucle HTTP, conservando la limpieza completa en el trabajador ETL. La ventana muestra porcentaje de envío, confirmación por archivo, errores y reintento; Planos permite seleccionar varios archivos del mismo año. Un error individual no detiene los demás. Guardar confirma recepción; **Procesar archivos** incorpora y activa los datos después de las validaciones.
+
+El clima hasta S42 y el plano S42 del usuario ya estaban recibidos, pendientes del ETL: no deben subirse otra vez. Prueba de recepción/reconocimiento de archivos existentes sin duplicarlos: dos planos 4,927 s; estimado 3,097 s; clima de 196 MB 5,625 s. Estos tiempos no son los de la limpieza completa. La API siguió respondiendo. Se aprobaron 29 pruebas y se verificaron carga múltiple, error individual y navegación móvil. Evidencia privada: `plataforma_gaitana/storage/verification_upload_fix.json`.
+
+
+### Revisión académica de la tesis según el profesor — 28/10/2026
+
+Nueva versión: `Trabajo escrito/Documento_LaGaitana_v7_revision_profesor_20261028.docx`, con PDF y Markdown propios. Se conserva la versión 6 y su texto base. La revisión transcribe OG y los cuatro objetivos específicos del Plan de proyecto original y los vincula con conclusiones e implicaciones para La Gaitana; distingue logros, avances parciales y validaciones pendientes. Hace explícitos supuestos, decisiones y limitaciones dentro de cada etapa y mejora transiciones entre contexto, método, resultados e implicaciones.
+
+Las métricas se recalcularon desde predicciones archivadas, sin reentrenar: MAE, RMSE, WAPE, sesgo medio y porcentual, con saldo neto en el archivo de auditoría. Se preservan panel histórico de 15.838, anual nominal de 16.325 y reciente de 1.226 casos. El EDA textual por producto/color/variedad se sincronizó con el anual corregido. Se incorporan MAPE y porcentaje dentro de ±8 % en evaluaciones con predicciones individuales; su ausencia en algunos agregados train queda marcada. Se identifican límites antes poco visibles: ingeniero emitido el jueves frente a variables del lunes, muestra máxima de 5.000 filas por ajuste reciente, H1 reciente evaluado en una sola semana y LSTM de un día adelante frente a emisión de siete días. No se atribuyen beneficios económicos ni validaciones prospectivas no realizados.
+
+La revisión conserva 19 figuras numeradas y registra 122 resúmenes de métricas, 14 pendientes y huellas de sus fuentes en `Trabajo escrito/Revision_v7/`. El Word se abrió en una instancia oculta e independiente para paginar y exportar PDF: 74 páginas y 47 tablas. La guía para esta versión y los scripts de reconstrucción están en `Trabajo escrito/LEEME.md`.
+
+## Actualización del 28/10/2026: evaluación temporal y operación
+
+Lectura corta: informe v8, 4.2.8 (train/validación/test y reentrenamiento), 5.1.3 (datos y resultados nuevos), 5.5 (train/test del mismo ajuste) y conclusiones por objetivo. Los demás modelos y el diario conservan sus resultados históricos, identificados como tales.
+
+Reproducción de esta actualización:
+1. Conservar la copia versionada `plataforma_gaitana/storage/datasets/evaluacion_local_20261028` y su manifiesto; no cambiar originales para repetir resultados.
+2. Ejecutar `26_validacion_temporal_actualizada_y_operacion.ipynb` de arriba abajo con el entorno de `plataforma_gaitana/.venv`. Reutiliza las funciones del 19 y no requiere consultar SQL ni WebFlor para calcular los errores.
+3. Revisar `fuentes_validadas.csv`, `cortes_entrenamiento.csv`, `particiones_por_corte.csv`, `train_test_por_ajuste.csv`, `auditoria_semanas.csv` y `verificacion_final.json`.
+4. Para regenerar el informe: `actualizar_documento_v8.py`, `generar_documento_v8.py`, `verificar_revision_v8.py` y `exportar_revision_v8_pdf.py`, en ese orden. Los tres últimos usan `entorno_tesis` (Word se abre oculto para exportar PDF).
+
+En el visualizador, «Evaluación actualizada · cuaderno 26» conserva las predicciones y recalcula errores contra la última versión validada de real/ingeniero. «Prueba 2026 · cuadernillo 19» mantiene el archivo de referencia. «Entrenamiento» muestra H1 dentro de muestra y «Seguimiento» exige publicaciones anticipadas. Cargar más datos no inventa predicciones para orígenes no evaluados: para ampliarlos se vuelve a ejecutar la evaluación o se conservan nuevas publicaciones.
+
+El comparador identifica con color quién tuvo menor WAPE y permite regresar de variedad a color y producto. La revisión manual de una propuesta conserva por separado el error original y ajustado; no modifica el benchmark nominal del ingeniero.
+
+En «Generar y ajustar», producto → color → variedades permite comparar varias selecciones, cambiar semanas y ocultar curvas. El checklist se guarda en la propuesta: seleccionar no confirma revisión. Marcar revisada registra aceptación o ajuste de las cinco semanas; cambiar cantidades vuelve a dejar pendientes las variedades afectadas. El avance por producto/color sólo se completa al revisar todas sus variedades. La curva por edad utiliza el resultado normalizado existente; el suavizado de la proyección absoluta es únicamente visual.

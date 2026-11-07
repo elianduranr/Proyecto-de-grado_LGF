@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "objetivos_verificados": 5,
+  "conclusiones_especificas": 4,
+  "figuras": 20,
+  "tablas": 54,
+  "filas_metricas_recalculadas": 54,
+  "separacion_temporal_verificada": true,
+  "edicion_anterior": {
+    "Trabajo escrito\\Documento_LaGaitana_v7_revision_profesor_20261028.docx": "d7fb184c2bcf5d1767b0437eef0facbd150359b5776ab4c4e8739420f2ef2e28",
+    "Trabajo escrito\\Documento_LaGaitana_v7_revision_profesor_20261028.md": "f20914f8cdc36329fecefc04417652b8a285894ad86df937c66d9afc26554710",
+    "Trabajo escrito\\Documento_LaGaitana_v7_revision_profesor_20261028.pdf": "e053782cce8bbe9136d75fd2b0f1f28983e1d08557c5ce270b8288d3802daa04"
+  }
+}

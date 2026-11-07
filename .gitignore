@@ -19,6 +19,10 @@ Datos.rar
 *.xlsb
 *.pkl
 *.pickle
+*.joblib
+*.pt
+*.pth
+*.onnx
 *.h5
 *.hdf5
 *.sqlite
@@ -41,3 +45,10 @@ Datos.rar
 # Los notebooks sí conservan resultados y gráficas para revisión.
 Notebooks/Proyecciones Teoricas Propias/Respaldos/
 Notebooks/Limpieza data, Notebooks y Scripts/coso para generar el html antes/
+
+# Copias locales y capturas de comprobación; la entrega académica final sí se versiona.
+/Trabajo escrito/Revision_v9/Version_inicial/
+/Trabajo escrito/Revision_v9/Comprobacion_visual/
+/Trabajo escrito/Documento_LaGaitana_v9_revision_asesor_20261104.docx
+/Trabajo escrito/Documento_LaGaitana_v9_revision_asesor_20261104.md
+/Trabajo escrito/Documento_LaGaitana_v9_revision_asesor_20261104.pdf
